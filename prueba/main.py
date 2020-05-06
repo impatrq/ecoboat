@@ -1,5 +1,7 @@
 def tomaDeDatos():
- return 1
+ print ("Ingrese un Valor")
+ valor = input()
+ return valor
 
 def tomaDeOperacion():
  return '+'
