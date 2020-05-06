@@ -7,10 +7,10 @@ def tomaDeOperacion():
 def calculoDeResultado(primero, segundo, operacion):
  return 2
 
-def muestraDeResultado():
+def muestraDeResultado(resultado):
  return 1
 
-print "comienzo del programa"
+print ("comienzo del programa")
 primerValor = tomaDeDatos()
 operacion = tomaDeOperacion()
 segundoValor = tomaDeDatos()
