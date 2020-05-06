@@ -1,11 +1,17 @@
-def tomaDeDatos:
+def tomaDeDatos():
  return 1
 
-def tomaDeOperacion:
+def tomaDeOperacion():
  return '+'
 
-def calculoDeResultado:
+def calculoDeResultado(primero, segundo, operacion):
  return 2
 
-def muestraDeResultado:
+def muestraDeResultado():
  return 1
+
+primerValor = tomaDeDatos()
+operacion = tomaDeOperacion()
+segundoValor = tomaDeDatos()
+resultado = calculoDeResultado(primerValor, segundoValor, operacion)
+muestraDeResultado()
