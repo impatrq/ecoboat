@@ -1,0 +1,63 @@
+#include <SoftwareSerial.h>
+#include <TinyGPS.h>
+
+TinyGPS gps;
+SoftwareSerial ss(4, 3);
+
+float flat, flon;
+unsigned long age;
+
+void setup() {
+
+  Serial.begin(115200);
+  ss.begin(9600);
+ 
+}
+
+void loop() {
+
+   gps.f_get_position(&flat, &flon, &age);
+
+   Serial.println();
+   Serial.print("lat: ");
+   print_float(flat, TinyGPS::GPS_INVALID_F_ANGLE, 11, 6);
+   Serial.print("lon: ");
+   print_float(flon, TinyGPS::GPS_INVALID_F_ANGLE, 11, 6);
+   Serial.print("vel: ");
+   print_float(gps.f_speed_kmph(), TinyGPS::GPS_INVALID_F_SPEED, 6, 2);
+   Serial.println();
+   
+   smartdelay(800);
+}
+
+
+
+static void smartdelay(unsigned long ms)
+{
+  unsigned long start = millis();
+  do 
+  {
+    while (ss.available())
+      gps.encode(ss.read());
+  } while (millis() - start < ms);
+}
+
+static void print_float(float val, float invalid, int len, int prec)
+{
+  if (val == invalid)
+  {
+    while (len-- > 1)
+      Serial.print('*');
+    Serial.print(' ');
+  }
+  else
+  {
+    Serial.print(val, prec);
+    int vi = abs((int)val);
+    int flen = prec + (val < 0.0 ? 2 : 1);
+    flen += vi >= 1000 ? 4 : vi >= 100 ? 3 : vi >= 10 ? 2 : 1;
+    for (int i=flen; i<len; ++i)
+      Serial.print(' ');
+  }
+  smartdelay(0);
+}

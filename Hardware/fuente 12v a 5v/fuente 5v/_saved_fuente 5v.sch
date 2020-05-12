@@ -1,0 +1,183 @@
+EESchema Schematic File Version 4
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Regulator_Linear:LM7805_TO220 12v-5v1
+U 1 1 5DCA912E
+P 5000 3500
+F 0 "12v-5v1" H 5000 3742 50  0000 C CNN
+F 1 "LM7805_TO220" H 5000 3651 50  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 5000 3725 50  0001 C CIN
+F 3 "http://www.fairchildsemi.com/ds/LM/LM7805.pdf" H 5000 3450 50  0001 C CNN
+	1    5000 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C Ci1
+U 1 1 5DCAA16A
+P 4500 3750
+F 0 "Ci1" H 4615 3796 50  0000 L CNN
+F 1 "330n" H 4615 3705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D3.8mm_W2.6mm_P2.50mm" H 4538 3600 50  0001 C CNN
+F 3 "~" H 4500 3750 50  0001 C CNN
+	1    4500 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C Co1
+U 1 1 5DCAAE50
+P 5500 3750
+F 0 "Co1" H 5615 3796 50  0000 L CNN
+F 1 "100n" H 5615 3705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D3.8mm_W2.6mm_P2.50mm" H 5538 3600 50  0001 C CNN
+F 3 "~" H 5500 3750 50  0001 C CNN
+	1    5500 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D 1N4001
+U 1 1 5DCAB4F4
+P 5000 3000
+F 0 "1N4001" H 5000 3216 50  0000 C CNN
+F 1 "D" H 5000 3125 50  0000 C CNN
+F 2 "Diode_THT:D_A-405_P7.62mm_Horizontal" H 5000 3000 50  0001 C CNN
+F 3 "~" H 5000 3000 50  0001 C CNN
+	1    5000 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4850 3000 4500 3000
+Wire Wire Line
+	4500 3000 4500 3500
+Wire Wire Line
+	4500 3500 4700 3500
+Connection ~ 4500 3500
+Wire Wire Line
+	4500 3500 4500 3600
+Wire Wire Line
+	5300 3500 5500 3500
+Wire Wire Line
+	5500 3500 5500 3600
+Wire Wire Line
+	5150 3000 5500 3000
+Connection ~ 5500 3500
+$Comp
+L power:GND #PWR0101
+U 1 1 5DCAC087
+P 5000 4100
+F 0 "#PWR0101" H 5000 3850 50  0001 C CNN
+F 1 "GND" H 5005 3927 50  0000 C CNN
+F 2 "" H 5000 4100 50  0001 C CNN
+F 3 "" H 5000 4100 50  0001 C CNN
+	1    5000 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5000 4000 5000 4100
+Connection ~ 5000 4000
+Wire Wire Line
+	5000 4000 5500 4000
+$Comp
+L Connector_Generic:Conn_01x02 input-12v1
+U 1 1 5DCAD1DF
+P 4000 3750
+F 0 "input-12v1" H 3918 3517 50  0000 C CNN
+F 1 "12v" H 3918 3516 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 4000 3750 50  0001 C CNN
+F 3 "~" H 4000 3750 50  0001 C CNN
+	1    4000 3750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	6250 4000 6250 3750
+Connection ~ 5500 4000
+Wire Wire Line
+	5000 3800 5000 4000
+Wire Wire Line
+	4200 3650 4200 3500
+Wire Wire Line
+	4200 3500 4500 3500
+Wire Wire Line
+	4200 3750 4200 4000
+Wire Wire Line
+	5500 4000 5900 4000
+$Comp
+L Device:R R1
+U 1 1 5DCB0AEF
+P 5900 3450
+F 0 "R1" H 5970 3496 50  0000 L CNN
+F 1 "1K" H 5970 3405 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5830 3450 50  0001 C CNN
+F 3 "~" H 5900 3450 50  0001 C CNN
+	1    5900 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D1
+U 1 1 5DCB1474
+P 5900 3800
+F 0 "D1" V 5939 3683 50  0000 R CNN
+F 1 "LED" V 5848 3683 50  0000 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 5900 3800 50  0001 C CNN
+F 3 "~" H 5900 3800 50  0001 C CNN
+	1    5900 3800
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5900 3600 5900 3650
+Wire Wire Line
+	5900 3950 5900 4000
+Connection ~ 5900 4000
+Wire Wire Line
+	5900 4000 6250 4000
+Wire Wire Line
+	5500 3000 5500 3200
+Wire Wire Line
+	6250 3200 5900 3200
+Wire Wire Line
+	6250 3200 6250 3650
+Connection ~ 5500 3200
+Wire Wire Line
+	5500 3200 5500 3500
+Wire Wire Line
+	5900 3200 5900 3300
+Connection ~ 5900 3200
+Wire Wire Line
+	5900 3200 5500 3200
+Wire Wire Line
+	5500 3900 5500 4000
+Wire Wire Line
+	4200 4000 4500 4000
+Wire Wire Line
+	4500 3900 4500 4000
+Connection ~ 4500 4000
+Wire Wire Line
+	4500 4000 5000 4000
+$Comp
+L Connector:Conn_01x02_Male J1
+U 1 1 5DCB9666
+P 6500 3750
+F 0 "J1" H 6472 3632 50  0000 R CNN
+F 1 "Conn_01x02_Male" H 6472 3723 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 6500 3750 50  0001 C CNN
+F 3 "~" H 6500 3750 50  0001 C CNN
+	1    6500 3750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	6250 3650 6300 3650
+Wire Wire Line
+	6250 3750 6300 3750
+$EndSCHEMATC
