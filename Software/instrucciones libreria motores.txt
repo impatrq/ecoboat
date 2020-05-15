@@ -1,0 +1,14 @@
+paso a paso:
+
+crear un objeto de la clase PaP con los 4 pines a usar como parametro: (pin1, pin2, pin3, pin4)
+para girar en sentido horario usar la funcion girarH(grados)
+para girar en sentido anti horario usar la funcion girarAH(grados)
+
+motores lineales:
+
+crear un objeto de la clase puenteH con los dos pines como parametro
+el primer pin gira hacia la derecha y el segundo a la izquierda
+funciones: para girar hacia la derecha: girarD(velocidad de giro)
+	   para girar hacia la izquierda: girarI(velocidad de giro)
+	   para frenar: detener()
+
