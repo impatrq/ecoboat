@@ -8,7 +8,7 @@ motores lineales:
 
 crear un objeto de la clase puenteH con los dos pines como parametro
 el primer pin gira hacia la derecha y el segundo a la izquierda
-funciones: para girar hacia la derecha: girarD(velocidad de giro)
-	   para girar hacia la izquierda: girarI(velocidad de giro)
+funciones: para girar hacia la derecha: girarD()
+	   para girar hacia la izquierda: girarI()
 	   para frenar: detener()
 
