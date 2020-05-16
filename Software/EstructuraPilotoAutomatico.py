@@ -27,10 +27,10 @@ def Girar(motor, waypoint):
 	else:
 		#verifica si hay que girar a la derecha o izquierda
 		if(DeltaD<0):
-			motor.girarD(10)
+			motor.girarH(10)
 			giro=1
 		else:
-			motor.girarI(10)
+			motor.girarAH(10)
 			giro=0
 
 		#se mantiene girando hasta que corrija el rumbo
@@ -42,9 +42,9 @@ def Girar(motor, waypoint):
 
 		#vuelve a su posicion el timon
 		if (giro==1):
-			motor.girarI(10)
+			motor.girarH(10)
 		else:
-			motor.girarD(10)
+			motor.girarAH(10)
 
 	return 0
 
@@ -52,7 +52,11 @@ def LlegadaAlWP(destino):
 	#comparar nuestra direccion con el destino
 	return 0
 
+
 timon= mt.PaP(1, 2, 3, 4)
+motorDirec= mt.puenteH(1,2)
+#meto primera
+motorDirec.girarD()
 
 #en esta array se guardan los waypoints a recorrer 
 #cada waypoint se guarda en una fila distinta
