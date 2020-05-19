@@ -1,7 +1,7 @@
 import time as tm 
 import numpy as np 
 import motores as mt 
-#uso numpy ya que tiene un mejor manejo de matrices
+from pynmea2 import nmea
 
 def EvitarObstaculos():
         #Sensores para evitar que el barco choque
@@ -46,15 +46,17 @@ def Girar(motor, waypoint):
 
 		#vuelve a su posicion el timon
 		if (giro==1):
-			motor.girarH(10)
-		else:
 			motor.girarAH(10)
+		else:
+			motor.girarH(10)
 
 	return 0
 
 def LlegadaAlWP(destino):
 	#comparar nuestra direccion con el destino
 	return 0
+
+
 
 
 timon= mt.PaP(1, 2, 3, 4)
@@ -64,7 +66,7 @@ motorDirec.girarD()
 
 #en esta array se guardan los waypoints a recorrer 
 #cada waypoint se guarda en una fila distinta
-waypoints= np.empty(TotaldeWaypoints, 2)
+waypoints= np.empty((TotaldeWaypoints, 2))
 
 #se recorren todos los watpoints uno por uno
 for i in range (0, len(waypoints)):
