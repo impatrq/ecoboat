@@ -3,6 +3,10 @@ import numpy as np
 import motores as mt 
 #uso numpy ya que tiene un mejor manejo de matrices
 
+def EvitarObstaculos():
+        #Sensores para evitar que el barco choque
+        return 1
+
 def DireccionActual():
 	#determinar la direccion actual, esta funcion ya esta en la libreria del gps
 	#para que el gps determine la direccion debemos recorrer unos metros
