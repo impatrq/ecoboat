@@ -2,6 +2,8 @@ import RPi.GPIO as gpio
 import time 
 import numpy as np 
 
+#agregar configuracion de pines gpio
+
 estados=np.array([
 	["True","False","False","False"],
 	["False","True","False","False"],

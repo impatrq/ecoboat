@@ -1,11 +1,12 @@
 import time as tm 
 import numpy as np 
 import motores as mt 
-from pynmea2 import nmea
+import gps
+import math
 
 def EvitarObstaculos():
-        #Sensores para evitar que el barco choque
-        return 1
+    #Sensores para evitar que el barco choque
+    return 1
 
 def DireccionActual():
 	#determinar la direccion actual, esta funcion ya esta en la libreria del gps
@@ -54,10 +55,15 @@ def Girar(motor, waypoint):
 
 def LlegadaAlWP(destino):
 	#comparar nuestra direccion con el destino
-	return 0
+	dis= gps.distancia(pos, destino)
 
+	if(abs(dis) <= 5):
+		return 0
+	else:
+		return 1
+	
 
-
+pos= gps.Gps()
 
 timon= mt.PaP(1, 2, 3, 4)
 motorDirec= mt.puenteH(1,2)
