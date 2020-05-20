@@ -1,11 +1,12 @@
 import time as tm 
 import numpy as np 
 import motores as mt 
-#uso numpy ya que tiene un mejor manejo de matrices
+import gps
+import math
 
 def EvitarObstaculos():
-        #Sensores para evitar que el barco choque
-        return 1
+    #Sensores para evitar que el barco choque
+    return 1
 
 def DireccionActual():
 	#determinar la direccion actual, esta funcion ya esta en la libreria del gps
@@ -46,16 +47,23 @@ def Girar(motor, waypoint):
 
 		#vuelve a su posicion el timon
 		if (giro==1):
-			motor.girarH(10)
-		else:
 			motor.girarAH(10)
+		else:
+			motor.girarH(10)
 
 	return 0
 
 def LlegadaAlWP(destino):
 	#comparar nuestra direccion con el destino
-	return 0
+	dis= gps.distancia(pos, destino)
 
+	if(abs(dis) <= 5):
+		return 0
+	else:
+		return 1
+	
+
+pos= gps.Gps()
 
 timon= mt.PaP(1, 2, 3, 4)
 motorDirec= mt.puenteH(1,2)
@@ -64,7 +72,7 @@ motorDirec.girarD()
 
 #en esta array se guardan los waypoints a recorrer 
 #cada waypoint se guarda en una fila distinta
-waypoints= np.empty(TotaldeWaypoints, 2)
+waypoints= np.empty((TotaldeWaypoints, 2))
 
 #se recorren todos los watpoints uno por uno
 for i in range (0, len(waypoints)):
