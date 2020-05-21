@@ -38,3 +38,18 @@ def distancia(gps, waypoint):
 	d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return d
 
+def cursoHacia(gps, waypoint):
+	gps.lectura()
+	lat1=gps.lat
+	lng1=gps.lng
+	lat2=waypoint[0, 0]
+	lng2=waypoint[0, 1]
+	dlon=lng2-lng1 
+	a1=sin(dlon)*cos(lat2)
+	a2=(cos(lat1)*sin(lat2))-(sin(lat1)*cos(lat2)*cos(dlon))
+	curso=atan2(a1, a2)
+
+	if(curso < 0):
+		curso += 2*math.pi
+
+	return degrees(curso)
