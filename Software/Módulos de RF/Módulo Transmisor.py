@@ -1,37 +1,54 @@
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
 from lib_nrf24 import NRF24
 import time
 import spidev
 
-pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+GPIO.setmode(GPIO.BCM)
 
-radio2 = NRF24(GPIO, spidev.SpiDev())
-radio2.begin(0, 17)
+class transmisor():
 
-radio2.setRetries(15,15)
+	def __init__(self, pin1, pin2):
+		self.pin1=pin1
+	    self.pin2=pin2
 
-radio2.setPayloadSize(32)
-radio2.setChannel(0x60)
-radio2.setDataRate(NRF24.BR_2MBPS)
-radio2.setPALevel(NRF24.PA_MIN)
+	    #configuracion del modulo
 
-radio2.setAutoAck(True)
-radio2.enableDynamicPayloads()
-radio2.enableAckPayload()
+		pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 
-radio2.openWritingPipe(pipes[1])
+		radio = NRF24(GPIO, spidev.SpiDev())
+		radio.begin(self.pin1, self.pin2)
 
-radio2.printDetails()
+		radio.setRetries(15,15)
 
-while True:
-    mensaje = list("dato")
-    radio.Write(mensaje)
-    print ("Se mandó el mensaje")
+		radio.setPayloadSize(32)
+		radio.setChannel(0x60)
+		radio.setDataRate(NRF24.BR_2MBPS)
+		radio.setPALevel(NRF24.PA_MIN)
 
-    if radio.isAckPayloadAvailable ():
-        returnedPL = []
-        radio.read(returnedPL, radio.getDynamicPayloadSize())
-        print (returnedPL)
-    else:
-        print ("No se recivió el mensaje")
+		radio.setAutoAck(True)
+		radio.enableDynamicPayloads()
+		radio.enableAckPayload()
+
+		radio.openWritingPipe(pipes[1])
+
+		radio.printDetails()
+
+	#envia un mensaje
+	def enviar(self, mensaje)
+	    msj = list(mensaje)
+	    radio.Write(msj)
+	    print ("Se mandó el mensaje")
+
+	    if radio.isAckPayloadAvailable ():
+	        returnedPL = []
+	        radio.read(returnedPL, radio.getDynamicPayloadSize())
+	        print (returnedPL)
+	    else:
+	        print ("No se recivió el mensaje")
+	    time.sleep(1)
+
+	#configuracion del modulo por si no se quiere la predeterminada
+	#se le pueden agregar mas cosas
+	def config(self, canal, tamaño):
+		radio.setPayloadSize(tamaño)
+		radio.setChannel(canal)
