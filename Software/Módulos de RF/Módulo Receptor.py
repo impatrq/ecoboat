@@ -1,45 +1,55 @@
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
 from lib_nrf24 import NRF24
 import time
 import spidev
 
-pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+GPIO.setmode(GPIO.BCM)
 
-radio2 = NRF24(GPIO, spidev.SpiDev())
-radio2.begin(0, 17)
+class receptor():
 
-radio2.setRetries(15,15)
+    def __init__(self, pin1, pin2):
+        self.pin1=pin1
+        self.pin2=pin2
 
-radio2.setPayloadSize(32)
-radio2.setChannel(0x60)
-radio2.setDataRate(NRF24.BR_2MBPS)
-radio2.setPALevel(NRF24.PA_MIN)
+        #configuracion del modulo
 
-radio2.setAutoAck(True)
-radio2.enableDynamicPayloads()
-radio2.enableAckPayload()
+        pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 
-radio2.openReadingPipe(1, pipes[1])
+        radio = NRF24(GPIO, spidev.SpiDev())
 
-radio2.printDetails()
+        radio.begin(self.pin1, self.pin2)
 
-radio2.startListening()
+        radio.setRetries(15,15)
+        radio.setPayloadSize(32)
+        radio.setChannel(0x60)
+        radio.setDataRate(NRF24.BR_2MBPS)
+        radio.setPALevel(NRF24.PA_MIN)
 
-while True:
-    while not radio2.available(0):
-        time.sleep(1/100)
+        radio.setAutoAck(True)
+        radio.enableDynamicPayloads()
+        radio.enableAckPayload()
 
-    msjRecibido = []
-    radio2.read(msjRecibido, radio2.getDynamicPayloadSize())
-    print ("Recivido: {}".format(msjRecivido))
+        radio.openReadingPipe(1, pipes[1])
 
-    print ("Traduciendo los mensajes...")
-    mensaje = ""
-    for n in msjRecibido
-        if (n >= 32 and n <= 126)
-            mensaje += chr(n)
-    print (mensaje)
+        radio.printDetails()
 
-    radio.witeAckPayload(1, ackPL, len(ackPL))
-    print("Se envió la confirmación de mensaje de {}".format(ackPL))
+        radio.startListening()
+
+        #se queda esperando un mensaje
+        while True:
+            while not radio2.available(0):
+                time.sleep(1/100)
+
+            msjRecibido = []
+            radio2.read(msjRecibido, radio2.getDynamicPayloadSize())
+            print ("Recivido: {}".format(msjRecivido))
+
+            print ("Traduciendo los mensajes...")
+            mensaje = ""
+            for n in msjRecibido
+                if (n >= 32 and n <= 126)
+                    mensaje += chr(n)
+            print (mensaje)
+
+            radio.witeAckPayload(1, ackPL, len(ackPL))
+            print("Se envió la confirmación de mensaje de {}".format(ackPL))
