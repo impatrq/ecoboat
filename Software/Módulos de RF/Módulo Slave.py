@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 from lib_nrf24 import NRF24
 import time
 import spidev
+import EstructuraPilotoAutomatico
+import gps
 
 GPIO.setmode(GPIO.BCM)
 
@@ -36,15 +38,29 @@ class slave():
 
         radio.startListening()
 
-def coordenadas(gps):
-    #Tomo la posición del barco
-    return pos
+def direccion(gps):
+    #Tomo la direccion del barco
+    Gps.lectura()
+    direccion = Gps.cur
+    return direccion
+
+def latitud(gps):
+    #Tomo la latitud del barco
+    Gps.lectura()
+    latitud = Gps.lat
+    return latitud
+
+def longitud(gps):
+    #Tomo la latitud del barco
+    Gps.lectura()
+    longitud = Gps.lng
+    return longitud
 
 def bateria():
     #Detecto el porcentaje de bateria
     return bateria
 
-def conPropulsion():
+def consPropulsion():
     #Mido el consumo del motor de propulsión.
     return consPropulsion
 
@@ -56,17 +72,17 @@ def anguloMotDir():
     #Mido el ángulo del motor de dirección
     return anguloMotDir
 
-def PaqueteDeData():
-    #repartir la informacion en paquetes para enviarlos
-    return paquete
 
-def enviarDatos(mensaje):
+def enviarDatos(direccion, latitud, longitud, bateria, consPropulsion, consCangilon, anguloMotDir):
     #Creo un array con todos los datos y lo envío.
     radio.stopListening()
     time.sleep(0.25)
-    datos = mensaje
-    radio.Write(datos)
-    radio.startListening()
+    direccionSend = list(direccion)
+    radio.Write(direccionSend)
+    latitudSend = list(latitud)
+    radio.Write(latitudSend)
+    longitudSend = list(longitud)
+    radio.Write(longitudSend)
 
 def detectarSiEstaciono():
     #Detecto si el barco volvió a la estación de carga.
@@ -94,15 +110,19 @@ while True:
             mensaje += chr(n)
     print (mensaje)
 
-    #Cuando el Master se lo pide. Obtiene todos los datos y los envía.
+    #Cuando el Master se lo pide, obtiene todos los datos y los envía.
     if mensaje == "Zarpar":
         while estacionado == 0: #Una vez que el barco estaciona, sale del while.
-            posicion = coordenadas()
+            direccion = direccion(gps)
+            latitud = latitud(gps)
+            longitud = longitud (gps)
             bateria = bateria()
             consPropulsion = consPropulsion()
             consCangilon = consCangilon()
             anguloMotDir = anguloMotDir()
             enviarDatos(mensaje)
+            time.sleep(0.5)
+        radio.startListening()
 
             radio.witeAckPayload(1, ackPL, len(ackPL))
             print("Se envió la confirmación de mensaje de {}".format(ackPL))
