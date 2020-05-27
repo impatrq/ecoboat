@@ -13,9 +13,10 @@ def DireccionActual():
 	return Gps.cur
 
 def DireccionDeseada(waypoint):
-	return gps.cursoHacia(Gps, waypoint)
+	Gps.lectura()
+	return gps.cursoHacia(Gps.lat, Gps.lng, waypoint)
 
-def Girar(motor, waypoint):
+def Girar(waypoint):
 
 	#primero hace un primer chequeo de la diferencia de direccion
 	DD= DireccionDeseada(waypoint)
@@ -29,10 +30,10 @@ def Girar(motor, waypoint):
 	else:
 		#verifica si hay que girar a la derecha o izquierda
 		if(DeltaD<0):
-			motor.girarH(10)
+			timon.girarH(10)
 			giro=1
 		else:
-			motor.girarAH(10)
+			timon.girarAH(10)
 			giro=0
 
 		#se mantiene girando hasta que corrija el rumbo
@@ -44,15 +45,16 @@ def Girar(motor, waypoint):
 
 		#vuelve a su posicion el timon
 		if (giro==1):
-			motor.girarAH(10)
+			timon.girarAH(10)
 		else:
-			motor.girarH(10)
+			timon.girarH(10)
 
 	return 0
 
 def LlegadaAlWP(destino):
 	#comparar nuestra direccion con el destino
-	dis= gps.distancia(Gps, destino)
+	Gps.lectura()
+	dis= gps.distancia(Gps.lat, Gps.lng, destino)
 
 	if(abs(dis) <= 5):
 		return 0
@@ -75,5 +77,5 @@ waypoints= np.empty((TotaldeWaypoints, 2))
 for i in range (0, len(waypoints)):
 	#la idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
 	while(LlegadaAlWP(waypoints[i]) != 1):
-		Girar(timon, waypoints[i])
+		Girar(waypoints[i])
 		tm.sleep(0.05)
