@@ -30,6 +30,7 @@ class slave():
         radio.enableAckPayload()
 
         radio.openReadingPipe(1, pipes[1])
+        radio.openWritingPipe(pipes[0])
 
         radio.printDetails()
 
