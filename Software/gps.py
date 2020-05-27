@@ -26,10 +26,7 @@ class Gps():
 
 		return 0
 
-def distancia(gps, waypoint):
-	gps.lectura()
-	lat1=gps.lat
-	lng1=gps.lng
+def distancia(lat1, lng1 , waypoint):
 	lat2=waypoint[0, 0]
 	lng2=waypoint[0, 1]
 	r=6371000
@@ -38,10 +35,7 @@ def distancia(gps, waypoint):
 	d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 	return d
 
-def cursoHacia(gps, waypoint):
-	gps.lectura()
-	lat1=gps.lat
-	lng1=gps.lng
+def cursoHacia(lat1, lng1, waypoint):
 	lat2=waypoint[0, 0]
 	lng2=waypoint[0, 1]
 	dlon=lng2-lng1 
