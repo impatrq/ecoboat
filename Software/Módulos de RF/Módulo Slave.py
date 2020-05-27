@@ -73,6 +73,11 @@ def detectarSiEstaciono():
     return estacionado
 
 while True:
+    
+    #Avisa que resivió el comando.
+    ackPL = [1]
+    radio.writeAckPayload(1, ackPL, len (ackPL))
+    
     #se queda esperando un mensaje
     while not radio2.available(0):
         time.sleep(1/100)
