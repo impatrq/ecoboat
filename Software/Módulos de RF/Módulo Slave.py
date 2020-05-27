@@ -36,10 +36,9 @@ class slave():
 
         radio.startListening()
 
-def coordenadas():
+def coordenadas(gps):
     #Tomo la posición del barco
-    return latitud
-    return longitud
+    return pos
 
 def bateria():
     #Detecto el porcentaje de bateria
@@ -57,13 +56,17 @@ def anguloMotDir():
     #Mido el ángulo del motor de dirección
     return anguloMotDir
 
-def enviarDatos(latitud, longitud, bateria, consPropulsion, consCangilon, anguloMotDir):
+def PaqueteDeData():
+    #repartir la informacion en paquetes para enviarlos
+    return paquete
+
+def enviarDatos(mensaje):
     #Creo un array con todos los datos y lo envío.
     radio.stopListening()
     time.sleep(0.25)
-    datos = #Acá irían todos los datos.
+    datos = mensaje
     radio.Write(datos)
-    radio.startListening
+    radio.startListening()
 
 def detectarSiEstaciono():
     #Detecto si el barco volvió a la estación de carga.
@@ -94,7 +97,7 @@ while True:
             consPropulsion = consPropulsion()
             consCangilon = consCangilon()
             anguloMotDir = anguloMotDir()
-            enviarDatos()
+            enviarDatos(mensaje)
 
             radio.witeAckPayload(1, ackPL, len(ackPL))
             print("Se envió la confirmación de mensaje de {}".format(ackPL))
