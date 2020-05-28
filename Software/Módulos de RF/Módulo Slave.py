@@ -38,19 +38,19 @@ class slave():
 
         radio.startListening()
 
-def direccion(gps):
+def direccion():
     #Tomo la direccion del barco
     Gps.lectura()
     direccion = Gps.cur
     return direccion
 
-def latitud(gps):
+def latitud():
     #Tomo la latitud del barco
     Gps.lectura()
     latitud = Gps.lat
     return latitud
 
-def longitud(gps):
+def longitud():
     #Tomo la latitud del barco
     Gps.lectura()
     longitud = Gps.lng
@@ -75,7 +75,6 @@ def anguloMotDir():
 
 def enviarDatos(direccion, latitud, longitud, bateria, consPropulsion, consCangilon, anguloMotDir):
     #Creo un array con todos los datos y lo envío.
-    radio.stopListening()
     time.sleep(0.25)
     direccionSend = list(direccion)
     radio.Write(direccionSend)
@@ -84,9 +83,11 @@ def enviarDatos(direccion, latitud, longitud, bateria, consPropulsion, consCangi
     longitudSend = list(longitud)
     radio.Write(longitudSend)
 
-def detectarSiEstaciono():
+def Llegada():
     #Detecto si el barco volvió a la estación de carga.
     return estacionado
+
+Gps= gps.Gps()
 
 while True:
     
@@ -95,12 +96,12 @@ while True:
     radio.writeAckPayload(1, ackPL, len (ackPL))
     
     #se queda esperando un mensaje
-    while not radio2.available(0):
+    while not radio.available(0):
         time.sleep(1/100)
 
     #Recive un comando del Master.
     msjRecibido = []
-    radio2.read(msjRecibido, radio2.getDynamicPayloadSize())
+    radio.read(msjRecibido, radio.getDynamicPayloadSize())
     print ("Recivido: {}".format(msjRecivido))
 
     print ("Traduciendo los mensajes...")
@@ -111,18 +112,19 @@ while True:
     print (mensaje)
 
     #Cuando el Master se lo pide, obtiene todos los datos y los envía.
-    if mensaje == "Zarpar":
-        while estacionado == 0: #Una vez que el barco estaciona, sale del while.
-            direccion = direccion(gps)
-            latitud = latitud(gps)
-            longitud = longitud (gps)
+    if mensaje == "Si":
+    	radio.stopListening()
+        while Llegada == 0: #Una vez que el barco estaciona, sale del while.
+            direccion = direccion()
+            latitud = latitud()
+            longitud = longitud ()
             bateria = bateria()
             consPropulsion = consPropulsion()
             consCangilon = consCangilon()
             anguloMotDir = anguloMotDir()
             enviarDatos(mensaje)
             time.sleep(0.5)
-        radio.startListening()
 
-            radio.witeAckPayload(1, ackPL, len(ackPL))
-            print("Se envió la confirmación de mensaje de {}".format(ackPL))
+        radio.startListening()
+        radio.witeAckPayload(1, ackPL, len(ackPL))
+        print("Se envió la confirmación de mensaje de {}".format(ackPL))

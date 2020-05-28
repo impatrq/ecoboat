@@ -1,5 +1,6 @@
-import motores as mt 
+import numpy as np 
 
-a= mt.puenteH(1,2)
+a= np.full((2,3),4)
 
-print(a.pin1)
+print(a[1])
+print(a[:, 2])
