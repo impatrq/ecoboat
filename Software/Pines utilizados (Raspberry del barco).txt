@@ -1,0 +1,7 @@
+Modo BCM
+
+GPIO 23 (Batería)
+GPIO 24 (Consumo del motor de Propulsión)
+GPIO 25 (Consumo del motor del Cangilón)
+GPIO 12 (Ángulo del motor de Dirección)
+GPIO 26 (Detección de estacionamiento)
