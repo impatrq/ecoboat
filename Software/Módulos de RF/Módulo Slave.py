@@ -58,18 +58,22 @@ def longitud():
 
 def bateria():
     #Detecto el porcentaje de bateria
+    GPIO.setup(23, GPIO.IN)
     return bateria
 
 def consPropulsion():
     #Mido el consumo del motor de propulsión.
+    GPIO.setup(24, GPIO.IN)
     return consPropulsion
 
 def consCangilon():
     #Mido el consumo del motor del cangilón.
+    GPIO.setup(25, GPIO.IN)
     return consCangilon
 
 def anguloMotDir():
     #Mido el ángulo del motor de dirección
+    GPIO.setup(12, GPIO.IN)
     return anguloMotDir
 
 
@@ -82,16 +86,25 @@ def enviarDatos(direccion, latitud, longitud, bateria, consPropulsion, consCangi
     radio.Write(latitudSend)
     longitudSend = list(longitud)
     radio.Write(longitudSend)
+    bateriaSend = list(bateria)
+    radio.Write(bateriaSend)
+    consPropulsionSend = list(consPropulsion)
+    radio.Write(consPropulsionSend)
+    consCangilonSend = list(consCangilon)
+    radio.Write(consCangilonSend)
+    anguloMotDirSend = list(anguloMotDir)
+    radio.Write(anguloMotDirSend)
 
 def Llegada():
     #Detecto si el barco volvió a la estación de carga.
+    GPIO.setup(26, GPIO.IN)
     return estacionado
 
 Gps= gps.Gps()
 
 while True:
     
-    #Avisa que resivió el comando.
+    #Avisa que recivió el comando.
     ackPL = [1]
     radio.writeAckPayload(1, ackPL, len (ackPL))
     
@@ -126,5 +139,3 @@ while True:
             time.sleep(0.5)
 
         radio.startListening()
-        radio.witeAckPayload(1, ackPL, len(ackPL))
-        print("Se envió la confirmación de mensaje de {}".format(ackPL))
