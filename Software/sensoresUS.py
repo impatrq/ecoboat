@@ -5,12 +5,14 @@ import numpy as np
 #libreria para el control de los sensores us
 #estado = verde
 
-TRIG = 23 #hay que especificar los puertos
+TRIG1 = 23
+TRIG2 = 22 #hay que especificar los puertos
 ECHO = 24 #estos son ejemplos
 
 GPIO.setmode(GPIO.BCM)
 # Establecer que TRIG es un canal de salida.
-GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(TRIG1, GPIO.OUT)
+GPIO.setup(TRIG2, GPIO.OUT)
 # Establecer que ECHO es un canal de entrada.
 GPIO.setup(ECHO, GPIO.IN)
 
@@ -21,17 +23,13 @@ GPIO.setup(3, GPIO.OUT)
 
 def medicion():
 
-
-	# Apagar el pin activador y permitir un par de
-	# segundos para que se estabilice.
-	GPIO.output(TRIG, "False")
-	time.sleep(2)
-
 	# Prender el pin activador por 10 microsegundos
 	# y después volverlo a apagar.
-	GPIO.output(TRIG, "True")
+	GPIO.output(TRIG1, "True")
+	GPIO.output(TRIG2, "False")
 	time.sleep(0.00001)
-	GPIO.output(TRIG, "False")
+	GPIO.output(TRIG1, "False")
+	GPIO.output(TRIG2, "True")
 
 	# En este momento el sensor envía 8 pulsos
 	# y pone a ECHO en HIGH
@@ -53,6 +51,11 @@ def medicion():
 	distancia = (17150 * duracion)
 
 	return distancia
+
+#hay que darle unos segundos a los sensores para que se estabilicen
+GPIO.output(TRIG1, "False")
+GPIO.output(TRIG2, "True")
+time.sleep(2)
 
 def lectura():
 	datos= np.empty((1, 8))
