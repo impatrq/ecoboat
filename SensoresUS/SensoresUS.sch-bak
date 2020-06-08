@@ -14,23 +14,23 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L 74xx:74HCT137 ECHO
+L 74xx:74HCT137 Echo2
 U 1 1 5EDE6D7B
 P 5700 4750
-F 0 "ECHO" H 5700 5531 50  0000 C CNN
+F 0 "Echo2" H 5700 5531 50  0000 C CNN
 F 1 "74HCT137" H 5700 5440 50  0000 C CNN
-F 2 "" H 5700 4750 50  0001 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 5700 4750 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/cd74hc237.pdf" H 5700 4750 50  0001 C CNN
 	1    5700 4750
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x08_Female SalidasEcho
+L Connector:Conn_01x08_Female SalidasEcho1
 U 1 1 5EDF2DE8
 P 6650 4650
-F 0 "SalidasEcho" H 6678 4580 50  0000 L CNN
+F 0 "SalidasEcho1" H 6678 4580 50  0000 L CNN
 F 1 "Conn_01x08_Female" H 6678 4535 50  0001 L CNN
-F 2 "" H 6650 4650 50  0001 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-08A_1x08_P2.54mm_Vertical" H 6650 4650 50  0001 C CNN
 F 3 "~" H 6650 4650 50  0001 C CNN
 	1    6650 4650
 	1    0    0    -1  
@@ -52,10 +52,10 @@ Wire Wire Line
 Wire Wire Line
 	6100 5050 6450 5050
 $Comp
-L Connector:Conn_01x03_Female Seleccion
+L Connector:Conn_01x03_Female Seleccion1
 U 1 1 5EDFA4FC
 P 4400 4000
-F 0 "Seleccion" H 4292 4193 50  0000 C CNN
+F 0 "Seleccion1" H 4292 4193 50  0000 C CNN
 F 1 "Conn_01x03_Female" H 4292 4194 50  0001 C CNN
 F 2 "" H 4400 4000 50  0001 C CNN
 F 3 "~" H 4400 4000 50  0001 C CNN
@@ -87,12 +87,12 @@ Wire Wire Line
 Wire Wire Line
 	5050 4550 5300 4550
 $Comp
-L Connector:Conn_01x08_Female SalidasTrig
+L Connector:Conn_01x08_Female SalidasTrig1
 U 1 1 5EE0315F
 P 6650 3250
-F 0 "SalidasTrig" H 6678 3180 50  0000 L CNN
+F 0 "SalidasTrig1" H 6678 3180 50  0000 L CNN
 F 1 "Conn_01x08_Female" H 6542 3644 50  0001 C CNN
-F 2 "" H 6650 3250 50  0001 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-08A_1x08_P2.54mm_Vertical" H 6650 3250 50  0001 C CNN
 F 3 "~" H 6650 3250 50  0001 C CNN
 	1    6650 3250
 	1    0    0    -1  
@@ -120,10 +120,10 @@ Select2
 Text GLabel 5050 3150 0    50   Input ~ 0
 Select3
 $Comp
-L Connector:Conn_01x01_Female Trig
+L Connector:Conn_01x01_Female Trig1
 U 1 1 5EE0702A
 P 4850 3650
-F 0 "Trig" H 4742 3743 50  0000 C CNN
+F 0 "Trig1" H 4742 3743 50  0000 C CNN
 F 1 "Conn_01x01_Female" H 4742 3744 50  0001 C CNN
 F 2 "" H 4850 3650 50  0001 C CNN
 F 3 "~" H 4850 3650 50  0001 C CNN
@@ -131,12 +131,12 @@ F 3 "~" H 4850 3650 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x01_Female Echo
+L Connector:Conn_01x01_Female Echo1
 U 1 1 5EE08B55
 P 4850 5050
-F 0 "Echo" H 4742 5143 50  0000 C CNN
+F 0 "Echo1" H 4742 5143 50  0000 C CNN
 F 1 "Conn_01x01_Female" H 4742 5144 50  0001 C CNN
-F 2 "" H 4850 5050 50  0001 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-05A_1x05_P2.54mm_Vertical" H 4850 5050 50  0001 C CNN
 F 3 "~" H 4850 5050 50  0001 C CNN
 	1    4850 5050
 	-1   0    0    -1  
@@ -152,10 +152,10 @@ Wire Wire Line
 Wire Wire Line
 	5050 2950 5300 2950
 $Comp
-L power:+5V #PWR?
+L power:+5V #PWR0101
 U 1 1 5EE0D3E3
 P 5000 2450
-F 0 "#PWR?" H 5000 2300 50  0001 C CNN
+F 0 "#PWR0101" H 5000 2300 50  0001 C CNN
 F 1 "+5V" H 5015 2623 50  0000 C CNN
 F 2 "" H 5000 2450 50  0001 C CNN
 F 3 "" H 5000 2450 50  0001 C CNN
@@ -163,12 +163,12 @@ F 3 "" H 5000 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74HCT137 ECHO
+L 74xx:74HCT137 Trig2
 U 1 1 5EE03155
 P 5700 3350
-F 0 "ECHO" H 5700 4131 50  0000 C CNN
+F 0 "Trig2" H 5700 4131 50  0000 C CNN
 F 1 "74HCT137" H 5700 4040 50  0000 C CNN
-F 2 "" H 5700 3350 50  0001 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 5700 3350 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/cd74hc237.pdf" H 5700 3350 50  0001 C CNN
 	1    5700 3350
 	1    0    0    -1  
@@ -188,10 +188,10 @@ Wire Wire Line
 Wire Wire Line
 	5000 2500 5000 2450
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0102
 U 1 1 5EE138C4
 P 5700 5350
-F 0 "#PWR?" H 5700 5100 50  0001 C CNN
+F 0 "#PWR0102" H 5700 5100 50  0001 C CNN
 F 1 "GND" H 5705 5177 50  0000 C CNN
 F 2 "" H 5700 5350 50  0001 C CNN
 F 3 "" H 5700 5350 50  0001 C CNN
@@ -199,10 +199,10 @@ F 3 "" H 5700 5350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0103
 U 1 1 5EE141AD
 P 6000 3850
-F 0 "#PWR?" H 6000 3600 50  0001 C CNN
+F 0 "#PWR0103" H 6000 3600 50  0001 C CNN
 F 1 "GND" H 6005 3677 50  0000 C CNN
 F 2 "" H 6000 3850 50  0001 C CNN
 F 3 "" H 6000 3850 50  0001 C CNN
