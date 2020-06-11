@@ -110,35 +110,24 @@ $EndComp
 $Comp
 L Amplifier_Operational:OP07 op1
 U 1 1 5E9EA082
-P 6100 2850
-F 0 "op1" H 6250 3100 50  0000 L CNN
-F 1 "OP07" H 6250 3000 50  0000 L CNN
-F 2 "Package_DIP:DIP-8_W7.62mm" H 6150 2900 50  0001 C CNN
-F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/OP07.pdf" H 6150 3000 50  0001 C CNN
-	1    6100 2850
+P 6200 2850
+F 0 "op1" H 6350 3100 50  0000 L CNN
+F 1 "OP07" H 6350 3000 50  0000 L CNN
+F 2 "Package_DIP:DIP-8_W7.62mm" H 6250 2900 50  0001 C CNN
+F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/OP07.pdf" H 6250 3000 50  0001 C CNN
+	1    6200 2850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R_POT RV1
 U 1 1 5E9EA848
-P 5450 4100
-F 0 "RV1" H 5381 4146 50  0000 R CNN
-F 1 "R_POT" H 5381 4055 50  0000 R CNN
-F 2 "Potentiometer_THT:Potentiometer_ACP_CA14-H5_Horizontal" H 5450 4100 50  0001 C CNN
-F 3 "~" H 5450 4100 50  0001 C CNN
-	1    5450 4100
+P 5400 3600
+F 0 "RV1" H 5331 3646 50  0000 R CNN
+F 1 "R_POT" H 5331 3555 50  0000 R CNN
+F 2 "Potentiometer_THT:Potentiometer_ACP_CA14-H5_Horizontal" H 5400 3600 50  0001 C CNN
+F 3 "~" H 5400 3600 50  0001 C CNN
+	1    5400 3600
 	0    -1   -1   0   
-$EndComp
-$Comp
-L pspice:DIODE D1
-U 1 1 5E9E51EC
-P 6700 2850
-F 0 "D1" V 6654 2978 50  0000 L CNN
-F 1 "DIODE" V 6745 2978 50  0000 L CNN
-F 2 "Diode_THT:D_A-405_P12.70mm_Horizontal" H 6700 2850 50  0001 C CNN
-F 3 "~" H 6700 2850 50  0001 C CNN
-	1    6700 2850
-	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	4500 2550 4500 2750
@@ -195,61 +184,58 @@ Wire Wire Line
 $Comp
 L Device:C C3
 U 1 1 5E9EDB4A
-P 5950 3900
-F 0 "C3" H 6065 3946 50  0000 L CNN
-F 1 "100nF" H 6000 3800 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D4.3mm_W1.9mm_P5.00mm" H 5988 3750 50  0001 C CNN
-F 3 "~" H 5950 3900 50  0001 C CNN
-	1    5950 3900
+P 5750 3300
+F 0 "C3" H 5865 3346 50  0000 L CNN
+F 1 "100nF" H 5800 3200 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D4.3mm_W1.9mm_P5.00mm" H 5788 3150 50  0001 C CNN
+F 3 "~" H 5750 3300 50  0001 C CNN
+	1    5750 3300
 	0    1    1    0   
 $EndComp
 $Comp
 L Device:R R2
 U 1 1 5E9F03A1
-P 4800 4100
-F 0 "R2" H 4870 4146 50  0000 L CNN
-F 1 "82K" H 4870 4055 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4730 4100 50  0001 C CNN
-F 3 "~" H 4800 4100 50  0001 C CNN
-	1    4800 4100
+P 4750 3600
+F 0 "R2" H 4820 3646 50  0000 L CNN
+F 1 "82K" H 4820 3555 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4680 3600 50  0001 C CNN
+F 3 "~" H 4750 3600 50  0001 C CNN
+	1    4750 3600
 	0    1    1    0   
 $EndComp
-Connection ~ 4500 3150
 $Comp
 L power:Earth #PWR0105
 U 1 1 5E9F166F
-P 6150 4100
-F 0 "#PWR0105" H 6150 3850 50  0001 C CNN
-F 1 "Earth" H 6150 3950 50  0001 C CNN
-F 2 "" H 6150 4100 50  0001 C CNN
-F 3 "~" H 6150 4100 50  0001 C CNN
-	1    6150 4100
+P 6100 3600
+F 0 "#PWR0105" H 6100 3350 50  0001 C CNN
+F 1 "Earth" H 6100 3450 50  0001 C CNN
+F 2 "" H 6100 3600 50  0001 C CNN
+F 3 "~" H 6100 3600 50  0001 C CNN
+	1    6100 3600
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x02 PANEL1
 U 1 1 5E9F9816
-P 5900 2250
-F 0 "PANEL1" V 5864 2062 50  0000 R CNN
-F 1 "Screw_Terminal_01x02" V 5850 3200 50  0001 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 5900 2250 50  0001 C CNN
-F 3 "~" H 5900 2250 50  0001 C CNN
-	1    5900 2250
+P 6000 2250
+F 0 "PANEL1" V 5964 2062 50  0000 R CNN
+F 1 "Screw_Terminal_01x02" V 5950 3200 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 6000 2250 50  0001 C CNN
+F 3 "~" H 6000 2250 50  0001 C CNN
+	1    6000 2250
 	0    -1   -1   0   
 $EndComp
 $Comp
 L power:Earth #PWR0107
 U 1 1 5E9FBB4D
-P 5850 2450
-F 0 "#PWR0107" H 5850 2200 50  0001 C CNN
-F 1 "Earth" H 5850 2300 50  0001 C CNN
-F 2 "" H 5850 2450 50  0001 C CNN
-F 3 "~" H 5850 2450 50  0001 C CNN
-	1    5850 2450
+P 5950 2450
+F 0 "#PWR0107" H 5950 2200 50  0001 C CNN
+F 1 "Earth" H 5950 2300 50  0001 C CNN
+F 2 "" H 5950 2450 50  0001 C CNN
+F 3 "~" H 5950 2450 50  0001 C CNN
+	1    5950 2450
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5900 2450 5850 2450
 Wire Wire Line
 	4500 2100 4500 2200
 Wire Wire Line
@@ -261,115 +247,140 @@ Wire Wire Line
 Connection ~ 4500 2100
 Connection ~ 4500 2550
 Wire Wire Line
-	6400 2850 6500 2850
-Wire Wire Line
-	6900 2850 6900 2150
-Wire Wire Line
 	4600 2150 4600 2200
 Connection ~ 4600 2200
 $Comp
 L Device:R R3
 U 1 1 5EBF2660
-P 5750 2550
-F 0 "R3" H 5820 2596 50  0000 L CNN
-F 1 "1.2K" H 5820 2505 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 5680 2550 50  0001 C CNN
-F 3 "~" H 5750 2550 50  0001 C CNN
-	1    5750 2550
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	6000 2450 6000 2500
-Wire Wire Line
-	6000 2500 6100 2500
-Wire Wire Line
-	6100 2500 6100 2100
-Wire Wire Line
-	6100 2100 5750 2100
-Wire Wire Line
-	5750 2100 5750 2400
-Connection ~ 6000 2500
-Wire Wire Line
-	6000 2500 6000 2550
-Wire Wire Line
-	4500 4100 4650 4100
-Wire Wire Line
-	4500 3150 4500 4100
-Wire Wire Line
-	4950 4100 5300 4100
-Wire Wire Line
-	5600 4100 5750 4100
-$Comp
-L Amplifier_Operational:OP07 op2
-U 1 1 5EDD960A
-P 5850 3450
-F 0 "op2" H 6000 3700 50  0000 L CNN
-F 1 "OP07" H 6000 3600 50  0000 L CNN
-F 2 "Package_DIP:DIP-8_W7.62mm" H 5900 3500 50  0001 C CNN
-F 3 "https://www.analog.com/media/en/technical-documentation/data-sheets/OP07.pdf" H 5900 3600 50  0001 C CNN
-	1    5850 3450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5450 3350 5550 3350
-Wire Wire Line
-	5750 3750 5750 4100
-Wire Wire Line
-	5450 3350 5450 3900
-Wire Wire Line
-	5250 2750 5500 2750
-Connection ~ 5250 2750
-Wire Wire Line
-	5750 2700 5750 3150
-Wire Wire Line
-	6900 2150 4600 2150
-$Comp
-L Device:LED D2
-U 1 1 5EDE7369
-P 6150 3650
-F 0 "D2" V 6189 3532 50  0000 R CNN
-F 1 "LED" V 6098 3532 50  0000 R CNN
-F 2 "LED_THT:LED_D3.0mm" H 6150 3650 50  0001 C CNN
-F 3 "~" H 6150 3650 50  0001 C CNN
-	1    6150 3650
+P 6850 3950
+F 0 "R3" H 6920 3996 50  0000 L CNN
+F 1 "1.2K" H 6920 3905 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 6780 3950 50  0001 C CNN
+F 3 "~" H 6850 3950 50  0001 C CNN
+	1    6850 3950
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	6150 3450 6150 3500
+	4900 3600 5250 3600
+$Comp
+L Device:LED D2
+U 1 1 5EDE7369
+P 6500 3950
+F 0 "D2" V 6539 3832 50  0000 R CNN
+F 1 "LED" V 6448 3832 50  0000 R CNN
+F 2 "LED_THT:LED_D3.0mm" H 6500 3950 50  0001 C CNN
+F 3 "~" H 6500 3950 50  0001 C CNN
+	1    6500 3950
+	1    0    0    1   
+$EndComp
 Wire Wire Line
-	6150 3800 6150 3900
+	5550 3600 6100 3600
 Wire Wire Line
-	6000 3150 6000 3400
+	6100 2450 6100 2500
 Wire Wire Line
-	6000 3400 6250 3400
+	6000 2450 5950 2450
 Wire Wire Line
-	6250 4100 6150 4100
-Connection ~ 6150 4100
+	5250 2750 5900 2750
+Connection ~ 5250 2750
 Wire Wire Line
-	5800 3900 5450 3900
-Connection ~ 5450 3900
+	5900 2950 5400 2950
+Connection ~ 6100 3600
+$Comp
+L Transistor_FET:IRF9540N QP
+U 1 1 5EE20C18
+P 6900 3650
+F 0 "QP" H 7104 3604 50  0000 L CNN
+F 1 "IRF9540N" H 7104 3695 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 7100 3575 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf9540n.pdf" H 6900 3650 50  0001 L CNN
+	1    6900 3650
+	1    0    0    1   
+$EndComp
+$Comp
+L Transistor_FET:IRF540N QN
+U 1 1 5EE22681
+P 6800 2850
+F 0 "QN" H 6650 2800 50  0000 L CNN
+F 1 "IRF540N" H 6550 2650 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 7050 2775 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 6800 2850 50  0001 L CNN
+	1    6800 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:D_Zener D1
+U 1 1 5EE23C5E
+P 6900 3250
+F 0 "D1" V 6950 3400 50  0000 R CNN
+F 1 "D_Zener" V 6900 3600 50  0000 R CNN
+F 2 "Diode_THT:D_DO-15_P15.24mm_Horizontal" H 6900 3250 50  0001 C CNN
+F 3 "~" H 6900 3250 50  0001 C CNN
+	1    6900 3250
+	0    -1   -1   0   
+$EndComp
 Wire Wire Line
-	5450 3900 5450 3950
+	6500 2850 6550 2850
 Wire Wire Line
-	5750 4100 6150 4100
-Connection ~ 5750 4100
+	6900 2650 6900 2500
 Wire Wire Line
-	6250 3400 6250 4100
+	6900 2500 6100 2500
+Connection ~ 6100 2500
 Wire Wire Line
-	6100 3900 6150 3900
-Connection ~ 6150 3900
+	6100 2500 6100 2550
 Wire Wire Line
-	6150 3900 6150 4100
+	6900 3050 6900 3100
 Wire Wire Line
-	5550 3550 5500 3550
+	6700 3650 6550 3650
 Wire Wire Line
-	5500 3550 5500 2750
-Connection ~ 5500 2750
+	6550 3650 6550 2850
+Connection ~ 6550 2850
 Wire Wire Line
-	5500 2750 5800 2750
+	6550 2850 6600 2850
 Wire Wire Line
-	5800 2950 5450 2950
+	7000 3450 7000 2500
 Wire Wire Line
-	5450 2950 5450 3350
-Connection ~ 5450 3350
+	7000 2500 6900 2500
+Connection ~ 6900 2500
+Wire Wire Line
+	6900 3400 7050 3400
+Wire Wire Line
+	7050 3400 7050 2150
+Wire Wire Line
+	7050 2150 4600 2150
+$Comp
+L power:Earth #PWR?
+U 1 1 5EE2B989
+P 6250 3950
+F 0 "#PWR?" H 6250 3700 50  0001 C CNN
+F 1 "Earth" H 6250 3800 50  0001 C CNN
+F 2 "" H 6250 3950 50  0001 C CNN
+F 3 "~" H 6250 3950 50  0001 C CNN
+	1    6250 3950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7000 3950 7000 3850
+Wire Wire Line
+	6700 3950 6650 3950
+Wire Wire Line
+	6350 3950 6250 3950
+Wire Wire Line
+	5400 2950 5400 3300
+Wire Wire Line
+	6100 3150 6100 3300
+Wire Wire Line
+	5400 3300 5600 3300
+Connection ~ 5400 3300
+Wire Wire Line
+	5400 3300 5400 3450
+Wire Wire Line
+	5900 3300 6100 3300
+Connection ~ 6100 3300
+Wire Wire Line
+	6100 3300 6100 3600
+Wire Wire Line
+	4500 3150 4500 3600
+Connection ~ 4500 3150
+Wire Wire Line
+	4500 3600 4600 3600
 $EndSCHEMATC
