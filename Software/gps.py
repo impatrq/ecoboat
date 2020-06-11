@@ -1,49 +1,19 @@
 import pynmea2 as nmea
 import serial
-import math
 import numpy
 
-class Gps():
+#falta algun while donde se quede esperando a que haya datos validos
 
-	def __init__(self):
-		self.lat=0
-		self.lng=0
-		self.cur=0
+def lectura(self):
+	port="/dev/ttyAMA0"
+	ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+	dataout=pynmea2.NMEAStreamReader()
+	data=ser.readline()
 
-		#falta algun while donde se quede esperando a que haya datos validos
+	if data[0:6] == "$GPRMC":
+		datos=pynmea2.parse(newdata)
+		lat=datos.latitude
+		lng=datos.longitude
+		cur=datos.direction
 
-	def lectura(self):
-		port="/dev/ttyAMA0"
-		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-		dataout=pynmea2.NMEAStreamReader()
-		data=ser.readline()
-
-		if data[0:6] == "$GPRMC":
-			datos=pynmea2.parse(newdata)
-			self.lat=datos.latitude
-			self.lng=datos.longitude
-			self.cur=datos.direction
-
-		return 0
-
-def distancia(lat1, lng1 , waypoint):
-	lat2=waypoint[0, 0]
-	lng2=waypoint[0, 1]
-	r=6371000
-	c=(math.pi)/180
-	#Fórmula de haversine
-	d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
-	return d
-
-def cursoHacia(lat1, lng1, waypoint):
-	lat2=waypoint[0, 0]
-	lng2=waypoint[0, 1]
-	dlon=lng2-lng1 
-	a1=sin(dlon)*cos(lat2)
-	a2=(cos(lat1)*sin(lat2))-(sin(lat1)*cos(lat2)*cos(dlon))
-	curso=atan2(a1, a2)
-
-	if(curso < 0):
-		curso += 2*math.pi
-
-	return degrees(curso)
+	return 0

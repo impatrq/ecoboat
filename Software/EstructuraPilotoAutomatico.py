@@ -1,8 +1,29 @@
 import time as tm 
 import numpy as np 
 import motores as mt 
-import gps
 import math
+
+def distancia(lat1, lng1 , waypoint):
+	lat2=waypoint[0, 0]
+	lng2=waypoint[0, 1]
+	r=6371000
+	c=(math.pi)/180
+	#Fórmula de haversine
+	d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
+	return d
+
+def cursoHacia(lat1, lng1, waypoint):
+	lat2=waypoint[0, 0]
+	lng2=waypoint[0, 1]
+	dlon=lng2-lng1 
+	a1=sin(dlon)*cos(lat2)
+	a2=(cos(lat1)*sin(lat2))-(sin(lat1)*cos(lat2)*cos(dlon))
+	curso=atan2(a1, a2)
+
+	if(curso < 0):
+		curso += 2*math.pi
+
+	return degrees(curso)
 
 def EvitarObstaculos():
     #Sensores para evitar que el barco choque
@@ -14,7 +35,7 @@ def DireccionActual():
 
 def DireccionDeseada(waypoint):
 	Gps.lectura()
-	return gps.cursoHacia(Gps.lat, Gps.lng, waypoint)
+	return cursoHacia(Gps.lat, Gps.lng, waypoint)
 
 def Girar(waypoint):
 
@@ -54,7 +75,7 @@ def Girar(waypoint):
 def LlegadaAlWP(destino):
 	#comparar nuestra direccion con el destino
 	Gps.lectura()
-	dis= gps.distancia(Gps.lat, Gps.lng, destino)
+	dis= distancia(Gps.lat, Gps.lng, destino)
 
 	if(abs(dis) <= 5):
 		return 0
@@ -62,7 +83,6 @@ def LlegadaAlWP(destino):
 		return 1
 	
 #inicio el gps
-Gps= gps.Gps()
 
 timon= mt.PaP(1, 2, 3, 4)
 motorDirec= mt.puenteH(1,2)
