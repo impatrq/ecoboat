@@ -2,8 +2,6 @@ import pynmea2 as nmea
 import serial
 import numpy
 
-#falta algun while donde se quede esperando a que haya datos validos
-
 def lectura(self):
 	port="/dev/ttyAMA0"
 	ser=serial.Serial(port, baudrate=9600, timeout=0.5)
@@ -17,3 +15,5 @@ def lectura(self):
 		cur=datos.direction
 
 	return 0
+
+	

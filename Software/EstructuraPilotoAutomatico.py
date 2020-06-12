@@ -5,19 +5,13 @@ import numpy as np
 import motores as mt 
 import math
 
-#//////////////// defino al objeto gps el cual va a guardar las variables/////////////
+#//////////////// defino la lista que va a guardar las variables/////////////
 
-class gps():
-
-	def __init__(sel):
-		self.lat=0
-		self.lng=0
-		self.cur=0
-	return 0
-
-	def disponible(self):
-		#while que espere a que haya informacion en el gps
-	return 1
+data= [0,0,0,0]
+#data 0 = latitud
+#data 1 = longitud
+#data 2 = curso
+#data 3 = fin de escaneo
 
 #//////////////// funciones de Piloto Automatico////////////////
 
@@ -52,8 +46,8 @@ def pilotoAutomatico():
 	def Girar(waypoint):
 
 		#primero hace un primer chequeo de la diferencia de direccion
-		DD= DireccionDeseada(Gps.lat, Gps.lng, waypoint)
-		DA= Gps.cur #Direccion actual dado por el modulo gps
+		DD= DireccionDeseada(data[0], data[1], waypoint)
+		DA= data[2] #Direccion actual dado por el modulo gps
 		DeltaD= DD - DA
 
 		#si no es demaciado no gira
@@ -71,8 +65,8 @@ def pilotoAutomatico():
 
 			#se mantiene girando hasta que corrija el rumbo
 			while(abs(DeltaD) >= 5):
-				DD= DireccionDeseada(Gps.lat, Gps.lng, waypoint)
-				DA= Gps.cur
+				DD= DireccionDeseada(data[0], data[1], waypoint)
+				DA= data[2]
 				DeltaD= DD - DA
 				tm.sleep(0.5)
 
@@ -86,7 +80,7 @@ def pilotoAutomatico():
 
 	def LlegadaAlWP(destino):
 		#comparar nuestra direccion con el destino
-		dis= distancia(Gps.lat, Gps.lng, destino)
+		dis= distancia(data[0], data[1], destino)
 
 		if(abs(dis) <= 5):
 			return 0
@@ -116,9 +110,9 @@ def comRF():
 
 #//////////////// funciones de GPS //////////////////////
 
-def GPSlectura():
+def GPS():
 
-	def lectura(self):
+	def lectura():
 		port="/dev/ttyAMA0"
 		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
 		dataout=pynmea2.NMEAStreamReader()
@@ -126,28 +120,40 @@ def GPSlectura():
 
 		if data[0:6] == "$GPRMC":
 			datos=pynmea2.parse(newdata)
-			Gps.lat=datos.latitude
-			Gps.lng=datos.longitude
-			Gps.cur=datos.direction
+			data[0]=datos.latitude
+			data[1]=datos.longitude
+			data[2]=datos.direction
 
 		time.sleep(0.05)
 		return 0
 
-#//////////////// inicio el gps //////////////////////////
+	while True:
+		lectura()
+		time.sleep(1)
 
-Gps= gps()
+#//////////////// programa /////////////////////////
 
 #espero a que haya data para arrancar
 
+def disponible():
+	#funcion que detecte disponibilidad de datos
+	port="/dev/ttyAMA0"
+	ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+	dataout=pynmea2.NMEAStreamReader()
+	data=ser.readline()
+	#falta terminar
+	return 0
+
 while True:
-	if (Gps.disponible==1):
+	if (disponible()==1):
+		data[3]==1
 		break
 
 #////////////// inicio los hilos ////////////////////
 
+TGPS = threading.Thread(name="GPS", target=GPS)
 TPA = threading.Thread(name="PA", target=pilotoAutomatico)
 TRF = threading.Thread(name="RF", target=comRF)
-TGPS = threading.Thread(name="GPS", target=GPSlectura)
 
 TPA.start()
 TRF.start()
