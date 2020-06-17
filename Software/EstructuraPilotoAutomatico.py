@@ -5,6 +5,8 @@ import numpy as np
 import motores as mt 
 import math
 
+#estado del codigo= naranja
+
 #//////////////// defino la lista que va a guardar las variables/////////////
 
 data= [0,0,0,0]
