@@ -66,7 +66,7 @@ def lectura():
 				GPIO.output(1, i)
 				GPIO.output(2, j)
 				GPIO.output(3, k)
-				datos[0, pos]= medicion()
+				datos[pos]= medicion()
 				pos+=1
 	return datos
 	
