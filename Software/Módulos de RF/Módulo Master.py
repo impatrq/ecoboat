@@ -2,10 +2,13 @@ import RPi.GPIO as GPIO
 from lib_nrf24 import NRF24
 import time
 import spidev
+import socket
+import threading
 
 GPIO.setmode(GPIO.BCM)
 
-class transmisor():
+#------------------------------------------------------------------------Definición de parámetros--------------------------------------------------------------------------
+class transceptor():
 
 	def __init__(self, pin1, pin2):
         self.pin1=pin1
@@ -29,104 +32,143 @@ class transmisor():
 		radio.enableDynamicPayloads()
 		radio.enableAckPayload()
 
-                radio.openReadingPipe(1, pipes[0])
+        radio.openReadingPipe(1, pipes[0])
 		radio.openWritingPipe(pipes[1])
 
 		radio.printDetails()
 
-def comandoZarpar():
-    #Envía el comando para que el barco zarpe.
-    if zarpar== 1:
-    	return Si 
-    else:
-    	return No
+class servidor():
+	#Defino todos los datos del servidor.
+	PUERTO = 29999
+	SERVIDOR = "127.0.0.1"
+	ADDR = (SERVIDOR, PUERTO)
+	FORMATO = 'utf-8' #Formato de bytes que se va a usar para transmitir
+	HEADER = 64 #Cantidad de bytes que se va a usar para mandar la longitud del dato
+	MSJZARPAR = "!ZARPAR" #Comando de zarpar
+	MSJANALISIS = "!ANALISIS_RAPIDO" #Comando de análisis rápido
+	MSJESTACIONADO = "EL BARCO ESTACIONÓ" #Comando de estacionamiento
+	MSJPSCARGANDO = "El panel solar está cargando."
+	MSJPSNOCARGANDO = "EL PANEL SOLAR NO ESTÁ CARGANDO."
+	MSJMOTDIR = "El motor de dirección está funcionando correctamente."
+	MSJMOTDIRFALLA = "EL MOTOR DE DIRECCIÓN TIENE UNA FALLA"
 
-def recivirDireccion():
-        rcvDireccion = []
-    radio.read(rcvDireccion, radio.getDynamicPayloadSize())
-    Direccion = ""
-    for n in rcvDireccion:
-        if (n >= 32 and n <= 126)
-            Direccion += chr(n)
-    return Direccion
+	#Defino el socket, indicando el tipo y el modo de conexión
+	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	server.bind(ADDR)
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-def recivirLatitud():
-        rcvLatitud = []
-    radio.read(rcvLatitud, radio.getDynamicPayloadSize())
-    Latitud = ""
-    for n in rcvLatitud:
-        if (n >= 32 and n <= 126)
-            Latitud += chr(n)
-    return Latitud
+def cliente(conn, addr):
 
-def recivirLongitud():
-        rcvLongitud = []
-    radio.read(rcvLongitud, radio.getDynamicPayloadSize())
-    Longitud = ""
-    for n in rcvLongitud:
-        if (n >= 32 and n <= 126)
-            Longitud += chr(n)
-    return Longitud
+	#Función de enviar mensajes de sockets
+	def enviar(msj):
+		#Codifico el mensaje y envío su longitud
+		mensaje = msj.encode(FORMATO)
+		longMsj = len(mensaje)
+		enviarLong = str(longMsj).encode(FORMATO)
+		enviarLong += b' ' * (HEADER - len(enviarLong))
+		conn.send(enviarLong)
+		conn.send(mensaje)
+		print (f"{msj} enviado")
 
-def recivirBateria():
-        rcvBateria = []
-    radio.read(rcvBateria, radio.getDynamicPayloadSize())
-    Bateria = ""
-    for n in rcvBateria:
-        if (n >= 32 and n <= 126)
-            Bateria += chr(n)
-    return Bateria
+	#Función de recibir mensajes de sockets
+	def recibir():
+		#Recivo la longitud y el mensaje y decodifico ambos
+		longitud = conn.recv(HEADER).decode(FORMATO)
+		if longitud:
+			longitud = int(longitud)
+			msjRecivido = conn.recv(longitud).decode(FORMATO)
+		print(f"{addr} Pidió: {msjRecivido}")
+		return msjRecivido
 
-def recivirConsPropulsion():
-        rcvConsPropulsion = []
-    radio.read(rcvConsPropulsion, radio.getDynamicPayloadSize())
-    consPropulsion = ""
-    for n in rcvConsPropulsion:
-        if (n >= 32 and n <= 126)
-            consPropulsion += chr(n)
-    return consPropulsion
+	#Función recibir mensajes de Transceptor
+	def recibirRF():
+	    rcvMsj = []
+	    radio.read(rcvMsj, radio.getDynamicPayloadSize())
+	    msj = ""
+	    for n in rcvMsj:
+	        if (n >= 32 and n <= 126)
+	            msj += chr(n)
+	    return msj
 
-def recivirConsCangilon():
-        rcvConsCangilon = []
-    radio.read(rcvConsCangilon, radio.getDynamicPayloadSize())
-    consCangilon = ""
-    for n in rcvConsCangilon:
-        if (n >= 32 and n <= 126)
-            consCangilon += chr(n)
-    return consCangilon
+#----------------------------------------------------Toma de datos con el Módulo RF y envio de datos con socket------------------------------------------------------------------
+	#Recivo la función de zarpar o análisis rápido del cliente
+	funcion = recibir()
+	#----------------Análisis Rápido------------------------
+	if funcion == MSJANALISIS:
+		BAT = recibirRF()
+		enviar(BAT)
+		PS = recibirRF()
+		if PS == 1:
+			enviar(MSJPSCARGANDO)
+		if PS == 0:
+			enviar(MSJPSNOCARGANDO)
+	#-------------------------------------------------------
 
-def recivirAnguloMotDir():
-        rcvAnguloMotDir = []
-    radio.read(rcvAnguloMotDir, radio.getDynamicPayloadSize())
-    anguloMotDir = ""
-    for n in rcvAnguloMotDir:
-        if (n >= 32 and n <= 126)
-            anguloMotDir += chr(n)
-    return anguloMotDir
+	#----------------------------------------------------Zarpar-----------------------------------------------------
+	if funcion == MSJZARPAR:
+		while True:
+			#Le digo al barco que zarpe
+			comando = "ZARPAR"
+			mensajeZarpar = list(comando)
+			radio.Write(mensajeZarpar)
+			print ("Se mandó el comando de zarpar.")
+			#Chequea si el slave recivió el comando.
+			if radio.isAckPayloadAvailable():
+		        returnedPL = []
+		        radio.read(returnedPL, radio.getDynamicPayloadSize())
+		        print (returnedPL)
+		        #Si se recive el ackPL se empiezan a recivir los datos
+		        #-----------------------------------Recibo y envío datos---------------------------------------------
+		        radio.startListening()
+		        while True:
+			        Lat = recibirRF()
+			        Lon = recibirRF()
+			        Dirr = recibirRF()
+			        enviar(Lat)
+			        enviar(Lon)
+			        enviar(Dirr)
+			        prop = recibirRF()
+			        enviar(prop)
+			        cang = recibirRF()
+			        enviar(cang)
+			        bat = recibirRF()
+			        enviar(bat)
+			        motDir = int(recibirRF())
+			        if motDir == 1:
+			        	enviar(MSJMOTDIR)
+			        if motDir == 0:
+			        	enviar(MSJMOTDIRFALLA)
+			        PS = int(recibirRF())
+			        if PS == 1:
+			        	enviar(MSJPSCARGANDO)
+			        if PS == 0:
+			        	enviar(MSJPSNOCARGANDO)
+			        estacionamiento = int(recibirRF())
+			        if estacionamiento == 0:
+			        	enviar("El barco sigue en curso")
+			        if estacionamiento == 1:
+			        	enviar("MSJESTACIONADO")
+			        	break
+		        radio.stopListening()
+		        break
+		        #----------------------------------------------------------------------------------------------------        
+		    else:
+		    print ("No se recivió el mensaje")
+		    time.sleep(1)
+	#----------------------------------------------------------------------------------------------------------------	    
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-while True:
-        comando = comandoZarpar()
-	mensaje = list (comando)
-	radio.Write(mensaje)
-	print ("Se mandó el comando de zarpar.")
+def iniciar():
+	server.listen()
+	print (f"Escuchando en {SERVIDOR}")
+	while True:
+		#Acepto el cliente
+		conn, addr = server.accept()
+		#Inicio en paralelo la función de cliente
+		thread = threading.Thread(target=cliente, args=(conn,addr))
+		thread.start()
+		print(f"[Conexiones Activas]: {threading.activeCount() - 1}")
 
-    #Chequea si el slave recivió el comando.
-	if radio.isAckPayloadAvailable():
-                returnedPL = []
-                radio.read(returnedPL, radio.getDynamicPayloadSize())
-                print (returnedPL)
-                #Si se recive el ackPL se empiezan a recivir los datos
-                radio.startListening()
-                while radio.available(0):
-                    recivirDireccion()
-                    recivirLatitud()
-                    recivirLongitud()
-                    recivirBateria()
-                    recivirConsPropulsion()
-                    recivirConsCangilon()
-                    recivirAnguloMotDir()
-                radio.stopListening()
-                
-        else:
-                print ("No se recivió el mensaje")
-                time.sleep(1)
+#Inicio el programa
+print("Iniciando el servidor...")
+iniciar()
