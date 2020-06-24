@@ -1,9 +1,12 @@
+import RPi.GPIO as GPIO
 import time
 import threading 
 import pynmea2 as nmea
 import numpy as np 
 import motores as mt 
 import math
+from lib_nrf24 import NRF24
+import spidev
 
 #estado del codigo= naranja
 
@@ -108,7 +111,114 @@ def pilotoAutomatico():
 #//////////////// funciones de RF //////////////////////
 
 def comRF():
-	#codigo de modulos RF
+	class slave():
+
+    def __init__(self, pin1, pin2):
+        self.pin1=pin1
+        self.pin2=pin2
+
+        #configuracion del modulo
+
+        pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+
+        radio = NRF24(GPIO, spidev.SpiDev())
+
+        radio.begin(self.pin1, self.pin2)
+
+        radio.setRetries(15,15)
+        radio.setPayloadSize(32)
+        radio.setChannel(0x60)
+        radio.setDataRate(NRF24.BR_2MBPS)
+        radio.setPALevel(NRF24.PA_MIN)
+
+        radio.setAutoAck(True)
+        radio.enableDynamicPayloads()
+        radio.enableAckPayload()
+
+        radio.openReadingPipe(1, pipes[1])
+        radio.openWritingPipe(pipes[0])
+
+        radio.printDetails()
+
+        radio.startListening()
+
+    #----------------------------ESTAS FUNCIONES HAY QUE COMPLETARLAS CON SUS RESPECTIVOS CIRCUITOS----------------------------
+	def bateria():
+	    #Detecto el porcentaje de bateria
+	    GPIO.setup(23, GPIO.IN)
+	    return bateria
+
+	def consPropulsion():
+	    #Mido el consumo del motor de propulsión.
+	    GPIO.setup(24, GPIO.IN)
+	    return consPropulsion
+
+	def consCangilon():
+	    #Mido el consumo del motor del cangilón.
+	    GPIO.setup(25, GPIO.IN)
+	    return consCangilon
+
+	def anguloMotDir():
+	    #Detecto si el motor de dirección falla
+	    GPIO.setup(12, GPIO.IN)
+	    return anguloMotDir
+
+	def estacionamiento():
+		#Detecto si el barco estaciona
+		GPIO.setup(26, GPIO.IN)
+		return estacionamiento
+
+	def PS():
+		#Detecto si el panel solar carga o no
+		GPIO.setup(6, GPIO.IN)
+		return PS
+	#--------------------------------------------------------------------------------------------------------------------------
+
+	#Función de recibir mensjaes
+	def recibirRF():
+	    rcvMsj = []
+	    radio.read(rcvMsj, radio.getDynamicPayloadSize())
+	    msj = ""
+	    for n in rcvMsj:
+	        if (n >= 32 and n <= 126)
+	            msj += chr(n)
+	    return msj
+
+	#Función de enviar datos
+	def enviarRF(msj):
+		mensaje = list(msj)
+		radio.Write(mensaje)
+
+	#Recibo el comando de zarpar
+	comando = recibirRF()
+	if comando == "ZARPAR":
+		TGPS = threading.Thread(name="GPS", target=GPS)
+		TPA = threading.Thread(name="PA", target=pilotoAutomatico)
+		TGPS.start()
+		TPA.start()
+		while True:
+			lat = datos[0]
+			lon = datos[1]
+			dirr = datos[2]
+			enviarRF(lat)
+			enviarRF(lon)
+			enviarRF(dirr)
+			prop = consPropulsion()
+			enviarRF(prop)
+			cang = consCangilon()
+			enviarRF(cang)
+			bat = bateria()
+			enviarRF(bat)
+			PS = PS()
+			enviarRF(PS)
+			estacionamiento = estacionamiento()
+			#Si el barco estaciona, salgo del loop
+			if estacionamiento == 1:
+				enviarRF(estacionamiento)
+				break
+			if estacionamiento == 0:
+				enviarRF(estacionamiento)
+
 
 #//////////////// funciones de GPS //////////////////////
 
@@ -152,15 +262,5 @@ while True:
 		break
 
 #////////////// inicio los hilos ////////////////////
-
-TGPS = threading.Thread(name="GPS", target=GPS)
-TPA = threading.Thread(name="PA", target=pilotoAutomatico)
-TRF = threading.Thread(name="RF", target=comRF)
-
-TPA.start()
-TRF.start()
-TGPS.start()
-
-TPA.join()
-TRF.join()
-TGPS.join()
+while True:
+	cmRF()
