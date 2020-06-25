@@ -14,21 +14,21 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Analog_ADC:MCP3008 U?
+L Analog_ADC:MCP3008 U1
 U 1 1 5EF4E0FD
 P 5500 3050
-F 0 "U?" H 5500 3731 50  0000 C CNN
+F 0 "U1" H 5500 3731 50  0000 C CNN
 F 1 "MCP3008" H 5500 3640 50  0000 C CNN
-F 2 "" H 5600 3150 50  0001 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 5600 3150 50  0001 C CNN
 F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf" H 5600 3150 50  0001 C CNN
 	1    5500 3050
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x02 J?
+L Connector:Screw_Terminal_01x02 J1
 U 1 1 5EF50EC2
 P 4550 2850
-F 0 "J?" H 4468 2525 50  0000 C CNN
+F 0 "J1" H 4468 2525 50  0000 C CNN
 F 1 "Sensores de Corriente" H 4468 2616 50  0000 C CNN
 F 2 "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" H 4550 2850 50  0001 C CNN
 F 3 "~" H 4550 2850 50  0001 C CNN
@@ -48,12 +48,12 @@ Wire Wire Line
 Wire Wire Line
 	5400 2550 5400 2500
 $Comp
-L Connector:Screw_Terminal_01x07 J?
+L Connector:Screw_Terminal_01x07 J2
 U 1 1 5EF54988
 P 6450 3050
-F 0 "J?" H 6400 3550 50  0000 L CNN
+F 0 "J2" H 6400 3550 50  0000 L CNN
 F 1 "Screw_Terminal_01x07" H 6300 3450 50  0000 L CNN
-F 2 "" H 6450 3050 50  0001 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-07A_1x07_P2.54mm_Vertical" H 6450 3050 50  0001 C CNN
 F 3 "~" H 6450 3050 50  0001 C CNN
 	1    6450 3050
 	1    0    0    -1  
