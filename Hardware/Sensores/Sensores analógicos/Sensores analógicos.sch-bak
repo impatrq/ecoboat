@@ -90,7 +90,7 @@ U 1 1 5EF6BB3C
 P 4850 2450
 F 0 "RV?" V 4643 2450 50  0000 C CNN
 F 1 "500k" V 4734 2450 50  0000 C CNN
-F 2 "" H 4850 2450 50  0001 C CNN
+F 2 "Potentiometer_THT:Potentiometer_Bourns_3006P_Horizontal" H 4850 2450 50  0001 C CNN
 F 3 "~" H 4850 2450 50  0001 C CNN
 	1    4850 2450
 	0    1    1    0   
