@@ -24,27 +24,10 @@ F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf" H 5600 3150 50 
 	1    5500 3050
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector:Screw_Terminal_01x02 J1
-U 1 1 5EF50EC2
-P 4550 2850
-F 0 "J1" H 4468 2525 50  0000 C CNN
-F 1 "Sensores de Corriente" H 4468 2616 50  0000 C CNN
-F 2 "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" H 4550 2850 50  0001 C CNN
-F 3 "~" H 4550 2850 50  0001 C CNN
-	1    4550 2850
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	4750 2750 4900 2750
-Wire Wire Line
-	4750 2850 4900 2850
-Text Label 4000 2800 0    50   ~ 0
+Text Label 3900 2800 0    50   ~ 0
 ACS712_N°1
-Text Label 4000 2900 0    50   ~ 0
+Text Label 3900 2900 0    50   ~ 0
 ACS712_N°2
-Wire Wire Line
-	5400 3650 5700 3650
 Wire Wire Line
 	5400 2550 5400 2500
 $Comp
@@ -58,11 +41,6 @@ F 3 "~" H 6450 3050 50  0001 C CNN
 	1    6450 3050
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5700 3650 6250 3650
-Wire Wire Line
-	6250 3650 6250 3350
-Connection ~ 5700 3650
 Wire Wire Line
 	6100 3250 6250 3250
 Wire Wire Line
@@ -95,4 +73,82 @@ Text Label 6500 3300 0    50   ~ 0
 CEO
 Text Label 6500 3400 0    50   ~ 0
 GND
+$Comp
+L Connector:Screw_Terminal_01x05 J?
+U 1 1 5EF696C7
+P 4450 2950
+F 0 "J?" H 4400 2550 50  0000 C CNN
+F 1 "Entradas X5" H 4600 2650 50  0000 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-05A_1x05_P2.54mm_Vertical" H 4450 2950 50  0001 C CNN
+F 3 "~" H 4450 2950 50  0001 C CNN
+	1    4450 2950
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_POT RV?
+U 1 1 5EF6BB3C
+P 4850 2450
+F 0 "RV?" V 4643 2450 50  0000 C CNN
+F 1 "500k" V 4734 2450 50  0000 C CNN
+F 2 "Potentiometer_THT:Potentiometer_Bourns_3006P_Horizontal" H 4850 2450 50  0001 C CNN
+F 3 "~" H 4850 2450 50  0001 C CNN
+	1    4850 2450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4650 2950 4700 2950
+Wire Wire Line
+	4700 2950 4700 2450
+Wire Wire Line
+	4650 2850 4900 2850
+Wire Wire Line
+	4650 2750 4900 2750
+Wire Wire Line
+	4850 2600 4850 2950
+Wire Wire Line
+	4850 2950 4900 2950
+Text Label 4100 3000 0    50   ~ 0
+Batería
+$Comp
+L power:Earth #PWR?
+U 1 1 5EF723B2
+P 5000 2500
+F 0 "#PWR?" H 5000 2250 50  0001 C CNN
+F 1 "Earth" H 5000 2350 50  0001 C CNN
+F 2 "" H 5000 2500 50  0001 C CNN
+F 3 "~" H 5000 2500 50  0001 C CNN
+	1    5000 2500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5000 2450 5000 2500
+$Comp
+L power:Earth #PWR?
+U 1 1 5EF72D32
+P 5550 3650
+F 0 "#PWR?" H 5550 3400 50  0001 C CNN
+F 1 "Earth" H 5550 3500 50  0001 C CNN
+F 2 "" H 5550 3650 50  0001 C CNN
+F 3 "~" H 5550 3650 50  0001 C CNN
+	1    5550 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:Earth #PWR?
+U 1 1 5EF73268
+P 6250 3400
+F 0 "#PWR?" H 6250 3150 50  0001 C CNN
+F 1 "Earth" H 6250 3250 50  0001 C CNN
+F 2 "" H 6250 3400 50  0001 C CNN
+F 3 "~" H 6250 3400 50  0001 C CNN
+	1    6250 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 3350 6250 3400
+Wire Wire Line
+	5700 3650 5550 3650
+Wire Wire Line
+	5400 3650 5550 3650
+Connection ~ 5550 3650
 $EndSCHEMATC
