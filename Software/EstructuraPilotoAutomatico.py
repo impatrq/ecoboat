@@ -160,10 +160,16 @@ def comRF():
     	datosProcesados = ((datosCrudos[1]&3) << 8) + datosCrudos[2]
     	return datosProcesados
 
-	def bateria():
-	    #Detecto el porcentaje de bateria
-	    GPIO.setup(23, GPIO.IN)
-	    return bateria
+	def bateria(redondeoDecimal = 3):
+	    porcentajeB = tomarDatos(sBateria)
+	    voltaje = (porcentajeB * 5) / float(1023)
+	    voltaje = round(voltaje, redondeoDecimal)
+	    if pocentajeB < 808:
+	    	porcentaje = 0
+	    else:
+	    	porcentaje = (porcentajeB * 100) / float(1023)
+	    	porcentaje = round(porcentaje)
+	    return porcentaje
 
 	def consPropulsion(redondeoDecimal = 3):
 	    consumoB = tomarDatos(sCorriente1) #Tomo el valor en bits
