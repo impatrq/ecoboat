@@ -74,17 +74,6 @@ CEO
 Text Label 6500 3400 0    50   ~ 0
 GND
 $Comp
-L Connector:Screw_Terminal_01x05 J1
-U 1 1 5EF696C7
-P 4450 2950
-F 0 "J1" H 4400 2550 50  0000 C CNN
-F 1 "Entradas X5" H 4600 2650 50  0000 C CNN
-F 2 "Connector_Molex:Molex_KK-254_AE-6410-05A_1x05_P2.54mm_Vertical" H 4450 2950 50  0001 C CNN
-F 3 "~" H 4450 2950 50  0001 C CNN
-	1    4450 2950
-	-1   0    0    1   
-$EndComp
-$Comp
 L Device:R_POT RV1
 U 1 1 5EF6BB3C
 P 4850 2450
@@ -151,4 +140,15 @@ Wire Wire Line
 Wire Wire Line
 	5400 3650 5550 3650
 Connection ~ 5550 3650
+$Comp
+L Connector:Screw_Terminal_01x03 J1
+U 1 1 5EFA381E
+P 4450 2850
+F 0 "J1" H 4368 2525 50  0000 C CNN
+F 1 "Screw_Terminal_01x03" H 4368 2616 50  0000 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-03A_1x03_P2.54mm_Vertical" H 4450 2850 50  0001 C CNN
+F 3 "~" H 4450 2850 50  0001 C CNN
+	1    4450 2850
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
