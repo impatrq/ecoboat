@@ -791,23 +791,6 @@ Wire Wire Line
 	3350 5450 4450 5450
 Wire Wire Line
 	3350 5550 4450 5550
-$Comp
-L Connector:Screw_Terminal_01x05 uC_Direccion1
-U 1 1 5E9D6D91
-P 1050 5450
-F 0 "uC_Direccion1" H 968 5775 50  0000 C CNN
-F 1 "Screw_Terminal_01x05" H 968 5776 50  0001 C CNN
-F 2 "Connector_Molex:Molex_KK-254_AE-6410-05A_1x05_P2.54mm_Vertical" H 1050 5450 50  0001 C CNN
-F 3 "~" H 1050 5450 50  0001 C CNN
-	1    1050 5450
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	1250 5650 1450 5650
-Wire Wire Line
-	1450 5650 1450 6050
-Wire Wire Line
-	1450 6050 2950 6050
 Connection ~ 2950 6050
 $Comp
 L power:Earth #PWR0108
@@ -840,4 +823,15 @@ Wire Wire Line
 	5050 5600 5050 6050
 Wire Wire Line
 	5050 6050 2950 6050
+$Comp
+L Connector:Screw_Terminal_01x04 uCDireccion1
+U 1 1 5EFAC944
+P 1050 5450
+F 0 "uCDireccion1" H 968 5025 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 968 5116 50  0000 C CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical" H 1050 5450 50  0001 C CNN
+F 3 "~" H 1050 5450 50  0001 C CNN
+	1    1050 5450
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
