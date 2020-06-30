@@ -113,50 +113,77 @@ def pilotoAutomatico():
 def comRF():
 	class slave():
 
-    def __init__(self, pin1, pin2):
-        self.pin1=pin1
-        self.pin2=pin2
+	    def __init__(self, pin1, pin2):
+	        self.pin1=pin1
+	        self.pin2=pin2
 
-        #configuracion del modulo
+	        #configuracion del modulo
 
-        pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+	        pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 
-        radio = NRF24(GPIO, spidev.SpiDev())
+	        radio = NRF24(GPIO, spidev.SpiDev())
 
-        radio.begin(self.pin1, self.pin2)
+	        radio.begin(self.pin1, self.pin2)
 
-        radio.setRetries(15,15)
-        radio.setPayloadSize(32)
-        radio.setChannel(0x60)
-        radio.setDataRate(NRF24.BR_2MBPS)
-        radio.setPALevel(NRF24.PA_MIN)
+	        radio.setRetries(15,15)
+	        radio.setPayloadSize(32)
+	        radio.setChannel(0x60)
+	        radio.setDataRate(NRF24.BR_2MBPS)
+	        radio.setPALevel(NRF24.PA_MIN)
 
-        radio.setAutoAck(True)
-        radio.enableDynamicPayloads()
-        radio.enableAckPayload()
+	        radio.setAutoAck(True)
+	        radio.enableDynamicPayloads()
+	        radio.enableAckPayload()
 
-        radio.openReadingPipe(1, pipes[1])
-        radio.openWritingPipe(pipes[0])
+	        radio.openReadingPipe(1, pipes[1])
+	        radio.openWritingPipe(pipes[0])
 
-        radio.printDetails()
+	        radio.printDetails()
 
-        radio.startListening()
+	        radio.startListening()
 
-    #----------------------------ESTAS FUNCIONES HAY QUE COMPLETARLAS CON SUS RESPECTIVOS CIRCUITOS----------------------------
-	def bateria():
-	    #Detecto el porcentaje de bateria
-	    GPIO.setup(23, GPIO.IN)
-	    return bateria
+    #--------------------------------------------Funciones de sensores---------------------------------------------------
+    #Abro el SPI
+    spi = spidev.SpiDev()
+    spi.open(0, 0)
 
-	def consPropulsion():
-	    #Mido el consumo del motor de propulsión.
-	    GPIO.setup(24, GPIO.IN)
-	    return consPropulsion
+    #Defino un canal para cada sensor
+    sCorriente1 = 0
+    sCorriente2 = 1
+    sBateria = 2
+    sMotDir = 3
+
+    def tomarDatos(canal):
+    	#Primero tomamos los datos crudos del conversor A/D
+    	datosCrudos = spi.xfer([1, (8 + canal) << 4, 0])
+    	#Proceso esta información para tenerla en un numero de 0 a 1023
+    	datosProcesados = ((datosCrudos[1]&3) << 8) + datosCrudos[2]
+    	return datosProcesados
+
+	def bateria(redondeoDecimal = 3):
+	    porcentajeB = tomarDatos(sBateria)
+	    voltaje = (porcentajeB * 5) / float(1023)
+	    voltaje = round(voltaje, redondeoDecimal)
+	    if pocentajeB < 808:
+	    	porcentaje = 0
+	    else:
+	    	porcentaje = (porcentajeB * 100) / float(1023)
+	    	porcentaje = round(porcentaje)
+	    return porcentaje
+
+	def consPropulsion(redondeoDecimal = 3):
+	    consumoB = tomarDatos(sCorriente1) #Tomo el valor en bits
+	    voltaje = (consumoB * 5) / float(1023) #Lo convierto a cuando voltaje representa
+	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a dos decimales
+	    consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+	    return consumo
 
 	def consCangilon():
-	    #Mido el consumo del motor del cangilón.
-	    GPIO.setup(25, GPIO.IN)
-	    return consCangilon
+	    consumoB = tomarDatos(sCorriente2) #Tomo el valor en bits
+	    voltaje = (consumoB * 5) / float(1023) #Lo convierto a cuando voltaje representa
+	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a dos decimales
+	    consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+	    return consumo
 
 	def anguloMotDir():
 	    #Detecto si el motor de dirección falla
