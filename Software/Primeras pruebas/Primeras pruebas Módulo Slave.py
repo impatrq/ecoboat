@@ -8,37 +8,31 @@ MSJANALISIS = "!ANALISIS"
 
 GPIO.setmode(GPIO.BCM)
 
+#------------------------------------------------------------Configuración del Módulo-----------------------------------------------------------------------
 class slave():
+    pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
 
-    def __init__(self, pin1, pin2):
-        self.pin1=pin1
-        self.pin2=pin2
+    radio = NRF24(GPIO, spidev.SpiDev())
 
-        #configuracion del modulo
+    radio.begin(0, 7)
 
-        pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+    radio.setRetries(15,15)
+    radio.setPayloadSize(32)
+    radio.setChannel(0x60)
+    radio.setDataRate(NRF24.BR_2MBPS)
+    radio.setPALevel(NRF24.PA_MAX)
 
-        radio = NRF24(GPIO, spidev.SpiDev())
+    radio.setAutoAck(True)
+    radio.enableDynamicPayloads()
+    radio.enableAckPayload()
 
-        radio.begin(self.pin1, self.pin2)
+    radio.openReadingPipe(1, pipes[1])
+    radio.openWritingPipe(pipes[0])
 
-        radio.setRetries(15,15)
-        radio.setPayloadSize(32)
-        radio.setChannel(0x60)
-        radio.setDataRate(NRF24.BR_2MBPS)
-        radio.setPALevel(NRF24.PA_MAX)
+    radio.printDetails()
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        radio.setAutoAck(True)
-        radio.enableDynamicPayloads()
-        radio.enableAckPayload()
-
-        radio.openReadingPipe(1, pipes[1])
-        radio.openWritingPipe(pipes[0])
-
-        radio.printDetails()
-
-        radio.startListening()
-
+#------------------------------------------------------------Funciones de enviar y recivir-----------------------------------------------------------------
 def enviar(dato):
     datoStr = str(dato) #Convierto el dato en string
     datoSend = list(datoStr) #Lo separo en letras
@@ -60,6 +54,9 @@ def recivir():
         if (n >= 32 and n <= 126)
             mensaje += chr(n)
     return mensaje
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+radio.startListening()
 
 while True:
     #se queda esperando un mensaje
