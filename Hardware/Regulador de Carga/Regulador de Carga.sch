@@ -14,42 +14,16 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Connector:Screw_Terminal_01x04 BATout1
-U 1 1 5E9E2845
-P 4400 1900
-F 0 "BATout1" V 4364 1612 50  0000 R CNN
-F 1 "Screw_Terminal_01x04" V 4273 1612 50  0001 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-4_P5.08mm" H 4400 1900 50  0001 C CNN
-F 3 "~" H 4400 1900 50  0001 C CNN
-	1    4400 1900
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	4400 2100 4500 2100
-$Comp
 L power:Earth #PWR0101
 U 1 1 5E9E4EF0
-P 4300 2150
-F 0 "#PWR0101" H 4300 1900 50  0001 C CNN
-F 1 "Earth" H 4300 2000 50  0001 C CNN
-F 2 "" H 4300 2150 50  0001 C CNN
-F 3 "~" H 4300 2150 50  0001 C CNN
-	1    4300 2150
+P 4300 2100
+F 0 "#PWR0101" H 4300 1850 50  0001 C CNN
+F 1 "Earth" H 4300 1950 50  0001 C CNN
+F 2 "" H 4300 2100 50  0001 C CNN
+F 3 "~" H 4300 2100 50  0001 C CNN
+	1    4300 2100
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4300 2100 4300 2150
-Wire Wire Line
-	4600 2100 4700 2100
-Wire Wire Line
-	4700 2100 4700 1800
-Wire Wire Line
-	4700 1800 4200 1800
-Wire Wire Line
-	4200 1800 4200 2150
-Wire Wire Line
-	4200 2150 4300 2150
-Connection ~ 4300 2150
 $Comp
 L Connector:Screw_Terminal_01x02 BATin1
 U 1 1 5E9E5C1C
@@ -237,18 +211,8 @@ F 3 "~" H 5950 2450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4500 2100 4500 2200
-Wire Wire Line
-	4500 2200 4600 2200
-Wire Wire Line
-	4600 2200 4600 2550
-Wire Wire Line
 	4600 2550 4500 2550
-Connection ~ 4500 2100
 Connection ~ 4500 2550
-Wire Wire Line
-	4600 2150 4600 2200
-Connection ~ 4600 2200
 $Comp
 L Device:R R3
 U 1 1 5EBF2660
@@ -383,4 +347,39 @@ Wire Wire Line
 Connection ~ 4500 3150
 Wire Wire Line
 	4500 3600 4600 3600
+Wire Wire Line
+	4600 2150 4600 2550
+$Comp
+L Connector:Screw_Terminal_01x05 J1
+U 1 1 5EFA25E1
+P 4500 1850
+F 0 "J1" V 4464 1562 50  0000 R CNN
+F 1 "Screw_Terminal_01x05" V 4373 1562 50  0000 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-5_P5.08mm" H 4500 1850 50  0001 C CNN
+F 3 "~" H 4500 1850 50  0001 C CNN
+	1    4500 1850
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4600 2050 4500 2050
+Wire Wire Line
+	4400 2050 4500 2050
+Connection ~ 4500 2050
+Wire Wire Line
+	4600 2050 4600 2150
+Connection ~ 4600 2050
+Connection ~ 4600 2150
+Wire Wire Line
+	4700 2050 4800 2050
+Wire Wire Line
+	4800 2050 4800 1750
+Wire Wire Line
+	4800 1750 4200 1750
+Wire Wire Line
+	4200 1750 4200 2050
+Wire Wire Line
+	4200 2050 4300 2050
+Wire Wire Line
+	4300 2050 4300 2100
+Connection ~ 4300 2050
 $EndSCHEMATC
