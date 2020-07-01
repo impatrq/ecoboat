@@ -1,8 +1,36 @@
 Modo BCM
 
-GPIO 23 (Batería)
-GPIO 24 (Consumo del motor de Propulsión)
-GPIO 25 (Consumo del motor del Cangilón)
-GPIO 12 (Ángulo del motor de Dirección)
-GPIO 26 (Detección de estacionamiento)
-GPIO 6 (Panel Solar)
+Motor de Propulsión:
+	GPIO13
+	GPIO26
+
+Motor del Cangilón:
+	GPIO5
+	GPIO6
+
+Motor de Dirección:
+	GPIO4
+	GPIO17
+	GPIO27
+	GPIO22
+
+Módulo RF Slave:
+	SPI0 MOSI
+	SPI0 MISO
+	SPI0 SCLK
+	SPI0 CS0
+	GPIO7
+
+Conversor Analógico Digital:
+	SPI1 CS0
+	SPI1 MOSI
+	SPI1 SCLK
+	SPI1 MISO
+
+Sensores Ultra Sónicos:
+	GPIO2
+	GPIO18
+	GPIO23
+	GPIO24
+	GPIO24
+	GPIO12
