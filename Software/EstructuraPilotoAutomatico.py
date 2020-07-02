@@ -12,7 +12,7 @@ import spidev
 
 #//////////////// defino la lista que va a guardar las variables/////////////
 
-data= [0,0,0,0]
+datos= [0,0,0,0]
 #data 0 = latitud
 #data 1 = longitud
 #data 2 = curso
@@ -51,7 +51,7 @@ def pilotoAutomatico():
 	def Girar(waypoint):
 
 		#primero hace un primer chequeo de la diferencia de direccion
-		DD= DireccionDeseada(data[0], data[1], waypoint)
+		DD= DireccionDeseada(datos[0], datos[1], waypoint)
 		DA= data[2] #Direccion actual dado por el modulo gps
 		DeltaD= DD - DA
 
@@ -70,8 +70,8 @@ def pilotoAutomatico():
 
 			#se mantiene girando hasta que corrija el rumbo
 			while(abs(DeltaD) >= 5):
-				DD= DireccionDeseada(data[0], data[1], waypoint)
-				DA= data[2]
+				DD= DireccionDeseada(datos[0], datos[1], waypoint)
+				DA= datos[2]
 				DeltaD= DD - DA
 				tm.sleep(0.5)
 
@@ -85,7 +85,7 @@ def pilotoAutomatico():
 
 	def LlegadaAlWP(destino):
 		#comparar nuestra direccion con el destino
-		dis= distancia(data[0], data[1], destino)
+		dis= distancia(datos[0], datos[1], destino)
 
 		if(abs(dis) <= 5):
 			return 0
@@ -222,6 +222,11 @@ def comRF():
 		TGPS = threading.Thread(name="GPS", target=GPS)
 		TPA = threading.Thread(name="PA", target=pilotoAutomatico)
 		TGPS.start()
+		
+		while True:
+    			if(datos[3]==1):
+        			break
+	
 		TPA.start()
 		while True:
 			lat = datos[0]
@@ -251,42 +256,46 @@ def comRF():
 
 def GPS():
 
+	def disponible():
+            #funcion que detecte disponibilidad de datos
+            port="/dev/ttyAMA0"
+            ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+            dataout=pynmea2.NMEAStreamReader()
+            data=ser.readline()
+
+            if data[0:6] == "$GPRMC":
+                datos=pynmea2.parse(newdata)
+                while True:
+                    if datos.status == A:
+                        break
+
+                datos[3]==1
+            return 0
+        
 	def lectura():
-		port="/dev/ttyAMA0"
-		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-		dataout=pynmea2.NMEAStreamReader()
-		data=ser.readline()
+	    port="/dev/ttyAMA0"
+            ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+            dataout=pynmea2.NMEAStreamReader()
+            data=ser.readline()
 
-		if data[0:6] == "$GPRMC":
-			datos=pynmea2.parse(newdata)
-			data[0]=datos.latitude
-			data[1]=datos.longitude
-			data[2]=datos.direction
+            if data[0:6] == "$GPRMC":
+                pos=pynmea2.parse(newdata)
+		datos[0]=pos.latitude
+		datos[1]=pos.longitude
+		datos[2]=pos.direction
 
-		time.sleep(0.05)
-		return 0
+	    time.sleep(0.05)
+	    return 0
 
-	while True:
-		lectura()
-		time.sleep(1)
+        disponible()
+
+        if (datos[3]==1):
+            while True:
+                lectura()
+                time.sleep(1)
+
 
 #//////////////// programa /////////////////////////
-
-#espero a que haya data para arrancar
-
-def disponible():
-	#funcion que detecte disponibilidad de datos
-	port="/dev/ttyAMA0"
-	ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-	dataout=pynmea2.NMEAStreamReader()
-	data=ser.readline()
-	#falta terminar
-	return 0
-
-while True:
-	if (disponible()==1):
-		data[3]==1
-		break
 
 #////////////// inicio los hilos ////////////////////
 while True:
