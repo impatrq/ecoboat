@@ -350,12 +350,12 @@ Wire Wire Line
 Wire Wire Line
 	4600 2150 4600 2550
 $Comp
-L Connector:Screw_Terminal_01x05 J?
+L Connector:Screw_Terminal_01x05 J1
 U 1 1 5EFA25E1
 P 4500 1850
-F 0 "J?" V 4464 1562 50  0000 R CNN
+F 0 "J1" V 4464 1562 50  0000 R CNN
 F 1 "Screw_Terminal_01x05" V 4373 1562 50  0000 R CNN
-F 2 "" H 4500 1850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-5_P5.08mm" H 4500 1850 50  0001 C CNN
 F 3 "~" H 4500 1850 50  0001 C CNN
 	1    4500 1850
 	0    -1   -1   0   

@@ -98,7 +98,7 @@ U 1 1 5E9EA848
 P 5400 3600
 F 0 "RV1" H 5331 3646 50  0000 R CNN
 F 1 "R_POT" H 5331 3555 50  0000 R CNN
-F 2 "Potentiometer_THT:Potentiometer_ACP_CA14-H5_Horizontal" H 5400 3600 50  0001 C CNN
+F 2 "Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical" H 5400 3600 50  0001 C CNN
 F 3 "~" H 5400 3600 50  0001 C CNN
 	1    5400 3600
 	0    -1   -1   0   
