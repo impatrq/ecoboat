@@ -4,6 +4,8 @@ import numpy as np
 
 #agregar configuracion de pines gpio
 
+gpio.setmode(gpio.BCM)
+
 estados=np.array([
 	["True","False","False","False"],
 	["False","True","False","False"],
@@ -90,10 +92,10 @@ gpio.setup(9, gpio.IN)
 gpio.setup(10, gpio.IN)
 
 if (gpio.input(7)==True):
-    timon.girarH()
+    timon.girarH(10)
 
 if (gpio.input(8)==True):
-    timon.girarAH()
+    timon.girarAH(10)
 
 if (gpio.input(9)==True):
     prop.girarD()
