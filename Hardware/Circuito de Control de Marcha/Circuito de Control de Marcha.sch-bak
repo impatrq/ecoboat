@@ -459,10 +459,10 @@ F 3 "~" H 1050 5450 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U2
 U 1 1 5F002069
 P 1700 1400
-F 0 "U?" H 1700 1725 50  0000 C CNN
+F 0 "U2" H 1700 1725 50  0000 C CNN
 F 1 "4N25" H 1700 1634 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 1500 1200 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 1700 1400 50  0001 L CNN
@@ -488,10 +488,10 @@ Wire Wire Line
 	2000 1600 2000 1500
 Connection ~ 1700 1600
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U4
 U 1 1 5F020A68
 P 1750 2000
-F 0 "U?" H 1750 2325 50  0000 C CNN
+F 0 "U4" H 1750 2325 50  0000 C CNN
 F 1 "4N25" H 1750 2234 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 1550 1800 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 1750 2000 50  0001 L CNN
@@ -514,10 +514,10 @@ Wire Wire Line
 	1450 2450 2050 2450
 Connection ~ 2050 2450
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U6
 U 1 1 5F02FF87
 P 4200 2000
-F 0 "U?" H 4200 2325 50  0000 C CNN
+F 0 "U6" H 4200 2325 50  0000 C CNN
 F 1 "4N25" H 4200 2234 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 4000 1800 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4200 2000 50  0001 L CNN
@@ -526,10 +526,10 @@ F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4200 2000 50  0001 L CNN
 $EndComp
 Connection ~ 3900 2100
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U8
 U 1 1 5F033177
 P 4250 1400
-F 0 "U?" H 4250 1725 50  0000 C CNN
+F 0 "U8" H 4250 1725 50  0000 C CNN
 F 1 "4N25" H 4250 1634 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 4050 1200 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4250 1400 50  0001 L CNN
@@ -575,10 +575,10 @@ Wire Wire Line
 Wire Wire Line
 	4950 2650 1000 2650
 $Comp
-L Transistor_FET:IRF9540N Q?
+L Transistor_FET:IRF9540N Q5
 U 1 1 5F05B32E
 P 2400 3250
-F 0 "Q?" H 2604 3204 50  0000 L CNN
+F 0 "Q5" H 2604 3204 50  0000 L CNN
 F 1 "IRF9540N" H 2604 3295 50  0000 L CNN
 F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 2600 3175 50  0001 L CIN
 F 3 "http://www.irf.com/product-info/datasheets/data/irf9540n.pdf" H 2400 3250 50  0001 L CNN
@@ -586,10 +586,10 @@ F 3 "http://www.irf.com/product-info/datasheets/data/irf9540n.pdf" H 2400 3250 5
 	1    0    0    1   
 $EndComp
 $Comp
-L Transistor_FET:IRF9540N Q?
+L Transistor_FET:IRF9540N Q7
 U 1 1 5F05BBDD
 P 3550 3250
-F 0 "Q?" H 3755 3204 50  0000 L CNN
+F 0 "Q7" H 3755 3204 50  0000 L CNN
 F 1 "IRF9540N" H 3755 3295 50  0000 L CNN
 F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 3750 3175 50  0001 L CIN
 F 3 "http://www.irf.com/product-info/datasheets/data/irf9540n.pdf" H 3550 3250 50  0001 L CNN
@@ -597,10 +597,10 @@ F 3 "http://www.irf.com/product-info/datasheets/data/irf9540n.pdf" H 3550 3250 5
 	-1   0    0    1   
 $EndComp
 $Comp
-L Transistor_FET:IRF540N Q?
+L Transistor_FET:IRF540N Q6
 U 1 1 5F05C27A
 P 2400 4250
-F 0 "Q?" H 2604 4296 50  0000 L CNN
+F 0 "Q6" H 2604 4296 50  0000 L CNN
 F 1 "IRF540N" H 2604 4205 50  0000 L CNN
 F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 2650 4175 50  0001 L CIN
 F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 2400 4250 50  0001 L CNN
@@ -608,10 +608,10 @@ F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 2400 4250 50
 	1    0    0    -1  
 $EndComp
 $Comp
-L Transistor_FET:IRF540N Q?
+L Transistor_FET:IRF540N Q8
 U 1 1 5F05CF57
 P 3550 4250
-F 0 "Q?" H 3755 4296 50  0000 L CNN
+F 0 "Q8" H 3755 4296 50  0000 L CNN
 F 1 "IRF540N" H 3755 4205 50  0000 L CNN
 F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 3800 4175 50  0001 L CIN
 F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 3550 4250 50  0001 L CNN
@@ -628,10 +628,10 @@ Wire Wire Line
 Wire Wire Line
 	1000 1650 1000 1900
 $Comp
-L Device:R R?
+L Device:R R2
 U 1 1 5F063F20
 P 1150 1900
-F 0 "R?" V 943 1900 50  0000 C CNN
+F 0 "R2" V 943 1900 50  0000 C CNN
 F 1 "220" V 1034 1900 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1080 1900 50  0001 C CNN
 F 3 "~" H 1150 1900 50  0001 C CNN
@@ -642,10 +642,10 @@ Connection ~ 1000 1900
 Wire Wire Line
 	1000 1900 1000 2650
 $Comp
-L Device:R R?
+L Device:R R14
 U 1 1 5F0641E7
 P 4750 1900
-F 0 "R?" V 4543 1900 50  0000 C CNN
+F 0 "R14" V 4543 1900 50  0000 C CNN
 F 1 "220" V 4634 1900 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4680 1900 50  0001 C CNN
 F 3 "~" H 4750 1900 50  0001 C CNN
@@ -653,10 +653,10 @@ F 3 "~" H 4750 1900 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R13
 U 1 1 5F0646E3
 P 4750 1300
-F 0 "R?" V 4543 1300 50  0000 C CNN
+F 0 "R13" V 4543 1300 50  0000 C CNN
 F 1 "220" V 4634 1300 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4680 1300 50  0001 C CNN
 F 3 "~" H 4750 1300 50  0001 C CNN
@@ -666,10 +666,10 @@ $EndComp
 Wire Wire Line
 	850  3700 950  3700
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U5
 U 1 1 5F06CB3C
 P 1750 4150
-F 0 "U?" H 1750 4475 50  0000 C CNN
+F 0 "U5" H 1750 4475 50  0000 C CNN
 F 1 "4N25" H 1750 4384 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 1550 3950 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 1750 4150 50  0001 L CNN
@@ -678,10 +678,10 @@ F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 1750 4150 50  0001 L CNN
 $EndComp
 Connection ~ 2050 4250
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U3
 U 1 1 5F0726D9
 P 1700 3550
-F 0 "U?" H 1700 3875 50  0000 C CNN
+F 0 "U3" H 1700 3875 50  0000 C CNN
 F 1 "4N25" H 1700 3784 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 1500 3350 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 1700 3550 50  0001 L CNN
@@ -689,10 +689,10 @@ F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 1700 3550 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U7
 U 1 1 5F0735D6
 P 4200 4150
-F 0 "U?" H 4200 4475 50  0000 C CNN
+F 0 "U7" H 4200 4475 50  0000 C CNN
 F 1 "4N25" H 4200 4384 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 4000 3950 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4200 4150 50  0001 L CNN
@@ -701,10 +701,10 @@ F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4200 4150 50  0001 L CNN
 $EndComp
 Connection ~ 3900 4250
 $Comp
-L Isolator:4N25 U?
+L Isolator:4N25 U9
 U 1 1 5F07448D
 P 4250 3550
-F 0 "U?" H 4250 3875 50  0000 C CNN
+F 0 "U9" H 4250 3875 50  0000 C CNN
 F 1 "4N25" H 4250 3784 50  0000 C CNN
 F 2 "Package_DIP:DIP-6_W7.62mm" H 4050 3350 50  0001 L CIN
 F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4250 3550 50  0001 L CNN
@@ -712,10 +712,10 @@ F 3 "https://www.vishay.com/docs/83725/4n25.pdf" H 4250 3550 50  0001 L CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L power:Earth #PWR?
+L power:Earth #PWR0105
 U 1 1 5F075575
 P 4250 3750
-F 0 "#PWR?" H 4250 3500 50  0001 C CNN
+F 0 "#PWR0105" H 4250 3500 50  0001 C CNN
 F 1 "Earth" H 4250 3600 50  0001 C CNN
 F 2 "" H 4250 3750 50  0001 C CNN
 F 3 "~" H 4250 3750 50  0001 C CNN
@@ -723,10 +723,10 @@ F 3 "~" H 4250 3750 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R16
 U 1 1 5F07592F
 P 4750 4050
-F 0 "R?" V 4543 4050 50  0000 C CNN
+F 0 "R16" V 4543 4050 50  0000 C CNN
 F 1 "220" V 4634 4050 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4680 4050 50  0001 C CNN
 F 3 "~" H 4750 4050 50  0001 C CNN
@@ -734,10 +734,10 @@ F 3 "~" H 4750 4050 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R15
 U 1 1 5F075D82
 P 4750 3450
-F 0 "R?" V 4543 3450 50  0000 C CNN
+F 0 "R15" V 4543 3450 50  0000 C CNN
 F 1 "220" V 4634 3450 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 4680 3450 50  0001 C CNN
 F 3 "~" H 4750 3450 50  0001 C CNN
@@ -751,10 +751,10 @@ Wire Wire Line
 Wire Wire Line
 	2950 2800 5000 2800
 $Comp
-L Device:R R?
+L Device:R R7
 U 1 1 5F07AAF0
 P 1150 3450
-F 0 "R?" V 943 3450 50  0000 C CNN
+F 0 "R7" V 943 3450 50  0000 C CNN
 F 1 "220" V 1034 3450 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1080 3450 50  0001 C CNN
 F 3 "~" H 1150 3450 50  0001 C CNN
@@ -762,10 +762,10 @@ F 3 "~" H 1150 3450 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R8
 U 1 1 5F07B007
 P 1150 4050
-F 0 "R?" V 943 4050 50  0000 C CNN
+F 0 "R8" V 943 4050 50  0000 C CNN
 F 1 "220" V 1034 4050 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1080 4050 50  0001 C CNN
 F 3 "~" H 1150 4050 50  0001 C CNN
@@ -777,10 +777,10 @@ Wire Wire Line
 Wire Wire Line
 	1300 4050 1450 4050
 $Comp
-L power:Earth #PWR?
+L power:Earth #PWR0109
 U 1 1 5F083A08
 P 1700 3750
-F 0 "#PWR?" H 1700 3500 50  0001 C CNN
+F 0 "#PWR0109" H 1700 3500 50  0001 C CNN
 F 1 "Earth" H 1700 3600 50  0001 C CNN
 F 2 "" H 1700 3750 50  0001 C CNN
 F 3 "~" H 1700 3750 50  0001 C CNN
@@ -856,10 +856,10 @@ Wire Wire Line
 Wire Wire Line
 	2950 4600 3900 4600
 $Comp
-L Device:R R?
+L Device:R R9
 U 1 1 5F0CA0D4
 P 2050 3050
-F 0 "R?" H 2120 3096 50  0000 L CNN
+F 0 "R9" H 2120 3096 50  0000 L CNN
 F 1 "10k" H 2120 3005 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1980 3050 50  0001 C CNN
 F 3 "~" H 2050 3050 50  0001 C CNN
@@ -867,10 +867,10 @@ F 3 "~" H 2050 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R10
 U 1 1 5F0CA4D1
 P 2050 4450
-F 0 "R?" H 2120 4496 50  0000 L CNN
+F 0 "R10" H 2120 4496 50  0000 L CNN
 F 1 "10k" H 2120 4405 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 1980 4450 50  0001 C CNN
 F 3 "~" H 2050 4450 50  0001 C CNN
@@ -881,10 +881,10 @@ Connection ~ 2050 4600
 Wire Wire Line
 	2050 4600 2950 4600
 $Comp
-L Device:R R?
+L Device:R R11
 U 1 1 5F0CAFB0
 P 3900 3050
-F 0 "R?" H 3970 3096 50  0000 L CNN
+F 0 "R11" H 3970 3096 50  0000 L CNN
 F 1 "10k" H 3970 3005 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 3830 3050 50  0001 C CNN
 F 3 "~" H 3900 3050 50  0001 C CNN
@@ -892,10 +892,10 @@ F 3 "~" H 3900 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R12
 U 1 1 5F0CB34B
 P 3900 4450
-F 0 "R?" H 3970 4496 50  0000 L CNN
+F 0 "R12" H 3970 4496 50  0000 L CNN
 F 1 "10k" H 3970 4405 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 3830 4450 50  0001 C CNN
 F 3 "~" H 3900 4450 50  0001 C CNN
@@ -907,4 +907,6 @@ Wire Wire Line
 	3900 4600 4500 4600
 Wire Wire Line
 	2050 4150 2300 4150
+Wire Wire Line
+	4600 3450 4550 3450
 $EndSCHEMATC
