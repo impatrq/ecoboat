@@ -36,8 +36,8 @@ while True:
 		if (med.Lsd > 400):
 			#doblar hacia la derecha
 		else if(med.Lsi > 400):
-			#si no se puede doblar a la izquierda
-			#doblar hacia la derecha de forma mas cerrada
+			#si no se puede doblar a la derecha
+			#doblar hacia la izquierda de forma mas cerrada
 
 	while(med.Lfd <=400 and med.Lfi > 400):
 		med.medicion()
@@ -45,7 +45,7 @@ while True:
 		if (med.Lsi > 400):
 			#doblar hacia la izquierda
 		else if(med.Lsd > 400):
-			#si no se puede doblar a la derecha
+			#si no se puede doblar a la izquierda
 			#doblar hacia la derecha de forma mas cerrada
 
 	while(med.Lfd <=400 and med.Lfi <=400):
