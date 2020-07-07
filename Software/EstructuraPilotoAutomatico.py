@@ -93,8 +93,10 @@ def pilotoAutomatico():
 			return 1
 
 	timon= mt.PaP(1, 2, 3, 4)
-	motorDirec= mt.puenteH(1,2)
+	Cangilon= mt.Cangilon(1,2,50)
+	motorDirec= mt.Propulsion(1,2,50)
 	#meto primera
+	Cangilon.girarD()
 	motorDirec.girarD()
 
 	#en esta array se guardan los waypoints a recorrer 
@@ -108,6 +110,9 @@ def pilotoAutomatico():
 			Girar(waypoints[i])
 			time.sleep(5)
 
+	Cangilon.detener()
+	motorDirec.detener()
+	
 #//////////////// funciones de RF //////////////////////
 
 def comRF():
