@@ -11,12 +11,14 @@ import spidev
 #estado del codigo= naranja
 
 #//////////////// defino la lista que va a guardar las variables/////////////
+class Data():
 
-datos= [0,0,0,0]
-#data 0 = latitud
-#data 1 = longitud
-#data 2 = curso
-#data 3 = fin de escaneo
+	def __init__(self):
+
+		self.lat=0
+		self.long=0
+		self.curso=0
+		self.escan=0
 
 #//////////////// funciones de Piloto Automatico////////////////
 
@@ -51,8 +53,8 @@ def pilotoAutomatico():
 	def Girar(waypoint):
 
 		#primero hace un primer chequeo de la diferencia de direccion
-		DD= DireccionDeseada(datos[0], datos[1], waypoint)
-		DA= data[2] #Direccion actual dado por el modulo gps
+		DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+		DA= DATOS.curso #Direccion actual dado por el modulo gps
 		DeltaD= DD - DA
 
 		#si no es demaciado no gira
@@ -70,8 +72,8 @@ def pilotoAutomatico():
 
 			#se mantiene girando hasta que corrija el rumbo
 			while(abs(DeltaD) >= 5):
-				DD= DireccionDeseada(datos[0], datos[1], waypoint)
-				DA= datos[2]
+				DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+				DA= DATOS.curso
 				DeltaD= DD - DA
 				tm.sleep(0.5)
 
@@ -85,7 +87,7 @@ def pilotoAutomatico():
 
 	def LlegadaAlWP(destino):
 		#comparar nuestra direccion con el destino
-		dis= distancia(datos[0], datos[1], destino)
+		dis= distancia(DATOS.lat, DATOS.long, destino)
 
 		if(abs(dis) <= 5):
 			return 0
@@ -229,14 +231,15 @@ def comRF():
 		TGPS.start()
 		
 		while True:
-    			if(datos[3]==1):
+    			if(DATOS.escan==1):
         			break
 	
 		TPA.start()
+
 		while True:
-			lat = datos[0]
-			lon = datos[1]
-			dirr = datos[2]
+			lat = DATOS.lat
+			lon = DATOS.long
+			dirr = DATOS.curso
 			enviarRF(lat)
 			enviarRF(lon)
 			enviarRF(dirr)
@@ -274,7 +277,7 @@ def GPS():
                     if datos.status == A:
                         break
 
-                datos[3]==1
+                DATOS.escan==1
             return 0
         
 	def lectura():
@@ -285,23 +288,24 @@ def GPS():
 
             if data[0:6] == "$GPRMC":
                 pos=pynmea2.parse(newdata)
-		datos[0]=pos.latitude
-		datos[1]=pos.longitude
-		datos[2]=pos.direction
+		DATOS.lat=pos.latitude
+		DATOS.long=pos.longitude
+		DATOS.curso=pos.direction
 
 	    time.sleep(0.05)
 	    return 0
 
         disponible()
 
-        if (datos[3]==1):
+        if (DATOS.escan==1):
             while True:
                 lectura()
                 time.sleep(1)
 
-
-#//////////////// programa /////////////////////////
-
 #////////////// inicio los hilos ////////////////////
-while True:
-	cmRF()
+
+DATOS= Data()
+
+TGPS = threading.Thread(name="RF", target=comRF)
+
+RF.start()
