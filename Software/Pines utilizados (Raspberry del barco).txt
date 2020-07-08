@@ -1,12 +1,12 @@
 Modo BCM
 
 Motor de Propulsión:
-	GPIO13
-	GPIO26
+	GPIO18  PWM
+	GPIO12  PWM
 
 Motor del Cangilón:
-	GPIO5
 	GPIO6
+	GPIO13 PWM
 
 Motor de Dirección:
 	GPIO4
@@ -29,8 +29,8 @@ Conversor Analógico Digital:
 
 Sensores Ultra Sónicos:
 	GPIO2
-	GPIO18
+	GPIO5
+	GPIO26
 	GPIO23
 	GPIO24
-	GPIO24
-	GPIO12
+	GPIO25
