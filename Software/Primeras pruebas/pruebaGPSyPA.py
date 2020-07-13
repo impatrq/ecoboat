@@ -14,73 +14,78 @@ datos= [0,0,0,0]
 def PilotoAutomatico():
 
     def distancia(lat1, lng1 , waypoint):
-            lat2=waypoint[0, 0]
-            lng2=waypoint[0, 1]
-            r=6371000
-            c=(math.pi)/180
-            #Fórmula de haversine
-            d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
-            return d
+
+        lat2=waypoint[0, 0]
+        lng2=waypoint[0, 1]
+        r=6371000
+        c=(math.pi)/180
+        #Fórmula de haversine
+        d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
+        return d
 
     def DireccionDeseada(lat1, lng1, waypoint):
-            lat2=waypoint[0, 0]
-            lng2=waypoint[0, 1]
-            dlon=lng2-lng1 
-            a1=sin(dlon)*cos(lat2)
-            a2=(cos(lat1)*sin(lat2))-(sin(lat1)*cos(lat2)*cos(dlon))
-            curso=atan2(a1, a2)
 
-            if(curso < 0):
-                    curso += 2*math.pi
+        lat2=waypoint[0, 0]
+        lng2=waypoint[0, 1]
+        dlon=lng2-lng1 
+        a1=sin(dlon)*cos(lat2)
+        a2=(cos(lat1)*sin(lat2))-(sin(lat1)*cos(lat2)*cos(dlon))
+        curso=atan2(a1, a2)
 
-            return degrees(curso)
+        if(curso < 0):
+            curso += 2*math.pi
+
+        return degrees(curso)
 
     def Girar(waypoint):
 
-            #primero hace un primer chequeo de la diferencia de direccion
-            DD= DireccionDeseada(datos[0], datos[1], waypoint)
-            DA= datos[2] #Direccion actual dado por el modulo gps
-            DeltaD= DD - DA
+        #primero hace un primer chequeo de la diferencia de direccion
+        DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+        DA= DATOS.curso #Direccion actual dado por el modulo gps
+        DeltaD= DD - DA
 
-            #si no es demaciado no gira
-            if (abs(DeltaD)<= 10):
-                    return 0
-            #si es mucho lo corrije
-            else:
-                    #verifica si hay que girar a la derecha o izquierda
-                    if(DeltaD<0):
-                            timon.girarH(10)
-                            giro=1
-                    else:
-                            timon.girarAH(10)
-                            giro=0
-                            
-                    #se mantiene girando hasta que corrija el rumbo
-                    while(abs(DeltaD) >= 5):
-                            DD= DireccionDeseada(datos[0], datos[1], waypoint)
-                            DA= datos[2]
-                            DeltaD= DD - DA
-                            tm.sleep(0.5)
-
-                    #vuelve a su posicion el timon
-                    if (giro==1):
-                            timon.girarAH(10)
-                    else:
-                            timon.girarH(10)
-
+        #si no es demasiado no gira
+        if (abs(DeltaD)<= 10):
             return 0
 
+        #si es mucho lo corrige
+        if (abs(DeltaD) >= 30):
+            
+            ang= round((DeltaD/abs(DeltaD)),0)*30
+            timon.girar(ang)
+
+            while(abs(DeltaD) >= 30):
+                DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+                DA= DATOS.curso
+                DeltaD= DD - DA
+
+        if (abs(DeltaD) <= 30):
+            ang=round(DeltaD, 0)
+            timon.girar(ang)
+            while(abs(DeltaD)<=30):
+                DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+                DA= DATOS.curso
+                DeltaD= DD - DA
+                if ((ang - DeltaD) <= 1):
+                    pass
+                else:
+                    timon.girar(ang-DeltaD)
+                    ang=round(DeltaD, 0)
+            
+        return 0
+
     def LlegadaAlWP(destino):
-            #comparar nuestra direccion con el destino
-            dis= distancia(datos[0], datos[1], destino)
+            
+        #comparar nuestra direccion con el destino
+        dis= distancia(datos[0], datos[1], destino)
                     
         if(abs(dis) <= 5):
-                    return 0
-            else:
-                    return 1
+            return 0
+        else:
+            return 1
 
-    timon= mt.PaP(1, 2, 3, 4)
-    motorDirec= mt.puenteH(1,2)
+    timon= mt.PaP(4, 17, 27, 22)
+    motorDirec= mt.puenteH(18, 12, 50)
     #meto primera
     motorDirec.girarD()
 

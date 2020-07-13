@@ -10,6 +10,8 @@ import spidev
 
 #estado del codigo= naranja
 
+GPIO.setmode(GPIO.BCM)
+
 #//////////////// defino la lista que va a guardar las variables/////////////
 class Data():
 
@@ -23,6 +25,8 @@ class Data():
 #//////////////// funciones de Piloto Automatico////////////////
 
 def pilotoAutomatico():
+
+#-----------------------------------------------------------------------------------------------------------
 
 	def EvitarObstaculos():
     #Sensores para evitar que el barco choque
@@ -57,32 +61,34 @@ def pilotoAutomatico():
 		DA= DATOS.curso #Direccion actual dado por el modulo gps
 		DeltaD= DD - DA
 
-		#si no es demaciado no gira
+		#si no es demasiado no gira
 		if (abs(DeltaD)<= 10):
 			return 0
-		#si es mucho lo corrije
-		else:
-			#verifica si hay que girar a la derecha o izquierda
-			if(DeltaD<0):
-				timon.girarH(10)
-				giro=1
-			else:
-				timon.girarAH(10)
-				giro=0
 
-			#se mantiene girando hasta que corrija el rumbo
-			while(abs(DeltaD) >= 5):
+		#si es mucho lo corrige
+		if (abs(DeltaD) >= 30):
+			
+			ang= round((DeltaD/abs(DeltaD)),0)*30
+			timon.girar(ang)
+
+			while(abs(DeltaD) >= 30):
 				DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
 				DA= DATOS.curso
 				DeltaD= DD - DA
-				tm.sleep(0.5)
 
-			#vuelve a su posicion el timon
-			if (giro==1):
-				timon.girarAH(10)
-			else:
-				timon.girarH(10)
-
+		if (abs(DeltaD) <= 30):
+			ang=round(DeltaD, 0)
+			timon.girar(ang)
+			while(abs(DeltaD)<=30):
+				DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+				DA= DATOS.curso
+				DeltaD= DD - DA
+				if ((ang - DeltaD) <= 1):
+					pass
+				else:
+					timon.girar(ang-DeltaD)
+					ang=round(DeltaD, 0)
+			
 		return 0
 
 	def LlegadaAlWP(destino):
@@ -94,9 +100,12 @@ def pilotoAutomatico():
 		else:
 			return 1
 
-	timon= mt.PaP(1, 2, 3, 4)
-	Cangilon= mt.Cangilon(1,2,50)
-	motorDirec= mt.Propulsion(1,2,50)
+#---------------------------------------------------------------------------------------------------------------
+
+	timon= mt.PaP(4, 17, 27, 22)
+	Cangilon= mt.Cangilon(6, 13, 50)
+	motorDirec= mt.Propulsion(18, 12, 50)
+
 	#meto primera
 	Cangilon.girarD()
 	motorDirec.girarD()
@@ -306,6 +315,6 @@ def GPS():
 
 DATOS= Data()
 
-TGPS = threading.Thread(name="RF", target=comRF)
+TRF = threading.Thread(name="RF", target=comRF)
 
 RF.start()

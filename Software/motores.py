@@ -25,30 +25,32 @@ class PaP():
 		gpio.setup(self.pin3, gpio.OUT)
 		gpio.setup(self.pin4, gpio.OUT)
 
-	def girarH(self, grados):
-		i=grados*512
-		for t in range (0, i):
-			for e in range (0,4):
-				gpio.output(self.pin1, estados[e, 0])
-				gpio.output(self.pin2, estados[e, 1])
-				gpio.output(self.pin3, estados[e, 2])
-				gpio.output(self.pin4, estados[e, 3])
-				time.sleep(0.005)
+	def girar(self, grados):
 
-		return 0
+		if (grados<0):
+			i=grados*512
+			for t in range (0, i):
+				for e in range (0,4):
+					gpio.output(self.pin1, estados[e, 0])
+					gpio.output(self.pin2, estados[e, 1])
+					gpio.output(self.pin3, estados[e, 2])
+					gpio.output(self.pin4, estados[e, 3])
+					time.sleep(0.005)
 
-	def girarAH(self, grados):
-		i=grados*512
-		for t in range (0, i):
-			for e in range (0,4):
-				gpio.output(self.pin1, estados[e, 3])
-				gpio.output(self.pin2, estados[e, 2])
-				gpio.output(self.pin3, estados[e, 1])
-				gpio.output(self.pin4, estados[e, 0])
-				time.sleep(0.005)
-			t+=1
+			return 0
 
-		return 0
+		if (grados>=0):
+			i=grados*512
+			for t in range (0, i):
+				for e in range (0,4):
+					gpio.output(self.pin1, estados[e, 3])
+					gpio.output(self.pin2, estados[e, 2])
+					gpio.output(self.pin3, estados[e, 1])
+					gpio.output(self.pin4, estados[e, 0])
+					time.sleep(0.005)
+				t+=1
+
+			return 0
 
 class Cangilon():
 
