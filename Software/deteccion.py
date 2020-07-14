@@ -30,6 +30,36 @@ med=mediciones()
 
 while True:
 	med.medicion()
+	#-------------------------------------------------------Caso: el barco esta centrado al obstáculo----------------------------------------------------------
+	if med.Lfi <= 400 and med.Lfd <= 400:
+		#Estoy en el medio del obstáculo (Detectan los dos)
+		if med.Lli == 0 and med.Lld == 0:
+			while med.Lli <= 300 or med.Lld <= 300:
+				med.medicion()
+				#Una vez que estoy a 3 metros empiezo a esquivar
+				#Si tiene espacio en los dos lados gira para el más cercano a la dirección deseada
+			if DeltaD < 0:
+				#Si la dirección deseada es para la derecha: Giro para la derecha.
+				timo.girar(30)
+				while med.Lfi > 0:
+					med.medicion()
+				timon.girar(-30)
+
+			if DeltaD > 0:
+				giro = 1
+
+		if med.Lli < med.Lld:
+			#Si hay mas espacio a la derecha voy por ese lado
+			giro = 1
+		while True:
+
+	if med.Lfi <= 400:
+		#Estoy a la derecha del obstáculo (Detecta el izquierdo)
+
+	if med.Lfd <= 400:
+		#Estoy a la izquierda del obstáculo (Detecta el derecho)
+
+
 	while(med.Lfi <=400 and med.Lfd > 400):
 		med.medicion()
 		#reviso el lobulo secundario
