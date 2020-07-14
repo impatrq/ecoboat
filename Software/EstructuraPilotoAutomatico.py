@@ -7,6 +7,7 @@ import motores as mt
 import math
 from lib_nrf24 import NRF24
 import spidev
+import sensoresUS as US 
 
 #estado del codigo= naranja
 
@@ -29,8 +30,22 @@ def pilotoAutomatico():
 #-----------------------------------------------------------------------------------------------------------
 
 	def EvitarObstaculos():
-    #Sensores para evitar que el barco choque
+    	#Sensores para evitar que el barco choque
     return 1
+
+	def girar(angulo):
+		
+		US.medicion()
+		if (angulo<0):
+			while(Lsi <= 250):
+				US.medicion()
+
+		if (angulo>0):
+			while(Lsd <= 250):
+				US.medicion()
+
+		timon.girar(angulo)
+
 
 	def distancia(lat1, lng1 , waypoint):
 		lat2=waypoint[0, 0]
@@ -54,7 +69,7 @@ def pilotoAutomatico():
 
 		return degrees(curso)
 
-	def Girar(waypoint):
+	def GirarAWP(waypoint):
 
 		#primero hace un primer chequeo de la diferencia de direccion
 		DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
@@ -69,7 +84,7 @@ def pilotoAutomatico():
 		if (abs(DeltaD) >= 30):
 			
 			ang= round((DeltaD/abs(DeltaD)),0)*30
-			timon.girar(ang)
+			girar(ang)
 
 			while(abs(DeltaD) >= 30):
 				DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
@@ -78,7 +93,7 @@ def pilotoAutomatico():
 
 		if (abs(DeltaD) <= 30):
 			ang=round(DeltaD, 0)
-			timon.girar(ang)
+			girar(ang)
 			while(abs(DeltaD)<=30):
 				DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
 				DA= DATOS.curso
@@ -86,7 +101,7 @@ def pilotoAutomatico():
 				if ((ang - DeltaD) <= 1):
 					pass
 				else:
-					timon.girar(ang-DeltaD)
+					girar(ang-DeltaD)
 					ang=round(DeltaD, 0)
 			
 		return 0
@@ -118,7 +133,7 @@ def pilotoAutomatico():
 	for i in range (0, len(waypoints)):
 		#la idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
 		while(LlegadaAlWP(waypoints[i]) != 1):
-			Girar(waypoints[i])
+			GirarAWP(waypoints[i])
 			time.sleep(5)
 
 	Cangilon.detener()

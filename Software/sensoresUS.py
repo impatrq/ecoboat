@@ -67,6 +67,12 @@ def lectura():
 				GPIO.output(2, j)
 				GPIO.output(3, k)
 				datos[pos]= medicion()
+				
+				if (datos[pos] < 400):
+					pass
+				else:
+					datos[pos]=0
+
 				pos+=1
 	return datos
 	
