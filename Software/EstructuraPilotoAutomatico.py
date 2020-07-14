@@ -301,7 +301,7 @@ def GPS():
 		DATOS.long=pos.longitude
 		DATOS.curso=pos.direction
 
-	    time.sleep(0.05)
+	    time.sleep(0.5)
 	    return 0
 
         disponible()
@@ -309,8 +309,7 @@ def GPS():
         if (DATOS.escan==1):
             while True:
                 lectura()
-                time.sleep(1)
-
+                
 #////////////// inicio los hilos ////////////////////
 
 DATOS= Data()
