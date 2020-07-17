@@ -52,7 +52,7 @@ def esquivarObstaculos():
 				while med.Lsi <= 200:
 					med.medicion()
 					#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Izquierdo mide más de 2m
-				pass
+				return 0
 
 			if DeltaD > 0:
 				#Si la dirección deseada es para la izquierda: Giro para la izquierda.
@@ -64,7 +64,7 @@ def esquivarObstaculos():
 				while med.Lsd <= 200:
 					med.medicion()
 					#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Derecho mide más de 2m
-				pass
+				return 0
 		#---------------------------------------------------------------------------------------------------------------
 
 		#------------------------------------Tengo espacio para esquivar a la izquierda---------------------------------
@@ -78,7 +78,7 @@ def esquivarObstaculos():
 			while med.Lsd <= 200:
 				med.medicion()
 				#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Derecho mide más de 2m
-			pass
+			return 0
 		#---------------------------------------------------------------------------------------------------------------
 
 		#-----------------------------------Tengo espacio para esquivar a la derecha------------------------------------
@@ -92,7 +92,7 @@ def esquivarObstaculos():
 			while med.Lsi <= 200:
 				med.medicion()
 				#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Izquierdo mide más de 2m
-			pass
+			return 0
 		#---------------------------------------------------------------------------------------------------------------
 
 	#-------------------------------------------------FIN // Caso: el barco esta centrado al obstáculo---------------------------------------------------------
@@ -103,7 +103,7 @@ def esquivarObstaculos():
 		while med.Lfi >= 300:
 			med.medicion()
 			if med.Lfi == 0: #Si antes de llegar a los 3m dejo de detectar significa que puedo pasar bien sin esquivar
-				pass
+				return 0
 		#Empiezo a esquivar a los 3 metros
 
 		timon.girar(30)
@@ -114,7 +114,7 @@ def esquivarObstaculos():
 		while med.Lsi <= 200:
 			med.medicion()
 			#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Izquierdo mide más de 2m
-		pass
+		return 0
 
 	#----------------------------------------------FIN // Caso: el barco está a la derecha del obstáculo-------------------------------------------------------
 
@@ -124,7 +124,7 @@ def esquivarObstaculos():
 		while med.Lfd >= 300:
 			med.medicion()
 			if med.Lfd == 0: #Si antes de llegar a los 3m dejo de detectar significa que puedo pasar bien sin esquivar
-				pass
+				return 0
 		#Empiezo a esquivar a los 3 metros
 
 		timon.girar(-30)
@@ -135,6 +135,6 @@ def esquivarObstaculos():
 		while med.Lsd <= 200:
 			med.medicion()
 			#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Derecho mide más de 2m
-		pass
+		return 0
 		
 	#---------------------------------------------FIN // Caso: el barco está a la izquierda del obstáculo------------------------------------------------------

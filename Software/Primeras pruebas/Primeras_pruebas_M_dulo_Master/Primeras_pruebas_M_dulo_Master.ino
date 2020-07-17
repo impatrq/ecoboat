@@ -34,12 +34,12 @@ int enviarRF(msj){
   return msj;
 }
 
-int recivirRF(){
-  char msjRecivido[32] = {0};
+int recibirRF(){
+  char msjRecibido[32] = {0};
   //Leo el mensaje y lo guardo en una variable
-  radio.read(msjRecivido, sizeof(msjRecivido));
+  radio.read(msjRecibido, sizeof(msjRecibido));
   //Lo decodifico a un string
-  String mensaje(msjRecivido);
+  String mensaje(msjRecibido);
   return mensaje;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -52,8 +52,8 @@ void loop() {
   //---------------------Comando Zarpar------------------------------
   if comando == MSJZARPAR{
     int a = 0;
-    while a == 0{
-      mensaje = recivirRF();
+    while a == 0{ //Mientras a sea 0 voy a seguir recibiendo mensajes
+      mensaje = recibirRF();
       Serial.println(mensaje);
       if mensaje == "20"{
         a = 1;
@@ -64,7 +64,7 @@ void loop() {
 
   //--------------------Comando análisis-----------------------------
   else if comando == MSJANALISIS{
-    mensaje = recivirRF();
+    mensaje = recibirRF();
     Serial.println(mensaje);
   }
   //-----------------------------------------------------------------

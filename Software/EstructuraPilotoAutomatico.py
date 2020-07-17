@@ -81,7 +81,7 @@ def pilotoAutomatico():
 					while med.Lsi <= 200:
 						med.medicion()
 						#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Izquierdo mide más de 2m
-					pass
+					return 0
 
 				if DeltaD > 0:
 					#Si la dirección deseada es para la izquierda: Giro para la izquierda.
@@ -93,7 +93,7 @@ def pilotoAutomatico():
 					while med.Lsd <= 200:
 						med.medicion()
 						#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Derecho mide más de 2m
-					pass
+					return 0
 			#---------------------------------------------------------------------------------------------------------------
 
 			#------------------------------------Tengo espacio para esquivar a la izquierda---------------------------------
@@ -107,7 +107,7 @@ def pilotoAutomatico():
 				while med.Lsd <= 200:
 					med.medicion()
 					#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Derecho mide más de 2m
-				pass
+				return 0
 			#---------------------------------------------------------------------------------------------------------------
 
 			#-----------------------------------Tengo espacio para esquivar a la derecha------------------------------------
@@ -121,7 +121,7 @@ def pilotoAutomatico():
 				while med.Lsi <= 200:
 					med.medicion()
 					#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Izquierdo mide más de 2m
-				pass
+				return 0
 			#---------------------------------------------------------------------------------------------------------------
 
 		#-------------------------------------------------FIN // Caso: el barco esta centrado al obstáculo---------------------------------------------------------
@@ -132,7 +132,7 @@ def pilotoAutomatico():
 			while med.Lfi >= 300:
 				med.medicion()
 				if med.Lfi == 0: #Si antes de llegar a los 3m dejo de detectar significa que puedo pasar bien sin esquivar
-					pass
+					return 0
 			#Empiezo a esquivar a los 3 metros
 
 			timon.girar(30)
@@ -143,7 +143,7 @@ def pilotoAutomatico():
 			while med.Lsi <= 200:
 				med.medicion()
 				#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Izquierdo mide más de 2m
-			pass
+			return 0
 		#----------------------------------------------FIN // Caso: el barco está a la derecha del obstáculo-------------------------------------------------------
 
 		#------------------------------------------------Caso: el barco está a la izquierda del obstáculo----------------------------------------------------------
@@ -152,7 +152,7 @@ def pilotoAutomatico():
 			while med.Lfd >= 300:
 				med.medicion()
 				if med.Lfd == 0: #Si antes de llegar a los 3m dejo de detectar significa que puedo pasar bien sin esquivar
-					pass
+					return 0
 			#Empiezo a esquivar a los 3 metros
 
 			timon.girar(-30)
@@ -163,7 +163,7 @@ def pilotoAutomatico():
 			while med.Lsd <= 200:
 				med.medicion()
 				#Me vuelvo a enderezar con el curso deseado una vez que el sensor Diagonal Derecho mide más de 2m
-			pass
+			return 0
 		#---------------------------------------------FIN // Caso: el barco está a la izquierda del obstáculo------------------------------------------------------
 
 	def girar(angulo):
@@ -327,44 +327,44 @@ def comRF():
     	return datosProcesados
 
 	def bateria(redondeoDecimal = 3):
-	    porcentajeB = tomarDatos(sBateria)
-	    voltaje = (porcentajeB * 5) / float(1023)
-	    voltaje = round(voltaje, redondeoDecimal)
-	    if pocentajeB < 808:
+	    porcentajeB = tomarDatos(sBateria) #Tomo el valor en bits
+	    voltaje = (porcentajeB * 5) / float(1023) #Lo convierto a cuando voltaje representa
+	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a tres decimales
+	    if pocentajeB < 808: #Si es menor a 808bits significa que estoy al 0% (11,8V)
 	    	porcentaje = 0
 	    else:
-	    	porcentaje = (porcentajeB * 100) / float(1023)
+	    	porcentaje = ((porcentajeB - 808) * 100) / float(1023 - 808) #Si el valor es igual o mayor a 808 calculo el procentaje
 	    	porcentaje = round(porcentaje)
 	    return porcentaje
 
 	def consPropulsion(redondeoDecimal = 3):
 	    consumoB = tomarDatos(sCorriente1) #Tomo el valor en bits
 	    voltaje = (consumoB * 5) / float(1023) #Lo convierto a cuando voltaje representa
-	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a dos decimales
-	    consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a tres decimales
+	    if voltaje <= 2,5: #Si es negativo
+	    	consumo = - (voltaje * 0.1) #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+
+	    else: #Si es positivo
+	    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+	    	
 	    return consumo
 
 	def consCangilon():
 	    consumoB = tomarDatos(sCorriente2) #Tomo el valor en bits
 	    voltaje = (consumoB * 5) / float(1023) #Lo convierto a cuando voltaje representa
-	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a dos decimales
-	    consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+	    voltaje = round(voltaje, redondeoDecimal) #Redondeo a tres decimales
+	    if voltaje <= 2,5: #Si es negativo
+	    	consumo = - (voltaje * 0.1) #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+
+	    else: #Si es positivo
+	    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+	    	
 	    return consumo
 
 	def anguloMotDir():
 	    #Detecto si el motor de dirección falla
 	    GPIO.setup(12, GPIO.IN)
 	    return anguloMotDir
-
-	def estacionamiento():
-		#Detecto si el barco estaciona
-		GPIO.setup(26, GPIO.IN)
-		return estacionamiento
-
-	def PS():
-		#Detecto si el panel solar carga o no
-		GPIO.setup(6, GPIO.IN)
-		return PS
 	#--------------------------------------------------------------------------------------------------------------------------
 
 	#Función de recibir mensjaes
@@ -382,16 +382,24 @@ def comRF():
 		mensaje = list(msj)
 		radio.Write(mensaje)
 
-	#Recibo el comando de zarpar
+	MSJZARPAR = "!ZARPAR"
+	MSJANALISIS = "!ANALISIS"
+
+	#Se queda esperando un mensaje
+    while not radio.available(0):
+        time.sleep(1/100)
+
+    #Recibo el comando
 	comando = recibirRF()
-	if comando == "ZARPAR":
+	#-----------------------------------Comando: ZARPAR---------------------------------------
+	if comando == MSJZARPAR:
 		TGPS = threading.Thread(name="GPS", target=GPS)
 		TPA = threading.Thread(name="PA", target=pilotoAutomatico)
 		TGPS.start()
 		
 		while True:
-    			if(DATOS.escan==1):
-        			break
+    		if(DATOS.escan==1): #Empiezo a mandar datos una vez que el GPS empieza a mostrar posición
+        		break
 	
 		TPA.start()
 
@@ -417,7 +425,14 @@ def comRF():
 				break
 			if estacionamiento == 0:
 				enviarRF(estacionamiento)
-
+	#---------------------------------------------------------------------------------------
+	#------------------------------Comando: ANALISIS RAPIDO---------------------------------
+	if comando == MSJANALISIS:
+		bat = bateria()
+		enviarRF(bateria)
+		ps = PS()
+		enviarRF(PS)
+	#---------------------------------------------------------------------------------------
 
 #//////////////// funciones de GPS //////////////////////
 
@@ -466,4 +481,5 @@ DATOS= Data()
 
 TRF = threading.Thread(name="RF", target=comRF)
 
-RF.start()
+while True:
+	RF.start()
