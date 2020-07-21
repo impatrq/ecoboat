@@ -49,27 +49,29 @@ def PilotoAutomatico():
             return 0
 
         #si es mucho lo corrige
+        #Si el ángulo que tiene que girar es mayor a 30, gira al máximo.
         if (abs(DeltaD) >= 30):
             
             ang= round((DeltaD/abs(DeltaD)),0)*30
             timon.girar(ang)
 
-            while(abs(DeltaD) >= 30):
+            while(abs(DeltaD) >= 30): #Sigue al máximo hasta que DeltaD sea 30°
                 DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
                 DA= DATOS.curso
                 DeltaD= DD - DA
 
+        #Si el ángulo que tiene que girar es menor a 30 gira menos.
         if (abs(DeltaD) <= 30):
-            ang=round(DeltaD, 0)
-            timon.girar(ang)
+            ang=round(DeltaD, 0) #Redondeo el ángulo de giro
+            timon.girar(ang) #Giro el timón la misma cantidad de grados que la DeltaD
             while(abs(DeltaD)<=30):
                 DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
                 DA= DATOS.curso
                 DeltaD= DD - DA
-                if ((ang - DeltaD) <= 1):
+                if ((ang - DeltaD) <= 1): #Si DeltaD es 1° dejo de girar
                     pass
                 else:
-                    timon.girar(ang-DeltaD)
+                    timon.girar(ang-DeltaD) #Voy corrigiendo el giro a medida que DeltaD va disminuyendo
                     ang=round(DeltaD, 0)
             
         return 0
@@ -96,9 +98,9 @@ def PilotoAutomatico():
     #se recorren todos los watpoints uno por uno
     for i in range (0, len(waypoints)):
 	#la idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
-	while(LlegadaAlWP(waypoints[i]) != 1):
-		Girar(waypoints[i])
-        	time.sleep(5)
+		while(LlegadaAlWP(waypoints[i]) != 1):
+			Girar(waypoints[i])
+	        	time.sleep(5)
 
 
 def GPS():
