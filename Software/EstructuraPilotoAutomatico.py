@@ -269,6 +269,7 @@ def pilotoAutomatico():
 		#la idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
 		while(LlegadaAlWP(waypoints[i]) != 1):
 			if DATOS.obstaculo == 1:
+				#Si detecto un obstáculo, esquivo
 				esquivarObstaculos()
 			GirarAWP(waypoints[i])
 			time.sleep(5)

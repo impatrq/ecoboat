@@ -100,7 +100,7 @@ def PilotoAutomatico():
 	#la idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
 		while(LlegadaAlWP(waypoints[i]) != 1):
 			Girar(waypoints[i])
-	        	time.sleep(5)
+	        time.sleep(5)
 
 
 def GPS():
