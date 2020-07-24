@@ -24,14 +24,13 @@ void setup(void) {
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------Funciones de enviar y recivir mensajes-------------------------------------------------------------------
-int enviarRF(msj){
+//---------------------------------------------------------------------Funciones de enviar y recibir mensajes-------------------------------------------------------------------
+void enviarRF(msj){
   //Convierto el mensaje en un string
   String msjStr(msj);
   const char texto[] = msjStr;
   //Lo envío
   radio.write(texto, sizeof(texto));
-  return msj;
 }
 
 int recibirRF(){

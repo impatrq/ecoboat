@@ -32,20 +32,17 @@ class slave():
     radio.printDetails()
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#------------------------------------------------------------Funciones de enviar y recivir-----------------------------------------------------------------
+#------------------------------------------------------------Funciones de enviar y recibir-----------------------------------------------------------------
 def enviar(dato):
     datoStr = str(dato) #Convierto el dato en string
     datoSend = list(datoStr) #Lo separo en letras
     radio.Write(datoSend) #Lo envio
 
-def recivir():
-    #Empiezo a escuchar
-    radio.startListening()
-
+def recibir():
     #Guardo el mensjae en una variable
-    msjRecivido = []
+    msjRecibido = []
     radio.read(msjRecibido, radio.getDynamicPayloadSize())
-    print ("Recivido: {}".format(msjRecivido))
+    print ("Recivido: {}".format(msjRecibido))
 
     #Decodifico el mensaje
     print ("Traduciendo el mensaje...")
@@ -56,27 +53,28 @@ def recivir():
     return mensaje
 #---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-radio.startListening()
-
 while True:
+    #Empiezo a escuchar
+    radio.startListening()
+    
     #se queda esperando un mensaje
     while not radio.available(0):
         time.sleep(1/100)
 
     #Recivo el mensaje
-    mensajeRcv = recivir()
+    mensajeRcb = recibir()
     print(mensajeRcv)
 
-    if mensajeRcv == MSJZARPAR:
+    if mensajeRcb == MSJZARPAR:
         #Dejo de escuchar
         radio.stopListening()
         a = 0
-        while a < 20:
+        while a <= 20:
             enviar(a)
             a++
             time.sleep(2)
 
-    if mensajeRcv == MSJANALISIS:
+    if mensajeRcb == MSJANALISIS:
         #Dejo de escuchar
         radio.stopListening()
         a = 0
