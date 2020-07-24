@@ -1,16 +1,16 @@
-def PID(waypoint)
+def controlPID(waypoint)
 	KP = 1 #Constante Proporcional
 	KI = 0.1 #Constante Integral
 	KD = 0.2 #Constante Derivativa
 	ZI = 5 #Zona activa de la Integral
 
-	while DeltaD != 0:
+	while DeltaD >= 0.005 or DeltaD <= -0.005:
 		#Primero calculo el error
 		DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
 		DA= DATOS.curso #Direccion actual dado por el modulo gps
 		DeltaD= DD - DA
 		
-		if DeltaD <= ZI and DeltaD != 0:
+		if DeltaD <= ZI and (DeltaD >= 0.005 or DeltaD <= -0.005):
 			#Si estamos en la zona activa de la integral empezamos a sumar ángulo
 			errorT += DeltaD
 		else:
