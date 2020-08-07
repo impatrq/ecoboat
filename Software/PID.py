@@ -4,7 +4,7 @@ def controlPID(waypoint)
 	KD = 0.2 #Constante Derivativa
 	ZI = 5 #Zona activa de la Integral
 
-	while DeltaD >= 0.005 or DeltaD <= -0.005:
+	while DeltaD >= 0.005 or DeltaD <= -0.005: #Le pusimos que funcione hasta un error un poco mayor a 0 debido a el margen de error del GPS
 		#Primero calculo el error
 		DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
 		DA= DATOS.curso #Direccion actual dado por el modulo gps
