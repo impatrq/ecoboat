@@ -25,12 +25,13 @@ void setup(void) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------Funciones de enviar y recibir mensajes-------------------------------------------------------------------
-void enviarRF(msj){
+int enviarRF(msj){
   //Convierto el mensaje en un string
   String msjStr(msj);
   const char texto[] = msjStr;
   //Lo envío
   radio.write(texto, sizeof(texto));
+  return msj;
 }
 
 int recibirRF(){
@@ -50,14 +51,14 @@ void loop() {
 
   //---------------------Comando Zarpar------------------------------
   if comando == MSJZARPAR{
-    int a = 0;
-    while a == 0{ //Mientras a sea 0 voy a seguir recibiendo mensajes
+    while true{
       mensaje = recibirRF();
       Serial.println(mensaje);
       if mensaje == "20"{
-        a = 1;
+        break;
       }
     }
+  break;
   }
   //-----------------------------------------------------------------
 
@@ -65,6 +66,7 @@ void loop() {
   else if comando == MSJANALISIS{
     mensaje = recibirRF();
     Serial.println(mensaje);
+    break;
   }
   //-----------------------------------------------------------------
 }

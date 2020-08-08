@@ -70,9 +70,10 @@ while True:
         radio.stopListening()
         a = 0
         while a <= 20:
-            enviar(a)
+            b = str(a)
+            enviar(b)
             a++
-            time.sleep(2)
+            time.sleep(1)
 
     if mensajeRcb == MSJANALISIS:
         #Dejo de escuchar
