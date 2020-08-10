@@ -26,7 +26,7 @@ class RedNeuronal():
 
 		#capas intermedias
 		self.biasI=np.random.random((capas[2],capas[1]))
-		self.pesosI=np.random.random((capas[2], capas[2], capas[1]))
+		self.pesosI=np.random.random((capas[2], capas[2], capas[1]-1))
 		self.valoresI=np.empty((capas[2], capas[1]), dtype=float)
 
 		#ultima capa de la red
@@ -39,26 +39,79 @@ class RedNeuronal():
 		inputs=inputs.reshape(self.capas[0],1)
 		#pesos de capas intermedias
 		a=sigmoid(np.dot(self.pesosE, inputs)+self.biasE)
-		for i in range(len(self.valoresI[:,0])):	
-			self.valoresI[i,0]=a[i,0]
+		self.valoresI[:,0]=a[:,0]
 
 		if self.capas[1]>1:
-			for i in range(0,self.capas[1]-1):
+			for i in range(self.capas[1]-1):
 				a=sigmoid1(np.dot(self.pesosI[:,:,i], self.valoresI[:,i])+self.biasI[:,i])
-				for j in range(0,self.capas[2]):
-					self.valoresI[j, i+1]=a[j]
+				self.valoresI[:, i+1]=a
+				
 			
 		#ultima capa
-		outputs=sigmoid1(np.dot(self.pesosS, self.valoresI[:,self.capas[1]-1])+self.biasS)
+		valoresIO= self.valoresI[:,self.capas[1]-1]
+		outputs=sigmoid1(np.dot(self.pesosS, valoresIO.reshape(len(valoresIO),1))+self.biasS)
 		return outputs
+
 
 	def entrenar(self, inputs, respuestas):
+	
 		outputs= self.adivinar(inputs)
-		return outputs
+		respuestas=respuestas.astype(np.float)
 
+		lr=0.5
 
-a=np.array([1,3,5,4])
-cap=np.array([4,3,2,1])
+		#caculo los errores de todos las capas
+		errS= respuestas.transpose()-outputs.transpose()
 
+		if self.capas[1]==1:
+			errI=np.dot(self.pesosS.transpose(), errS.transpose())
+
+		else:
+			errI=np.empty((self.capas[2],self.capas[1]))
+			a=np.dot(self.pesosS.transpose(), errS.transpose())
+			errI[:, self.capas[1]-1]=a[:,0]
+
+			for i in range(1,self.capas[1]):
+				k=self.capas[1]-i
+				a=np.dot(self.pesosI[:,:,k-1].transpose(), errI[:,k].transpose())
+				errI[:, k-1]=a
+
+		#calculo los deltas
+
+		deltaS = lr*errS.transpose()*outputs*(1-outputs)*(self.valoresI[:,self.capas[1]-1].reshape(1,self.capas[2]))
+		deltaSb = lr*errS.transpose()*outputs*(1-outputs)
+
+		deltaI = np.empty((self.capas[2], self.capas[2], self.capas[1]-1))
+		deltaIb = np.empty((self.capas[2], self.capas[1]))
+
+		if self.capas[1]==1:
+			pass
+
+		else:
+			for i in range(self.capas[1]-1):
+				b=(self.valoresI[:,i].reshape(1,self.capas[2]))
+				a= lr*errI[:,i+1]*self.valoresI[:,i+1]*(1-self.valoresI[:,i+1])
+				deltaI[:,:, i]=a*b
+				deltaIb[:, i]= a
+
+		a= lr*errI[:,0]*self.valoresI[:,0]*(1-self.valoresI[:,0])
+		b= inputs
+
+		deltaE= a.reshape(self.capas[2],1)*b
+		deltaEb= a
+
+		self.pesosE += deltaE
+		self.pesosI += deltaI
+		self.pesosS += deltaS
+
+		return 0
+
+cap=np.array([4,3,2,3])
+inp=np.array([(1,3,5,4)])
+resp=np.array([1,0.8,0.5])
 nn=RedNeuronal(cap)
-print(nn.entrenar(a, 1))
+
+print(nn.adivinar(inp))
+for i in range(1000):
+	nn.entrenar(inp, resp)
+print(nn.adivinar(inp))
