@@ -35,8 +35,18 @@ class RedNeuronal():
 
 	def adivinar(self, inputs):
 
+
+		#filtros de las entradas
+
+		#filtro para US
+		for i in range (8):
+			inputs[i]=inputs[i]/400
+		#filtro para curso deseado
+		inputs[8]=(inputs[8]+180)/360
+
 		inputs=inputs.astype(np.float)
 		inputs=inputs.reshape(self.capas[0],1)
+
 		#pesos de capas intermedias
 		a=sigmoid(np.dot(self.pesosE, inputs)+self.biasE)
 		self.valoresI[:,0]=a[:,0]
@@ -56,7 +66,7 @@ class RedNeuronal():
 	def entrenar(self, inputs, respuestas):
 	
 		outputs= self.adivinar(inputs)
-		respuestas=respuestas.astype(np.float)
+		respuestas=(respuestas+30)/float(60)
 
 		lr=0.5
 
@@ -98,12 +108,12 @@ class RedNeuronal():
 		b= inputs
 
 		deltaE= a.reshape(self.capas[2],1)*b
-		deltaEb= a
+		deltaEb= a.reshape(self.capas[2],1)
 
 		self.pesosE += deltaE
 		self.pesosI += deltaI
 		self.pesosS += deltaS
-		self.biasE += deltaEb.reshape(self.capas[2],1)
+		self.biasE += deltaEb
 		self.biasI += deltaIb
 		self.biasS += deltaSb
 
