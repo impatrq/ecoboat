@@ -103,6 +103,9 @@ class RedNeuronal():
 		self.pesosE += deltaE
 		self.pesosI += deltaI
 		self.pesosS += deltaS
+		self.biasE += deltaEb.reshape(self.capas[2],1)
+		self.biasI += deltaIb
+		self.biasS += deltaSb
 
 		return 0
 
