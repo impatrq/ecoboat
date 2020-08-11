@@ -10,31 +10,29 @@ void setup(void) {
   Serial.begin(9600);
 
   radio.begin();
-  radio.serPALevel(RF24_PA_MAX);
-  radio.setChannell(0x76);
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setChannel(0x76);
   radio.openWritingPipe(0xF0F0F0E1LL);
   const uint64_t pipe = 0xE8E8F0F0E1LL;
   radio.openReadingPipe(1, pipe);
 
   radio.enableDynamicPayloads();
   radio.powerUp();
-
-  char MSJZARPAR = "!ZARPAR";
-  char MSJANALISIS = "!ANALISIS";
 }
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------Funciones de enviar y recibir mensajes-------------------------------------------------------------------
-int enviarRF(msj){
+int enviarRF(int msj){
   //Convierto el mensaje en un string
   String msjStr(msj);
-  const char texto[] = msjStr;
+  const char texto[] = "msjStr";
   //Lo envío
   radio.write(texto, sizeof(texto));
   return msj;
 }
 
-int recibirRF(){
+String recibirRF(){
   char msjRecibido[32] = {0};
   //Leo el mensaje y lo guardo en una variable
   radio.read(msjRecibido, sizeof(msjRecibido));
@@ -45,28 +43,37 @@ int recibirRF(){
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void loop() {
+   char MSJZARPAR = "!ZARPAR";
+  char MSJANALISIS = "!ANALISIS";
+  char comando;
   comando = enviarRF(MSJZARPAR);
 
-  radio.StartListening();
+  radio.startListening();
 
   //---------------------Comando Zarpar------------------------------
-  if comando == MSJZARPAR{
-    while true{
-      mensaje = recibirRF();
-      Serial.println(mensaje);
-      if mensaje == "20"{
-        break;
+  if (comando == MSJZARPAR){
+    if (radio.available()){
+      while (true){
+        String mensaje;
+        mensaje = recibirRF();
+        Serial.println(mensaje);
+        if (mensaje == "20"){
+          return 0;
+        }
       }
     }
-  break;
+  return 0;
   }
   //-----------------------------------------------------------------
 
   //--------------------Comando análisis-----------------------------
-  else if comando == MSJANALISIS{
-    mensaje = recibirRF();
-    Serial.println(mensaje);
-    break;
+  else if (comando == MSJANALISIS){
+    if (radio.available()){
+      String mensaje;
+      mensaje = recibirRF();
+      Serial.println(mensaje);
+      return 0;
+    }
   }
   //-----------------------------------------------------------------
 }
