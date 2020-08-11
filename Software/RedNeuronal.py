@@ -13,6 +13,13 @@ def sigmoid1(matrix):
 		matrix[i]= 1/(1+math.exp(-matrix[i]))
 	return matrix
 
+def TanH(matrix):
+	for i in range(len(matrix)):
+		a=math.exp(matrix[i])
+		b=np.exp(-matrix[i])
+		matrix[i]= (a-b)/(a+b)
+	return matrix
+
 class RedNeuronal():
 
 	def __init__(self, capas):
@@ -35,8 +42,18 @@ class RedNeuronal():
 
 	def adivinar(self, inputs):
 
+
+		#filtros de las entradas
+
+		#filtro para US
+		for i in range (8):
+			inputs[i]=inputs[i]/400
+		#filtro para curso deseado
+		inputs[8]=(inputs[8]+180)/360
+
 		inputs=inputs.astype(np.float)
 		inputs=inputs.reshape(self.capas[0],1)
+
 		#pesos de capas intermedias
 		a=sigmoid(np.dot(self.pesosE, inputs)+self.biasE)
 		self.valoresI[:,0]=a[:,0]
@@ -49,16 +66,16 @@ class RedNeuronal():
 			
 		#ultima capa
 		valoresIO= self.valoresI[:,self.capas[1]-1]
-		outputs=sigmoid1(np.dot(self.pesosS, valoresIO.reshape(len(valoresIO),1))+self.biasS)
+		outputs=TanH(np.dot(self.pesosS, valoresIO.reshape(len(valoresIO),1))+self.biasS)
 		return outputs
 
 
 	def entrenar(self, inputs, respuestas):
 	
 		outputs= self.adivinar(inputs)
-		respuestas=respuestas.astype(np.float)
+		respuestas=respuestas/float(60)
 
-		lr=0.5
+		lr=0.2
 
 		#caculo los errores de todos las capas
 		errS= respuestas.transpose()-outputs.transpose()
@@ -78,8 +95,8 @@ class RedNeuronal():
 
 		#calculo los deltas
 
-		deltaS = lr*errS.transpose()*outputs*(1-outputs)*(self.valoresI[:,self.capas[1]-1].reshape(1,self.capas[2]))
-		deltaSb = lr*errS.transpose()*outputs*(1-outputs)
+		deltaS = lr*errS.transpose()*(1-(outputs*outputs))*(self.valoresI[:,self.capas[1]-1].reshape(1,self.capas[2]))
+		deltaSb = lr*errS.transpose()*(1-(outputs*outputs))
 
 		deltaI = np.empty((self.capas[2], self.capas[2], self.capas[1]-1))
 		deltaIb = np.empty((self.capas[2], self.capas[1]))
@@ -88,22 +105,22 @@ class RedNeuronal():
 			pass
 
 		else:
-			for i in range(self.capas[1]-1):
+			for i in range(1,self.capas[1]):
 				b=(self.valoresI[:,i].reshape(1,self.capas[2]))
-				a= lr*errI[:,i+1]*self.valoresI[:,i+1]*(1-self.valoresI[:,i+1])
-				deltaI[:,:, i]=a*b
-				deltaIb[:, i]= a
+				a= lr*errI[:,i]*self.valoresI[:,i]*(1-self.valoresI[:,i])
+				deltaI[:,:, i-1]=a*b
+				deltaIb[:, i-1]= a
 
 		a= lr*errI[:,0]*self.valoresI[:,0]*(1-self.valoresI[:,0])
 		b= inputs
 
 		deltaE= a.reshape(self.capas[2],1)*b
-		deltaEb= a
+		deltaEb= a.reshape(self.capas[2],1)
 
 		self.pesosE += deltaE
 		self.pesosI += deltaI
 		self.pesosS += deltaS
-		self.biasE += deltaEb.reshape(self.capas[2],1)
+		self.biasE += deltaEb
 		self.biasI += deltaIb
 		self.biasS += deltaSb
 
