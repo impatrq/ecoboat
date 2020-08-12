@@ -43,15 +43,17 @@ String recibirRF(){
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void loop() {
-   char MSJZARPAR = "!ZARPAR";
+  char MSJZARPAR = "!ZARPAR";
   char MSJANALISIS = "!ANALISIS";
   char comando;
   comando = enviarRF(MSJZARPAR);
+  Serial.println("Se está enviando el mensaje");
 
   radio.startListening();
 
   //---------------------Comando Zarpar------------------------------
   if (comando == MSJZARPAR){
+    Serial.println("El usuario eligió la opción zarpar");
     if (radio.available()){
       while (true){
         String mensaje;
@@ -68,6 +70,7 @@ void loop() {
 
   //--------------------Comando análisis-----------------------------
   else if (comando == MSJANALISIS){
+    Serial.println("El usuario eligió la opción análisis rápido");
     if (radio.available()){
       String mensaje;
       mensaje = recibirRF();
