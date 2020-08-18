@@ -7,7 +7,7 @@ import motores as mt
 import math
 
 
-#------------Variable Global que guarda los datos-------------
+#--------------Variable Global que guarda los datos-------------
 class Data():
 
 	def __init__(self):
@@ -56,6 +56,12 @@ def GPS():
         if (DATOS.escan==1):
             while True:
                 lectura()
+
+    while escan = 0:
+    	disponible()
+
+    while True:
+    	lectura()
 #--------------------------------------------------------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------------------Recorrido---------------------------------------------------------------------
@@ -148,7 +154,6 @@ def recorrido():
 		while(LlegadaAlWP(waypoints[i]) != 1):
 			controlPID(waypoints[i])
 			time.sleep(1)
-		i++
 
 	print("Finalizó el recorrido")
 #------------------------------------------------------------------------------------------------------------------------------------------------------

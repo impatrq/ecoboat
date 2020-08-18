@@ -28,7 +28,6 @@ int enviarRF(int msj){
   String msjStr(msj);
   const char texto[] = "msjStr";
   //Lo envío
-  radio.write(texto, sizeof(texto));
   return msj;
 }
 
@@ -42,11 +41,12 @@ String recibirRF(){
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-void loop() {
+void loop(void) {
   char MSJZARPAR = "!ZARPAR";
   char MSJANALISIS = "!ANALISIS";
   char comando;
   comando = enviarRF(MSJZARPAR);
+  radio.write(comando, sizeof(comando));
   Serial.println("Se está enviando el mensaje");
 
   radio.startListening();
@@ -62,8 +62,9 @@ void loop() {
         if (mensaje == "20"){
           return 0;
         }
+        delay(500);
       }
-    }
+   }
   return 0;
   }
   //-----------------------------------------------------------------
