@@ -1,17 +1,23 @@
 import numpy as np 
 import math 
+from random import randint, random
 from time import sleep
 
-def sigmoid(matrix):
-	for i in range(len(matrix)):
-		for j in range(len(matrix[0])):
-			matrix[i,j]= 1/(1+math.exp(-matrix[i,j]))
-	return matrix
+#funciones de activacion
 
-def sigmoid1(matrix):
-	for i in range(len(matrix)):
-		matrix[i]= 1/(1+math.exp(-matrix[i]))
-	return matrix
+def sigmoid(matrix):
+
+	s=np.shape(matrix)
+
+	if len(s)==2:
+		for i in range(s[0]):
+			for j in range(s[1]):
+				matrix[i,j]= 1/(1+math.exp(-matrix[i,j]))
+		return matrix
+	else:
+		for i in range(s[0]):
+			matrix[i]= 1/(1+math.exp(-matrix[i]))
+		return matrix
 
 def TanH(matrix):
 	for i in range(len(matrix)):
@@ -19,6 +25,34 @@ def TanH(matrix):
 		b=np.exp(-matrix[i])
 		matrix[i]= (a-b)/(a+b)
 	return matrix
+
+#funciones de matriz
+
+def mutarMatiz(matrix, rate):
+
+	s=np.shape(matrix)
+
+	for i in range(s[0]):
+		for j in range(s[1]):
+
+			if len(s)==2:
+				prob= random()
+				if prob > rate:
+					matrix[i,j]=random()
+				else:
+					pass
+
+			else:
+				for h in range(s[2]):
+					prob= random()
+					if prob > rate:
+						matrix[i,j,h]=random()
+					else:
+						pass
+	
+	return matrix
+
+#Red neuronal
 
 class RedNeuronal():
 
@@ -40,27 +74,27 @@ class RedNeuronal():
 		self.biasS=np.random.random((capas[3],1))
 		self.pesosS=np.random.random((capas[3], capas[2])) 
 
-	def adivinar(self, inputs):
+	def mutar(self, rate):
+		mutarMatiz(self.biasE ,rate)
+		mutarMatiz(self.biasI ,rate)
+		mutarMatiz(self.biasS ,rate)
+		mutarMatiz(self.pesosE ,rate)
+		mutarMatiz(self.pesosI ,rate)
+		mutarMatiz(self.pesosS ,rate)
+		
+		return 0
 
-
-		#filtros de las entradas
-
-		#filtro para US
-		for i in range (8):
-			inputs[i]=inputs[i]/400
-		#filtro para curso deseado
-		inputs[8]=(inputs[8]+180)/360
+	def resultado(self, inputs):
 
 		inputs=inputs.astype(np.float)
 		inputs=inputs.reshape(self.capas[0],1)
-
 		#pesos de capas intermedias
 		a=sigmoid(np.dot(self.pesosE, inputs)+self.biasE)
 		self.valoresI[:,0]=a[:,0]
 
 		if self.capas[1]>1:
 			for i in range(self.capas[1]-1):
-				a=sigmoid1(np.dot(self.pesosI[:,:,i], self.valoresI[:,i])+self.biasI[:,i])
+				a=sigmoid(np.dot(self.pesosI[:,:,i], self.valoresI[:,i])+self.biasI[:,i])
 				self.valoresI[:, i+1]=a
 				
 			
@@ -70,10 +104,10 @@ class RedNeuronal():
 		return outputs
 
 
-	def entrenar(self, inputs, respuestas):
+	def entrenarES(self, inputs, respuestas):
 	
-		outputs= self.adivinar(inputs)
-		respuestas=respuestas/float(60)
+		outputs= self.resultado(inputs)
+		respuestas=respuestas.astype(np.float)
 
 		lr=0.2
 
@@ -115,23 +149,13 @@ class RedNeuronal():
 		b= inputs
 
 		deltaE= a.reshape(self.capas[2],1)*b
-		deltaEb= a.reshape(self.capas[2],1)
+		deltaEb= a
 
 		self.pesosE += deltaE
 		self.pesosI += deltaI
 		self.pesosS += deltaS
-		self.biasE += deltaEb
+		self.biasE += deltaEb.reshape(self.capas[2],1)
 		self.biasI += deltaIb
 		self.biasS += deltaSb
 
 		return 0
-
-cap=np.array([4,3,2,3])
-inp=np.array([(1,3,5,4)])
-resp=np.array([1,0.8,0.5])
-nn=RedNeuronal(cap)
-
-print(nn.adivinar(inp))
-for i in range(1000):
-	nn.entrenar(inp, resp)
-print(nn.adivinar(inp))
