@@ -25,11 +25,11 @@ def medicion():
 
 	# Prender el pin activador por 10 microsegundos
 	# y después volverlo a apagar.
-	GPIO.output(TRIG1, "True")
-	GPIO.output(TRIG2, "False")
+	GPIO.output(TRIG1, 1)
+	GPIO.output(TRIG2, 0)
 	time.sleep(0.00001)
-	GPIO.output(TRIG1, "False")
-	GPIO.output(TRIG2, "True")
+	GPIO.output(TRIG1, 0)
+	GPIO.output(TRIG2, 1)
 
 	# En este momento el sensor envía 8 pulsos
 	# y pone a ECHO en HIGH
@@ -38,7 +38,7 @@ def medicion():
 
 	pulso_fin = time.time()
 	while True:
-		if (GPIO.input(ECHO) == "False"):
+		if (GPIO.input(ECHO) == 0):
 			break
 	pulso_fin = time.time()
 
@@ -53,16 +53,16 @@ def medicion():
 	return distancia
 
 #hay que darle unos segundos a los sensores para que se estabilicen
-GPIO.output(TRIG1, "False")
-GPIO.output(TRIG2, "True")
+GPIO.output(TRIG1, 0)
+GPIO.output(TRIG2, 1)
 time.sleep(2)
 
 def lectura():
 	datos= np.empty((1, 8))
 	pos=0
-	for i in ("False", "True"):
-		for j in ("False", "True"):
-			for k in ("False", "True"):
+	for i in (0, 1):
+		for j in (0, 1):
+			for k in (0, 1):
 				GPIO.output(1, i)
 				GPIO.output(2, j)
 				GPIO.output(3, k)
