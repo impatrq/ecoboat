@@ -1,0 +1,12 @@
+Batería:
+https://www.xupai.com/product/showproduct.php?id=932&lang=en
+Panel solar:
+https://articulo.mercadolibre.com.ar/MLA-617044005-cargador-de-baterias-12v-panel-solar-10wp-fotovoltaicos-10w-_JM
+Motores de propulsión y cinta transportadora:
+https://articulo.mercadolibre.com.ar/MLA-828883951-motorreductor-motor-reductor-12v-24v-cupla-20kgfcm-arduino-_JM?quantity=1#reco_item_pos=2&reco_backend=machinalis-seller-items-pdp&reco_backend_type=low_level&reco_client=vip-seller_items-above&reco_id=d231fc59-a1a7-4a6f-b3bf-ab472e27573d
+Motor de dirección:
+http://robocraft.ru/files/datasheet/28BYJ-48.pdf
+Raspberry:
+https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2711/rpi_DATA_2711_1p0_preliminary.pdf
+Arduino:
+https://store.arduino.cc/usa/arduino-uno-rev3
