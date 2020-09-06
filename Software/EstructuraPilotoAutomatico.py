@@ -324,9 +324,9 @@ def comRF():
 
     def tomarDatos(canal):
     	#Primero tomamos los datos crudos del conversor A/D
-    	datosCrudos = spi.xfer([0, (8 + canal)])
+    	datosCrudos = spi.xfer([(12 + canal)],0,0)
     	#Proceso esta información para tenerla en un numero de 0 a 1023
-    	datosProcesados = ((datosCrudos[1]&1) << 8) + datosCrudos[0]
+    	datosProcesados = ((datosCrudos[1]) << 1) + (datosCrudos[2]>>7)
     	return datosProcesados
 
 	def bateria(redondeoDecimal = 3):

@@ -2,24 +2,32 @@ import time
 import RPi.GPIO as GPIO
 import numpy as np 
 
-#libreria para el control de los sensores us
-#estado = verde
 
-TRIG1 = 23
-TRIG2 = 22 #hay que especificar los puertos
-ECHO = 24 #estos son ejemplos
+def USconfig(){
+	#libreria para el control de los sensores us
+	#estado = verde
 
-GPIO.setmode(GPIO.BCM)
-# Establecer que TRIG es un canal de salida.
-GPIO.setup(TRIG1, GPIO.OUT)
-GPIO.setup(TRIG2, GPIO.OUT)
-# Establecer que ECHO es un canal de entrada.
-GPIO.setup(ECHO, GPIO.IN)
+	TRIG1 = 5
+	TRIG2 = 2 
+	ECHO = 26 
 
-#pines de control
-GPIO.setup(1, GPIO.OUT)
-GPIO.setup(2, GPIO.OUT)
-GPIO.setup(3, GPIO.OUT)
+	GPIO.setmode(GPIO.BCM)
+	# Establecer que TRIG es un canal de salida.
+	GPIO.setup(TRIG1, GPIO.OUT)
+	GPIO.setup(TRIG2, GPIO.OUT)
+	# Establecer que ECHO es un canal de entrada.
+	GPIO.setup(ECHO, GPIO.IN)
+
+	#pines de control
+	GPIO.setup(23, GPIO.OUT)
+	GPIO.setup(24, GPIO.OUT)
+	GPIO.setup(25, GPIO.OUT)
+
+	#hay que darle unos segundos a los sensores para que se estabilicen
+	GPIO.output(TRIG1, 0)
+	GPIO.output(TRIG2, 1)
+	time.sleep(2)
+}
 
 def medicion():
 
@@ -36,7 +44,11 @@ def medicion():
 	# cuando llegan los pulsos lo pone en LOW
 	# hay que medir el tiempo 
 
-	pulso_fin = time.time()
+	while True:	
+		if (GPIO.input(ECHO) == 1):
+			break
+
+	pulso_inicio = time.time()
 	while True:
 		if (GPIO.input(ECHO) == 0):
 			break
@@ -52,25 +64,18 @@ def medicion():
 
 	return distancia
 
-#hay que darle unos segundos a los sensores para que se estabilicen
-GPIO.output(TRIG1, 0)
-GPIO.output(TRIG2, 1)
-time.sleep(2)
-
 def lectura():
 	datos= np.empty((1, 8))
 	pos=0
 	for i in (0, 1):
 		for j in (0, 1):
 			for k in (0, 1):
-				GPIO.output(1, i)
-				GPIO.output(2, j)
-				GPIO.output(3, k)
-				datos[pos]= medicion()
+				GPIO.output(23, i)
+				GPIO.output(24, j)
+				GPIO.output(25, k)
+				datos[0, pos]= medicion()
 				
-				if (datos[pos] < 400):
-					pass
-				else:
+				if (datos[pos] > 400):
 					datos[pos]=0
 
 				pos+=1
