@@ -10,3 +10,8 @@ Raspberry:
 https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2711/rpi_DATA_2711_1p0_preliminary.pdf
 Arduino:
 https://store.arduino.cc/usa/arduino-uno-rev3
+GPS:
+https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_(GPS.G6-HW-09005).pdf
+NRF24l01:
+https://nomada-e.com/descargas/datasheet/60-Mo%cc%81dulo%20de%20RF%202.4GHz%20%5bnRF24L01%5d.pdf
+https://www.sparkfun.com/datasheets/Components/SMD/nRF24L01Pluss_Preliminary_Product_Specification_v1_0.pdf
