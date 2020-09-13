@@ -29,3 +29,8 @@ CCM:
   https://www.uni-kl.de/elektronik-lager/417724
   ULN2003:
   https://www.st.com/resource/en/datasheet/uln2001.pdf
+Regulador de Carga:
+  UA741CP:
+  https://www.ti.com/lit/ds/slos094g/slos094g.pdf?ts=1600038173408&ref_url=https%253A%252F%252Fwww.google.com%252F
+  LM7805:
+  http://www.datasheet.es/PDF/919052/LM7805-pdf.html
