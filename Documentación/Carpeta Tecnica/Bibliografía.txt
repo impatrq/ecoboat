@@ -21,3 +21,7 @@ http://tet.pub.ro/pages/altele/Documentatie/Senzor%20ultrasunete%20HY-SRF05/HY-S
 CCM:
   4N25:
   https://www.vishay.com/docs/83725/4n25.pdf
+  IRF640N:
+  http://www.alphacron.de/download/hardware/IRF640.pdf
+  IRF9530:
+  https://www.vishay.com/docs/91076/sihf9530.pdf
