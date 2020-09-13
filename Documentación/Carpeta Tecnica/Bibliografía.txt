@@ -25,3 +25,7 @@ CCM:
   http://www.alphacron.de/download/hardware/IRF640.pdf
   IRF9530:
   https://www.vishay.com/docs/91076/sihf9530.pdf
+  74LS157 :
+  https://www.uni-kl.de/elektronik-lager/417724
+  ULN2003:
+  https://www.st.com/resource/en/datasheet/uln2001.pdf
