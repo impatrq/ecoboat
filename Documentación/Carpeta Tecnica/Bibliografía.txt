@@ -1,4 +1,4 @@
-Batería:
+﻿Batería:
 https://www.xupai.com/product/showproduct.php?id=932&lang=en
 Panel solar:
 https://articulo.mercadolibre.com.ar/MLA-617044005-cargador-de-baterias-12v-panel-solar-10wp-fotovoltaicos-10w-_JM
@@ -34,3 +34,5 @@ Regulador de Carga:
   https://www.ti.com/lit/ds/slos094g/slos094g.pdf?ts=1600038173408&ref_url=https%253A%252F%252Fwww.google.com%252F
   LM7805:
   http://www.datasheet.es/PDF/919052/LM7805-pdf.html
+Tecnologia UART:
+http://www.el.uma.es/marin/Practica4_UART.pdf
