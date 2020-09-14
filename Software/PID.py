@@ -53,27 +53,27 @@ def recorrido():
 		r=6371000
 		c=(math.pi)/180
 		#Fórmula de haversine
-		d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
+		d = 2*r*math.asin(math.sqrt(math.sin(c*(lat2-lat1)/2)**2 + math.cos(c*lat1)*math.cos(c*lat2)*math.sin(c*(lng2-lng1)/2)**2))
 		return d
 
 	def DireccionDeseada(lat1, lng1, waypoint):
 		lat2=waypoint[0, 0]
 		lng2=waypoint[0, 1]
 		dlon=lng2-lng1 
-		a1=sin(dlon)*cos(lat2)
-		a2=(cos(lat1)*sin(lat2))-(sin(lat1)*cos(lat2)*cos(dlon))
-		curso=atan2(a1, a2)
+		a1=math.sin(dlon)*math.cos(lat2)
+		a2=(math.cos(lat1)*math.sin(lat2))-(math.sin(lat1)*math.cos(lat2)*math.cos(dlon))
+		curso=math.atan2(a1, a2)
 
 		if(curso < 0):
 			curso += 2*math.pi
 
-		return degrees(curso)
+		return math.degrees(curso)
 
 	def LlegadaAlWP(destino):
 		#comparar nuestra direccion con el destino
 		dis= distancia(DATOS.lat, DATOS.long, destino)
 
-		if(abs(dis) <= 5):
+		if(abs(dis) <= 2):
 			return 0
 		else:
 			return 1
