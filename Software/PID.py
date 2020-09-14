@@ -5,6 +5,7 @@ import pynmea2 as nmea
 import numpy as np 
 import motores as mt 
 import math
+import serial
 
 
 #--------------Variable Global que guarda los datos-------------
@@ -16,52 +17,31 @@ class Data():
 		self.long=0
 		self.curso=0
 		self.escan=0
+		self.final=0
 
 #---------------------------------------------------------------GPS------------------------------------------------------------
 def GPS():
+	while True:
+		port="/dev/ttyAMA0"
+		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+		dataout=pynmea2.NMEAStreamReader()
+		data=ser.readline()
 
-	def disponible():
-            #funcion que detecte disponibilidad de datos
-            port="/dev/ttyAMA0"
-            ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-            dataout=pynmea2.NMEAStreamReader()
-            data=ser.readline()
+		if data[0:6] == b'$GPRMC':
+		    data = data.decode("utf-8","ignore")
+		    datos=pynmea2.parse(data)
+		    lat=datos.latitude
+		    lng=datos.longitude
+		    cur=datos.true_course
+		    DATOS.lat = lat
+		    DATOS.long = lng
+		    DATOS.curso = cur
 
-            if data[0:6] == "$GPRMC":
-                datos=pynmea2.parse(newdata)
-                while True:
-                    if datos.status == A:
-                        break
+		#Lo paro cuando termina el recorrido
+		if DATOS.final == 1:
+			break
 
-                DATOS.escan==1
-            return 0
-        
-	def lectura():
-	    port="/dev/ttyAMA0"
-            ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-            dataout=pynmea2.NMEAStreamReader()
-            data=ser.readline()
-
-            if data[0:6] == "$GPRMC":
-                pos=pynmea2.parse(newdata)
-		DATOS.lat=pos.latitude
-		DATOS.long=pos.longitude
-		DATOS.curso=pos.direction
-
-	    time.sleep(0.5)
-	    return 0
-
-        disponible()
-
-        if (DATOS.escan==1):
-            while True:
-                lectura()
-
-    while escan = 0:
-    	disponible()
-
-    while True:
-    	lectura()
+	return 0
 #--------------------------------------------------------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------------------Recorrido---------------------------------------------------------------------
@@ -140,20 +120,22 @@ def recorrido():
 				#Si el ángulo es mayor que el máximo de giro del timón giro 30°
 				angulo = -30
 
-			print(angulo)
 			return angulo
 	#----------------------------------------------------------------------------------------------------------------------------------------------
 
 
 	#en esta array se guardan los waypoints a recorrer 
 	#cada waypoint se guarda en una fila distinta
-	waypoints = np.empty((TotaldeWaypoints, 2))
+	waypoints = np.array([latitud, longitud], [latitud, longitud])
 
 	for i in range (0, len(waypoints)):
 		#la idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
 		while(LlegadaAlWP(waypoints[i]) != 1):
-			controlPID(waypoints[i])
+			timon = controlPID(waypoints[i])
+			print(timon)
 			time.sleep(1)
+
+		DATOS.final = 1
 
 	print("Finalizó el recorrido")
 #------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -163,12 +145,11 @@ def recorrido():
 
 #////////////////////////////////////////////////////////////////////Inicio el programa/////////////////////////////////////////////////////////////////
 
+DATOS = Data()
+
 TGPS = threading.Thread(name="GPS", target=GPS)
 TPID = threading.Thread(name="PID", target=recorrido)
 TGPS.start()
 
-while True:
-    if(DATOS.escan==1): #Empiezo con el programa una vez que el GPS empieza a mostrar posición
-    	break
-
+time.sleep(5)
 TPID.start()
