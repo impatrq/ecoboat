@@ -12,11 +12,20 @@ def lectura(self):
 		if data[0:6] == b'$GPRMC':
 		    data = data.decode("utf-8","ignore")
 		    datos=pynmea2.parse(data)
-		    lat=datos.latitude
-		    lng=datos.longitude
-		    cur=datos.true_course
-		    DATOS.lat = lat
-		    DATOS.long = lng
-		    DATOS.curso = cur
+		    DATOS.lat = datos.latitude
+		    DATOS.long = datos.longitude
+		    DATOS.curso = datos.true_course
+
+		if data[0:6] == b'$GPGLL':
+		    data = data.decode("utf-8","ignore")
+		    datos=pynmea2.parse(data)
+		    DATOS.lat = datos.latitude
+		    DATOS.long = datos.longitude
+
+		if data[0:6] == b'$GPGGA':
+		    data = data.decode("utf-8","ignore")
+		    datos=pynmea2.parse(data)
+		    DATOS.lat = datos.latitude
+		    DATOS.long = datos.longitude
 
 	return 0
