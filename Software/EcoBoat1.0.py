@@ -35,6 +35,7 @@ def GPS():
         data=ser.readline()
 
         if data[0:6] == "$GPRMC":
+        	data = data.decode("utf-8","ignore")
             datos=pynmea2.parse(newdata)
             while True:
                 if datos.status == A:
@@ -112,7 +113,9 @@ def pilotoAutomático():
 		r=6371000
 		c=(math.pi)/180
 		#Fórmula de haversine
-		d = 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
+		a = sin(c*(lat2-lat1)/2)**2
+		b = cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2
+		d = 2*r*asin(sqrt(a + b))
 		return d
 
 	def DireccionDeseada(lat1, lng1, waypoint):
