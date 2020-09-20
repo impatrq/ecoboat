@@ -13,13 +13,18 @@ import sensoresUS as US
 GPIO.setmode(GPIO.BCM)
 
 #---------------------Variable global-----------------------
-class Data():
+class Data():	#Aca guardamos todos los datos que van a ser utilizados por más de un hilo
 
 	def __init__(self):
-		self.lat=0
-		self.long=0
-		self.curso=0
-		self.escan=0
+		self.lat=0		#Latitud
+		self.long=0		#Longitud
+		self.curso=0	#Curso
+		self.escan=0	#Esta variable sirve para saber si el GPS recibe datos
+		self.fin=0		#Esta variable es para detectar cuando el barco finaliza su recorrio
+		self.timon=0	#Ángulo del timón, se utiliza para controlar el motor paso a paso
+		self.bateria=0  #Porcentaje de batería
+		self.motProp=0  #Consumo del motor de propulsión
+		self.motCang=0  #Consumo del motor de la cinta transportadora
 
 DATOS= Data()
 #-----------------------------------------------------------
@@ -29,52 +34,55 @@ def GPS():
 
 	def disponible():
         #Función que detecta disponibilidad de datos
-        port="/dev/ttyAMA0"
-        ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-        dataout=pynmea2.NMEAStreamReader()
-        data=ser.readline()
-
-        if data[0:6] == "$GPRMC":
-        	data = data.decode("utf-8","ignore")
-            datos=pynmea2.parse(newdata)
-            while True:
-                if datos.status == A:
-                    break
-
-            DATOS.escan==1
-        return 0
-        
-	def lectura(self):
-	while True:
-		port="/dev/ttyAMA0"
-		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+        port="/dev/ttyAMA0"		#Puerto UART de la Raspberry
+		ser=serial.Serial(port, baudrate=9600, timeout=0.5)	#Inicio el puerto serial
+		#Mido posición con el GPS
 		dataout=pynmea2.NMEAStreamReader()
 		data=ser.readline()
-
-		if data[0:6] == b'$GPRMC':
+		#Tomo únicamente la línea que nos interesa que posee la posición
+        if data[0:6] == b'$GPRMC':
 		    data = data.decode("utf-8","ignore")
 		    datos=pynmea2.parse(data)
 		    DATOS.lat = datos.latitude
 		    DATOS.long = datos.longitude
 		    DATOS.curso = datos.true_course
 
-		if data[0:6] == b'$GPGLL':
-		    data = data.decode("utf-8","ignore")
-		    datos=pynmea2.parse(data)
-		    DATOS.lat = datos.latitude
-		    DATOS.long = datos.longitude
+		    DATOS.escan = 1
+		    break
+        return 0
+        
+	def lectura(self):	#----------------Función que toma los datos de posición-------------------
+		port="/dev/ttyAMA0"		#Puerto UART de la Raspberry
+		ser=serial.Serial(port, baudrate=9600, timeout=0.5)	#Inicio el puerto serial
+		
+		while True:
+			#Mido posición con el GPS
+			dataout=pynmea2.NMEAStreamReader()
+			data=ser.readline()
 
-		if data[0:6] == b'$GPGGA':
-		    data = data.decode("utf-8","ignore")
-		    datos=pynmea2.parse(data)
-		    DATOS.lat = datos.latitude
-		    DATOS.long = datos.longitude
+			#Tomo únicamente la línea que nos interesa que posee la posición
+			if data[0:6] == b'$GPRMC':
+			    data = data.decode("utf-8","ignore")
+			    datos=pynmea2.parse(data)
+			    DATOS.lat = datos.latitude
+			    DATOS.long = datos.longitude
+			    DATOS.curso = datos.true_course
 
-	while escan = 0:
-    	disponible()
+			#Si el barco finalizó el recorrido, salimos del while
+			if DATOS.fin = 1:
+				break
 
-    while True:
-    	lectura()                
+
+	while DATOS.escan != 1:
+		disponible()	#Una vez que detecto disponibilidad de datos inicio la lectura de datos e inicio los otros
+						#hilos
+
+    lectura()                
+#-------------------------------------------------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------Conversor Analógico/Digital--------------------------------------------------------
+def conversor():
+
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------Piloto automático-------------------------------------------------------------
@@ -107,7 +115,8 @@ def pilotoAutomático():
 	#---------------------------------------------------------------------------
 
 	#---------------------------------------------Funciones de navegación---------------------------------------------
-	def distancia(lat1, lng1 , waypoint):
+	#Esta función se utilzia para medir la distancia entre la ubicación actual y el próximo waypoint
+	def distancia(lat1, lng1 , waypoint):	#lat1 y lng1 son los datos de posición actual
 		lat2=waypoint[0, 0]
 		lng2=waypoint[0, 1]
 		r=6371000
@@ -118,6 +127,7 @@ def pilotoAutomático():
 		d = 2*r*asin(sqrt(a + b))
 		return d
 
+	#Esta función nos otorga el curso deseado
 	def DireccionDeseada(lat1, lng1, waypoint):
 		lat2=waypoint[0, 0]
 		lng2=waypoint[0, 1]
@@ -131,11 +141,12 @@ def pilotoAutomático():
 
 		return degrees(curso)
 
+	#Est afunción nos indica cuando llegamos al waypoint
 	def LlegadaAlWP(destino):
 		#comparar nuestra direccion con el destino
 		dis= distancia(DATOS.lat, DATOS.long, destino)
 
-		if(abs(dis) <= 5):
+		if(abs(dis) <= 2):	#Detectamos que llegamos al wp una vez que estamos a menos de 2 metros (por los errores del GPS)
 			return 0
 		else:
 			return 1
@@ -202,13 +213,13 @@ def pilotoAutomático():
 	Cangilon= mt.Cangilon(6, 13, 50)			#Con un 1 en el pin de selección giramos horario, con un 0 antihorario.
 	motorDirec= mt.Propulsion(18, 12, 50)		#Con el 12 giro horario y con el 18 antihorario.
 
-	#Meto primera
+	#Comienzo a girar los motores de propulsión y de la cinta trtansportadora
 	Cangilon.girarD()
 	motorDirec.girarD()
 
 	#En esta array se guardan los waypoints a recorrer 
 	#Cada waypoint se guarda en una fila distinta
-	waypoints= np.empty((TotaldeWaypoints, 2))
+	waypoints= np.empty(([lat1, lng1], [lat2, lng2], ..., [latn, lngn]))
 
 	#Se recorren todos los watpoints uno por uno
 	for i in range (0, len(waypoints)):
@@ -228,11 +239,89 @@ def pilotoAutomático():
 
 #--------------------------------------------------------------Módulos RF-------------------------------------------------------------------
 def módulosRF():
-	#Código de los módulos RF
+	#-----------------------------Funciones de enviar y recibir-----------------------------
+	def enviar(dato):
+	    datoStr = str(dato) #Convierto el dato en string
+	    datoSend = list(datoStr) #Lo separo en letras
+	    radio.Write(datoSend) #Lo envio
+
+	def recibir():
+	    #Guardo el mensjae en una variable
+	    msjRecibido = []
+	    radio.read(msjRecibido, radio.getDynamicPayloadSize())
+
+	    #Decodifico el mensaje
+	    mensaje = ""
+	    for n in msjRecibido
+	        if (n >= 32 and n <= 126)
+	            mensaje += chr(n)
+	    return mensaje
+	#----------------------------------------------------------------------------------------
+
+	#-------------------------------Configuración del NRF24l01-------------------------------
+	#Estas son las direcciones que les asignamos a las direcciones de lectura y escritura
+	pipes = [[0xe7, 0xe7, 0xe7, 0xe7, 0xe7], [0xc2, 0xc2, 0xc2, 0xc2, 0xc2]]
+
+	radio = NRF24(GPIO, spidev.SpiDev())	#Creamos el objeto de la radio
+
+    radio.begin(0, 7)	#Iniciamos la radio
+
+    radio.setRetries(15,15)		#Cantidad de intentos
+    radio.setPayloadSize(32)	#Tamaño máximo de los mensajes
+    radio.setChannel(0x60)		#Canal de comunicación
+    radio.setDataRate(NRF24.BR_2MBPS)	#Velocidad de transferencia
+    radio.setPALevel(NRF24.PA_MAX)		#Consumo del módulo, esto define el alcance
+
+    #Estas funcioines sirven para que el módulo sepa si se recibió el mensaje que envió
+    radio.setAutoAck(True)
+    radio.enableDynamicPayloads()
+    radio.enableAckPayload()
+
+    #Abro las direcciones
+    radio.openReadingPipe(1, pipes[1])
+    radio.openWritingPipe(pipes[0])
+
+    radio.startListening()
+    #-----------------------------------------------------------------------------------------
+
+    #Se queda esperando un mensaje
+    while not radio.available(0):
+        time.sleep(1/100)
+
+    #Cuando detecta un mensaje, lo guardo en una variable
+    comando = recibir()
+
+	#-----------------------------------Comando: ZARPAR---------------------------------------
+	if comando == MSJZARPAR:	#Cuando recibo la orden de zarapar tengo que inicar los otros hilos
+		TGPS = threading.Thread(name="GPS", target=GPS)		#Creo el hilo del GPS
+		TPA = threading.Thread(name="PA", target=pilotoAutomatico)	#Creo el hilo del piloto automático
+		#Inicio el GPS
+		TGPS.start()
+		
+		while True:		#Espero a que el GPS reciba datos
+    		if(DATOS.escan==1):
+        		break
+		#Inicio el Piloto Automático
+		TPA.start()
+
+		#Envió información a la interfaz de usuario
+		while True:
+			enviarRF(DATOS.lat)
+			enviarRF(DATOS.lon)
+			enviarRF(DATOS.curso)
+			enviarRF(DATOS.motProp)
+			enviarRF(DATOS.motCang)
+			enviarRF(DATOS.bateria)
+			#Si el barco finalizó el recorrido, dejo de enviar datos
+			if DATOS.fin == 1:
+				break
+	#---------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------Inicio el programa--------------------------------------------------------------
+#Creo el hilo del módulo RF
 TRF = threading.Thread(name="RF", target=comRF)
 
+#Inicio un bucle para que cuando el programa finalice, siga esperando a recibir orden de salir de vuelta.
 while True:
-	RF.start()
+	TRF.start()
