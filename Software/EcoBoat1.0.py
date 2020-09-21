@@ -1,13 +1,14 @@
-import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO			#Libreréa de pines GPIO
 import time
-import threading 
-import pynmea2 as nmea
-import numpy as np 
-import motores as mt 
-import math
-from lib_nrf24 import NRF24
-import spidev
-import sensoresUS as US 
+import threading 				#Librería de los hilos
+import pynmea2 as nmea 			#Librería del GPS
+import serial 					#Librería para el puerto serial del GPS
+import numpy as np 				#Librería de arrays
+import motores as mt 			#Librería de los motores (Desarrollada por el equipo de EcoBoat)
+import math 					#Librería de funciones matemáticas
+from lib_nrf24 import NRF24 	#Librería del NRF24l01
+import spidev 					#Librería de comunicación SPI
+import sensoresUS as US  		#Librería de los Sensores Ultrasónicos (Desarrollada por el equipo de EcoBoat)
 
 #Defino el modo de uso de los pines GPIO
 GPIO.setmode(GPIO.BCM)
@@ -33,22 +34,23 @@ DATOS= Data()
 def GPS():
 
 	def disponible():
-        #Función que detecta disponibilidad de datos
-        port="/dev/ttyAMA0"		#Puerto UART de la Raspberry
-		ser=serial.Serial(port, baudrate=9600, timeout=0.5)	#Inicio el puerto serial
-		#Mido posición con el GPS
-		dataout=pynmea2.NMEAStreamReader()
-		data=ser.readline()
-		#Tomo únicamente la línea que nos interesa que posee la posición
-        if data[0:6] == b'$GPRMC':
-		    data = data.decode("utf-8","ignore")
-		    datos=pynmea2.parse(data)
-		    DATOS.lat = datos.latitude
-		    DATOS.long = datos.longitude
-		    DATOS.curso = datos.true_course
+		while True:
+	        #Función que detecta disponibilidad de datos
+	        port="/dev/ttyAMA0"		#Puerto UART de la Raspberry
+			ser=serial.Serial(port, baudrate=9600, timeout=0.5)	#Inicio el puerto serial
+			#Mido posición con el GPS
+			dataout=pynmea2.NMEAStreamReader()
+			data=ser.readline()
+			#Tomo únicamente la línea que nos interesa que posee la posición
+	        if data[0:6] == b'$GPRMC':
+			    data = data.decode("utf-8","ignore")
+			    datos=pynmea2.parse(data)
+			    DATOS.lat = datos.latitude
+			    DATOS.long = datos.longitude
+			    DATOS.curso = datos.true_course
 
-		    DATOS.escan = 1
-		    break
+			    DATOS.escan = 1
+			    break
         return 0
         
 	def lectura(self):	#----------------Función que toma los datos de posición-------------------
@@ -81,8 +83,65 @@ def GPS():
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------Conversor Analógico/Digital--------------------------------------------------------
-def conversor():
+def conversor():	#El conversor A/D funciona con comunicación SPI
+	#Inicio la comunicación SPI
+	spi = spidev.SpiDev()
+	spi.open(0, 0)
 
+	spi.max_speed_hz = 300000
+	spi.mode = 0
+
+	while True:
+		for canal in range (0, 3):	#Voy tomando los datos de todos los canales
+			#Primero tomamos los datos crudos del conversor A/D (le digo que canal y que modo quiero usar)
+	        datosCrudos = spi.xfer([(12 + canal), 0, 0])
+	        #Proceso esta información para tenerla en un numero de 0 a 1023
+	        datosProcesados = ((datosCrudos[1]) << 1) + (datosCrudos[2] >> 7)
+	        #--------------------------------------------Conversión a porcentaje de batería--------------------------------------------
+	        if canal == 0:	#Canal del sensor de porcentaje de la batería
+			    if datosProcesados < 808: #Si es menor a 808bits significa que estoy al 0% (11,8V)
+			    	porcentaje = 0
+			    else:
+			    	porcentaje = ((datosProcesados - 808) * 100) / float(1023 - 808) #Si el valor es igual o mayor a 808 calculo el procentaje
+			    	porcentaje = round(porcentaje)
+			    
+			    DATOS.bateria = porcentaje
+			    return 0
+			#-----------------------------------------------Conversión a grados del timón----------------------------------------------
+			if canal == 1:	#Canal del sensor de posición del timón
+	        	grados = -128 + datosProcesados		#La marca de 0 grados está justo en el medio del pote, por ende, es una conversión de sumar.
+	        	
+	        	DATOS.timon = grados
+	        	return 0
+	        #--------------------------------------Conversión a consumo del motor de propulsión (A)------------------------------------
+	        if canal == 2:	#Canal del sensor de corriente del motor de propulsión
+	        	voltaje = (datosProcesados * 5) / float(1023) #Convierto el valor en bits a volts (0 a 5V)
+			    voltaje = round(voltaje, 3) #Redondeo a tres decimales
+			    if voltaje <= 2,5: #Si es negativo
+			    	consumo = - (voltaje * 0.1) #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+
+			    else: #Si es positivo
+			    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+
+			    DATOS.motProp = consumo
+			   	return 0
+			#-------------------------------Conversión a consumo del motor de la cinta Transportadora (A)------------------------------
+			if canal == 3:	#Canal del sensor de corriente del motor de propulsión
+	        	voltaje = (datosProcesados * 5) / float(1023) #Convierto el valor en bits a volts (0 a 5V)
+			    voltaje = round(voltaje, 3) #Redondeo a tres decimales
+			    if voltaje <= 2,5: #Si es negativo
+			    	consumo = - (voltaje * 0.1) #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+
+			    else: #Si es positivo
+			    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
+
+			    DATOS.motCang = consumo
+			   	return 0
+
+			#Cuando se finaliza el recorrido, dejamos de sensar datos.
+			if DATOS.fin == 1:
+				spi.close()
+				break
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------Piloto automático-------------------------------------------------------------
@@ -158,60 +217,67 @@ def pilotoAutomático():
 	#------------------------------------------------------------------------------------------------------------------
 
 	#---------------------------------------------------Control PID----------------------------------------------------
-	def controlPID(waypoint):
+	def controlPID(waypoint):	#Es el algoritmo que controla el giro del timón
 		KP = 1 #Constante Proporcional
-		KI = 0.1 #Constante Integral
-		KD = 0.2 #Constante Derivativa
-		ZI = 5 #Zona activa de la Integral
-		#Defino el thread de la red neuronal
-		TRN = threading.Thread(name = redNeuronal, target = redNeuronal)
+	    KI = 0.1 #Constante Integral
+	    KD = 0.2 #Constante Derivativa
+	    ZI = 5 #Zona activa de la Integral
+	        
+	    DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+	    DA= DATOS.curso #Direccion actual dado por el modulo gps
+	    DeltaD= DD - DA 	#Con estos 3 renglones tomamos la diferencia entre el curso actual y el deseado
 
-		while DeltaD >= 0.005 or DeltaD <= -0.005: #Le pusimos que funcione hasta un error un poco mayor a 0 debido a el margen de error del GPS
-			med.medicion()		#Si se detecta un obstáculo mientras giro voy a la RN
-			if Lli <= 150 or Lsi <= 150 or Lfi <= 100 or Lld <= 150 or Lsd <= 150 or Lfd <= 100:
-				TNR.start()
-				TNR.join()
-			#Primero calculo el error
-			DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
-			DA= DATOS.curso #Direccion actual dado por el modulo gps
-			DeltaD= DD - DA
-			
-			if DeltaD <= ZI and (DeltaD >= 0.005 or DeltaD <= -0.005):
-				#Si estamos en la zona activa de la integral empezamos a sumar ángulo
-				errorT += DeltaD
-			else:
-				#Si estamos fuera de la zona activa de la integral, asignamos un 0 a la integral
-				errorT = 0
+	    errorT = 0	#Variable para cuando se activa la zona integral
+	    
+	    while DeltaD >= 0.005 or DeltaD <= -0.005: #Le pusimos que funcione hasta un error un poco mayor a 0 debido a el margen de error del GPS
+	        #Primero calculo el error
+	        DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+	        DA= DATOS.curso #Direccion actual dado por el modulo gps
+	        DeltaD= DD - DA
+	            
+	        if DeltaD <= ZI and (DeltaD >= 0.005 or DeltaD <= -0.005):
+	            #Si estamos en la zona activa de la integral empezamos a sumar ángulo
+	            errorT += DeltaD
+	        else:
+	            #Si estamos fuera de la zona activa de la integral, asignamos un 0 a la integral
+	            errorT = 0
 
-			if errorT >= 50/KI:
-				#Le ponemos un límite a la integral
-				errorT = 50/KI
+	        if errorT >= 50/KI:
+	            #Le ponemos un límite a la integral
+	            errorT = 50/KI
+	            
+	        UltimoError = DeltaD #Guardo el último error
+	        Proporcional = DeltaD * KP
+	        Integral = errorT * KI
+	        Derivativa = (DeltaD - UltimoError) * KD
 
-			Proporcional = DeltaD * KP
-			Integral = errorT * KI
-			Derivativa = (DeltaD - UltimoError) * KD
+	        #Obtengo el valor del ángulo para el timón
+	        angulo = Proporcional + Integral + Derivativa
 
-			UltimoError = DeltaD #Guardo el último error
+	        if abs(angulo) >= 30 and DeltaD > 0: #Caso: DeltaD positivo
+	            #Si el ángulo es mayor que el máximo de giro del timón giro 30°
+	            angulo = 30
 
-			#Obtengo el valor del ángulo para el timón
-			angulo = Proporcional + Integral + Derivativa
+	        if abs(angulo) >= 30 and DeltaD < 0: #Caso: DeltaD negativo
+	            #Si el ángulo es mayor que el máximo de giro del timón giro 30°
+	            angulo = -30
+	        
+	        if angulo < 0:	#Si el giro es negativo
+	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        		timon.girarH()
 
-			if abs(angulo) >= 30 and DeltaD > 0: #Caso: DeltaD positivo
-				#Si el ángulo es mayor que el máximo de giro del timón giro 30°
-				angulo = 30
+	        if angulo > 0:	#Si el giro es positivo
+	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        		timon.girarAH()
 
-			if abs(angulo) >= 30 and DeltaD < 0: #Caso: DeltaD negativo
-				#Si el ángulo es mayor que el máximo de giro del timón giro 30°
-				angulo = -30
-
-			return angulo
+	        return angulo
 	#------------------------------------------------------------------------------------------------------------------
 
 	#--------------------------------------------Inicio el piloto automático-------------------------------------------
 	#Creo objetos para los motores
 	timon= mt.PaP(4, 17, 27, 22)
-	Cangilon= mt.Cangilon(6, 13, 50)			#Con un 1 en el pin de selección giramos horario, con un 0 antihorario.
-	motorDirec= mt.Propulsion(18, 12, 50)		#Con el 12 giro horario y con el 18 antihorario.
+	Cangilon= mt.Cangilon(6, 13, 100)			#Con un 1 en el pin de selección giramos horario, con un 0 antihorario.
+	motorDirec= mt.Propulsion(18, 12, 100)		#Con el 12 giro horario y con el 18 antihorario.
 
 	#Comienzo a girar los motores de propulsión y de la cinta trtansportadora
 	Cangilon.girarD()
@@ -219,22 +285,27 @@ def pilotoAutomático():
 
 	#En esta array se guardan los waypoints a recorrer 
 	#Cada waypoint se guarda en una fila distinta
-	waypoints= np.empty(([lat1, lng1], [lat2, lng2], ..., [latn, lngn]))
+	waypoints= np.array(([lat1, lng1], [lat2, lng2], ..., [latn, lngn]))
 
 	#Se recorren todos los watpoints uno por uno
 	for i in range (0, len(waypoints)):
 		#La idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
 		while(LlegadaAlWP(waypoints[i]) != 1):
-			controlPID(waypoints[i])	#Inicio el control PID que no va a hacer nada a no ser que el curso no sea el deseado
+			if DATOS.curso != None:		#Solo corrijo el rumbo si hay un curso detectado
+				MEDICION DE US 		#Mido con los sensores UltraSónicos
+				if CONDICIÓN DE US:		#Si detecto algo utilizo la Red Neuronal para esquivar el obstáculo
+					redNeuronal()
+				controlPID()
 
-			med.medicion()		#Mido con todos los ultrasónicos
-			if (Lsi > 0 and Lsi <= 400) or (Lfi > 0 and Lfi <= 400) or (Lsd > 0 and Lsd <= 400) or (Lfd > 0 and Lfd <= 400):
-				#Si alguno de los ultrasónicos de adelante detecta algo entro en la RN
+			MEDICION DE US
+			if CONDICION DE US:
 				redNeuronal()
-			time.sleep(1)
 
+	#Detengo los motores de propulsión y la cinta transportadora
 	Cangilon.detener()
 	motorDirec.detener()
+
+	DATOS.fin = 1	#Indico que finalizó el recorrido
 #-------------------------------------------------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------------Módulos RF-------------------------------------------------------------------
@@ -295,13 +366,15 @@ def módulosRF():
 	if comando == MSJZARPAR:	#Cuando recibo la orden de zarapar tengo que inicar los otros hilos
 		TGPS = threading.Thread(name="GPS", target=GPS)		#Creo el hilo del GPS
 		TPA = threading.Thread(name="PA", target=pilotoAutomatico)	#Creo el hilo del piloto automático
+		TCAD = threading.Thread(name="CAD", target=conversor)	#Creo el hilo del Conversor A/D
 		#Inicio el GPS
 		TGPS.start()
 		
 		while True:		#Espero a que el GPS reciba datos
     		if(DATOS.escan==1):
         		break
-		#Inicio el Piloto Automático
+		#Inicio el Piloto Automático y el conversor A/D
+		TCAD.start()
 		TPA.start()
 
 		#Envió información a la interfaz de usuario
