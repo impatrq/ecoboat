@@ -2,7 +2,6 @@ import time
 import RPi.GPIO as GPIO
 import numpy as np 
 
-
 def USconfig(){
 	#libreria para el control de los sensores us
 	#estado = verde
@@ -80,5 +79,4 @@ def lectura():
 
 				pos+=1
 	return datos
-	
-lectura()			
+			

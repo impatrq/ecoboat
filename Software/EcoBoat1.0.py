@@ -8,7 +8,8 @@ import motores as mt 			#Librería de los motores (Desarrollada por el equipo de
 import math 					#Librería de funciones matemáticas
 from lib_nrf24 import NRF24 	#Librería del NRF24l01
 import spidev 					#Librería de comunicación SPI
-import sensoresUS as US  		#Librería de los Sensores Ultrasónicos (Desarrollada por el equipo de EcoBoat)
+import sensoresUS as US 		#Librería de los Sensores Ultrasónicos (Desarrollada por el equipo de EcoBoat)
+from RedNeuronal import *       #Librería de la Red Neuronal (Desarrollada por el equipo de EcoBoat)
 
 #Defino el modo de uso de los pines GPIO
 GPIO.setmode(GPIO.BCM)
@@ -106,15 +107,13 @@ def conversor():	#El conversor A/D funciona con comunicación SPI
 			    	porcentaje = round(porcentaje)
 			    
 			    DATOS.bateria = porcentaje
-			    return 0
 			#-----------------------------------------------Conversión a grados del timón----------------------------------------------
-			if canal == 1:	#Canal del sensor de posición del timón
+			elif canal == 1:	#Canal del sensor de posición del timón
 	        	grados = -128 + datosProcesados		#La marca de 0 grados está justo en el medio del pote, por ende, es una conversión de sumar.
 	        	
 	        	DATOS.timon = grados
-	        	return 0
-	        #--------------------------------------Conversión a consumo del motor de propulsión (A)------------------------------------
-	        if canal == 2:	#Canal del sensor de corriente del motor de propulsión
+	        #--------------------------------------Conversión a consumo de los motores (A)------------------------------------
+	        elif canal == 2 or canal == 3:	
 	        	voltaje = (datosProcesados * 5) / float(1023) #Convierto el valor en bits a volts (0 a 5V)
 			    voltaje = round(voltaje, 3) #Redondeo a tres decimales
 			    if voltaje <= 2,5: #Si es negativo
@@ -123,20 +122,11 @@ def conversor():	#El conversor A/D funciona con comunicación SPI
 			    else: #Si es positivo
 			    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
 
-			    DATOS.motProp = consumo
-			   	return 0
-			#-------------------------------Conversión a consumo del motor de la cinta Transportadora (A)------------------------------
-			if canal == 3:	#Canal del sensor de corriente del motor de propulsión
-	        	voltaje = (datosProcesados * 5) / float(1023) #Convierto el valor en bits a volts (0 a 5V)
-			    voltaje = round(voltaje, 3) #Redondeo a tres decimales
-			    if voltaje <= 2,5: #Si es negativo
-			    	consumo = - (voltaje * 0.1) #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
-
-			    else: #Si es positivo
-			    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
-
-			    DATOS.motCang = consumo
-			   	return 0
+			   	if canal == 2: #Canal del sensor de corriente del motor de propulsión
+				    DATOS.motProp = consumo
+				   	
+				elif canal == 3: #Canal del sensor de corriente del motor de la cinta Transportadora
+					DATOS.motCang = consumo
 
 			#Cuando se finaliza el recorrido, dejamos de sensar datos.
 			if DATOS.fin == 1:
@@ -212,8 +202,27 @@ def pilotoAutomático():
 	#------------------------------------------------------------------------------------------------------------------
 
 	#--------------------------------------------------Red Neuronal----------------------------------------------------
-	def redNeuronal():
-		#Código de la red neuronal.
+	def redNeuronal(curso, waypoint): 
+		#curso= 0 yendo hacia adelante
+		#curso=-2 yendo a izquierda
+		#curso= 1 yendo a derecha 
+		med=US.lectura()
+		entradas= np.empty((1, 10))
+		for i in range(10):
+			entradas[i]=med[i]
+
+		entradas[8]=DATOS.curso
+		entradas[9]=DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+
+		while entradas[3]<400 or entradas[4]<400 or (curso!=0 and entradas[4+curso]<400): 			
+			angulo=RN.resultado(entradas)
+			if angulo > 0:	#Si el giro es positivo
+	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        		timon.girarAH()
+	        if angulo < 0:	#Si el giro es negativo
+	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        		timon.girarH()	
+
 	#------------------------------------------------------------------------------------------------------------------
 
 	#---------------------------------------------------Control PID----------------------------------------------------
@@ -229,7 +238,7 @@ def pilotoAutomático():
 
 	    errorT = 0	#Variable para cuando se activa la zona integral
 	    
-	    while DeltaD >= 0.005 or DeltaD <= -0.005: #Le pusimos que funcione hasta un error un poco mayor a 0 debido a el margen de error del GPS
+	    while DeltaD >= 0.05 or DeltaD <= -0.05: #Le pusimos que funcione hasta un error un poco mayor a 0 debido a el margen de error del GPS
 	        #Primero calculo el error
 	        DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
 	        DA= DATOS.curso #Direccion actual dado por el modulo gps
@@ -254,20 +263,18 @@ def pilotoAutomático():
 	        #Obtengo el valor del ángulo para el timón
 	        angulo = Proporcional + Integral + Derivativa
 
-	        if abs(angulo) >= 30 and DeltaD > 0: #Caso: DeltaD positivo
+	        if abs(angulo) >= 30:
 	            #Si el ángulo es mayor que el máximo de giro del timón giro 30°
-	            angulo = 30
+	            angulo = (DeltaD/ abs(DeltaD))*30 #el angulo toma el signo del DeltaD
 
-	        if abs(angulo) >= 30 and DeltaD < 0: #Caso: DeltaD negativo
-	            #Si el ángulo es mayor que el máximo de giro del timón giro 30°
-	            angulo = -30
-	        
 	        if angulo < 0:	#Si el giro es negativo
 	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        		redNeuronal(-2, waypoint)
 	        		timon.girarH()
 
 	        if angulo > 0:	#Si el giro es positivo
 	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        		redNeuronal(1, waypoint)
 	        		timon.girarAH()
 
 	        return angulo
@@ -283,23 +290,22 @@ def pilotoAutomático():
 	Cangilon.girarD()
 	motorDirec.girarD()
 
+	#inicio la red neuronal
+	#hay que cargar un archivo que tenga la red ya entrenada
+	RN= RedNeuronal()
+
 	#En esta array se guardan los waypoints a recorrer 
 	#Cada waypoint se guarda en una fila distinta
 	waypoints= np.array(([lat1, lng1], [lat2, lng2], ..., [latn, lngn]))
 
 	#Se recorren todos los watpoints uno por uno
 	for i in range (0, len(waypoints)):
-		#La idea es que corrija el rumbo a lo largo del trayecto cada xx tiempo
+		#La idea es que corrija el rumbo a lo largo del trayecto
 		while(LlegadaAlWP(waypoints[i]) != 1):
-			if DATOS.curso != None:		#Solo corrijo el rumbo si hay un curso detectado
-				MEDICION DE US 		#Mido con los sensores UltraSónicos
-				if CONDICIÓN DE US:		#Si detecto algo utilizo la Red Neuronal para esquivar el obstáculo
-					redNeuronal()
-				controlPID()
+			redNeuronal(0, waypoints[i])
 
-			MEDICION DE US
-			if CONDICION DE US:
-				redNeuronal()
+			if DATOS.curso != None:		#Solo corrijo el rumbo si hay un curso detectado
+				controlPID(waypoints[i])
 
 	#Detengo los motores de propulsión y la cinta transportadora
 	Cangilon.detener()
