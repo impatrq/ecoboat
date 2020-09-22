@@ -64,7 +64,7 @@ void draw() {
   hitbox.Hitbox(barco);
   barco.choque=hitbox.colision(obs);  
 
-  if ((frameCount%60==0 && frameCount!=0)) {
+  if ((frameCount%60==0 && frameCount>=180)) {
     guardar();
   }
   if (barco.choque==true) {  

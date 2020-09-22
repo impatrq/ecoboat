@@ -82,7 +82,7 @@ public void draw() {
   hitbox.Hitbox(barco);
   barco.choque=hitbox.colision(obs);  
 
-  if ((frameCount%60==0 && frameCount!=0)) {
+  if ((frameCount%60==0 && frameCount>=180)) {
     guardar();
   }
   if (barco.choque==true) {  
@@ -231,7 +231,7 @@ class Barco {
       this.cursoD=360+this.cursoD;
     } 
     
-    this.curso+= map(this.timon, -30,30, -0.15f,0.15f);
+    this.curso+= map(this.timon, -30,30, 0.15f,-0.15f);
 
     //si no choco 
     if (this.choque==false) {

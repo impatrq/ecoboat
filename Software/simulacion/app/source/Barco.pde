@@ -97,7 +97,7 @@ class Barco {
       this.cursoD=360+this.cursoD;
     } 
     
-    this.curso+= map(this.timon, -30,30, -0.15,0.15);
+    this.curso+= map(this.timon, -30,30, 0.15,-0.15);
 
     //si no choco 
     if (this.choque==false) {
