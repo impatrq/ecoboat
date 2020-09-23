@@ -58,8 +58,6 @@ void draw() {
   }
 
   barco.timon=timon;
-  stroke(10);
-  line(barco.pos.x, barco.pos.y, meta.x, meta.y);
   barco.display();
   barco.move();
   barco.update(obs);
@@ -98,7 +96,6 @@ void keyPressed() {
 }
 
 void guardar() {
-  
   for (int j = 0; j < barco.inputs.length; j++) {
     JSONObject temp2 = new JSONObject();
     temp2.setFloat("id", barco.inputs[j]);
