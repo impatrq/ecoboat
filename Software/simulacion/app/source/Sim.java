@@ -76,6 +76,8 @@ public void draw() {
   }
 
   barco.timon=timon;
+  stroke(10);
+  line(barco.pos.x, barco.pos.y, meta.x, meta.y);
   barco.display();
   barco.move();
   barco.update(obs);
@@ -114,6 +116,7 @@ public void keyPressed() {
 }
 
 public void guardar() {
+  
   for (int j = 0; j < barco.inputs.length; j++) {
     JSONObject temp2 = new JSONObject();
     temp2.setFloat("id", barco.inputs[j]);
@@ -148,6 +151,8 @@ class Barco {
   boolean llegada= false;
 
   float fitness=0;
+    
+  float delta= random(-90,90);
   
   float[] inputs= new float[11];
 
@@ -173,15 +178,20 @@ class Barco {
 
       translate(this.pos.x, this.pos.y);
       rotate(radians(-this.curso));
-
+      
+      stroke(10);
+      line(0, 0, 0, -this.alto);
+      
       noStroke();
+                 
       fill(180, 135, 11);
       rect(0-(this.ancho/2), 0-(this.alto/2), this.ancho, this.alto);
 
       fill(101, 166, 185);
       rect(0-(this.ancho/4), 0-(this.alto/2), this.ancho/2, this.alto/4);
-
+      
       pop();
+      
     }
   }
 
@@ -196,12 +206,7 @@ class Barco {
     //si no choco hasta el momento
     if (this.choque == false) {
       //aca hago que el curso se mantenga entre valores de 0 a 360
-      if (this.curso>=360) {
-        this.curso=0;
-      }
-      if (this.curso<0) {
-        this.curso=360+this.curso;
-      }
+      this.curso=constrain(this.curso);
 
       //lo muevo segun su vel y curso
       //mas trigonometria
@@ -241,11 +246,21 @@ class Barco {
         this.inputs[i]=map(us[i].cheak(obs), 0, 80, 0, 400);
       }
     }
-    this.inputs[8]=this.curso;
-    this.inputs[9]=cursoD;
+    this.inputs[8]=constrain(this.curso+ this.delta);
+    this.inputs[9]=constrain(cursoD+ this.delta);
     this.inputs[10]=this.timon;
   }
 }
+
+public float constrain(float num){
+  if (num>=360) {
+    num=num-360;
+  }
+  else if (num<0) {
+    num=360+num;
+  }
+  return num;
+} 
 public float hip(float a, float b) {
 
   float a2=pow(a, 2);
