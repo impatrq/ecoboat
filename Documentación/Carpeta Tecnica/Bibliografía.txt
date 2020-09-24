@@ -34,5 +34,33 @@ Regulador de Carga:
   https://www.ti.com/lit/ds/slos094g/slos094g.pdf?ts=1600038173408&ref_url=https%253A%252F%252Fwww.google.com%252F
   LM7805:
   http://www.datasheet.es/PDF/919052/LM7805-pdf.html
+Sensores Ultrasónicos:
+
+Sensores Analógicos:
+  ADC0834:
+  https://www.ti.com/lit/ds/symlink/adc0834-n.pdf?ts=1600954794602&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FADC0834-N
+Fuentes de 5V:
+  LM2596:
+  https://www.onsemi.com/pub/Collateral/LM2596-D.PDF
 Tecnologia UART:
 http://www.el.uma.es/marin/Practica4_UART.pdf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
