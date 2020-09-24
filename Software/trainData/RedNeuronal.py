@@ -163,60 +163,49 @@ class RedNeuronal():
 
 		return 0
 
-def lecturaJSON():
+def entranamiento(total, red):
+	array= np.empty((50, 11, total))
+
+	for i in range(total):
+		print(lecturaJSON(i))
+
+	return array
+
+
+def lecturaJSON(x):
 	div=11
-	x=0
-	while True:
-		try:
-			with open('new.json('+str(x)+')') as file:
-		   		data = json.load(file)
-		except FileNotFoundError:
-			break
+	try:
+		with open('new.json('+str(x)+')') as file:
+	   		data = json.load(file)
+	except FileNotFoundError:
+		return 0
 
 		#print(data)
-		array= np.empty((int(len(data['valores'])/div),div))
+	array= np.empty((int(len(data['valores'])/div),div))
+
+	i=j=0
+	for valor in data['valores']:
+		array[i,j%div]=float(valor['id'])
+
+		if j%div<8:
+			array[i,j%div]=round(array[i,j%div]/400, 3)
+		if j%div==8 or j%div==9:
+			array[i,j%div]=round(array[i,j%div]/360, 3)
+		if j%div==10:
+			if array[i,j%div]==0:
+				array[i,j%div]=0.001
+			else:
+				array[i,j%div]=round(array[i,j%div]/30,3)
+		j+=1
+
+		if j%div==0 and j!=0:
+			i+=1
 		
-		i=j=0
-		for valor in data['valores']:
-			array[i,j%div]=(int(valor['id']))
-			
-			if j%div<8:
-				array[i,j%div]=array[i,j%div]/400
-			if j%div==8 or j%div==9:
-				array[i,j%div]=array[i,j%div]/360
-			if j%div==10:
-				if array[i,j%div]==0:
-					array[i,j%div]=0.01
-				else:
-					array[i,j%div]=array[i,j%div]/30
-
-			j+=1
-
-			if j%div==0 and j!=0:
-				i+=1
-		x+=1
 	return array
 
 capas= np.array([10,8,8,1])
 RN= RedNeuronal(capas)
 
-trainData=lecturaJSON()
+trainData=entranamiento(5, RN)
 #print(trainData)
 
-for i in range(1000):
-	r=randint(5,len(trainData)-5)
-	inputs=np.empty((1,10))
-	for j in range(10):
-		inputs[0,j]=trainData[r,j]
-	salida=trainData[r,10]/30
-	RN.entrenarES(inputs, salida)
-
-r=randint(5,len(trainData)-5)
-inputs=np.empty((1,10))
-for j in range(8):
-	inputs[0,j]=trainData[r,j]/400
-inputs[0,8]=trainData[r,8]/360
-inputs[0,9]=trainData[r,9]/360
-salida=trainData[r,10]/30
-print(RN.resultado(inputs))
-print(salida)
