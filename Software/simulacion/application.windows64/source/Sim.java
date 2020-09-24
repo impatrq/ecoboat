@@ -76,6 +76,8 @@ public void draw() {
   }
 
   barco.timon=timon;
+  stroke(10);
+  line(barco.pos.x, barco.pos.y, meta.x,meta.y);
   barco.display();
   barco.move();
   barco.update(obs);
@@ -139,6 +141,8 @@ class Barco {
   float timon;
 
   float vel=0.2f;
+  
+  float Delta= random(-90,90);
 
   PVector pos= new PVector(width/2, height-300);
   float curso= 0;
@@ -173,6 +177,9 @@ class Barco {
 
       translate(this.pos.x, this.pos.y);
       rotate(radians(-this.curso));
+      
+      stroke(10);
+      line(0,0,0,-this.alto);
 
       noStroke();
       fill(180, 135, 11);
@@ -227,9 +234,7 @@ class Barco {
     cursoD= (atan((this.pos.x-meta.x)/(this.pos.y-meta.y)))*180/PI;
 
     //normalizo el valor del curso deseado a valore positivos
-    if (this.cursoD<0) {
-      this.cursoD=360+this.cursoD;
-    } 
+      this.cursoD=constrain(this.cursoD);
     
     this.curso+= map(this.timon, -30,30, 0.15f,-0.15f);
 
@@ -241,10 +246,20 @@ class Barco {
         this.inputs[i]=map(us[i].cheak(obs), 0, 80, 0, 400);
       }
     }
-    this.inputs[8]=this.curso;
-    this.inputs[9]=cursoD;
+    this.inputs[8]=constrain(this.curso+this.Delta);
+    this.inputs[9]=constrain(cursoD+this.Delta);
     this.inputs[10]=this.timon;
   }
+}
+
+public float constrain(float num){
+  if(num>=360){
+    num=num-360;
+  }
+  else if(num<0){
+    num=360+num;
+  }
+  return num;
 }
 public float hip(float a, float b) {
 

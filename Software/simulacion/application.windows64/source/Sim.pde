@@ -58,6 +58,8 @@ void draw() {
   }
 
   barco.timon=timon;
+  stroke(10);
+  line(barco.pos.x, barco.pos.y, meta.x,meta.y);
   barco.display();
   barco.move();
   barco.update(obs);
