@@ -163,60 +163,49 @@ class RedNeuronal():
 
 		return 0
 
-def lecturaJSON():
-	div=11
-	x=0
-	while True:
+
+def lecturaJSON(a1, a2):
+	x=a1
+	contador=0
+	datos=np.empty((1,11))
+
+	for x in range(a1,a2):
+
 		try:
 			with open('new.json('+str(x)+')') as file:
 		   		data = json.load(file)
 		except FileNotFoundError:
-			break
+			return 0
 
-		#print(data)
-		array= np.empty((int(len(data['valores'])/div),div))
-		
-		i=j=0
-		for valor in data['valores']:
-			array[i,j%div]=(int(valor['id']))
-			
-			if j%div<8:
-				array[i,j%div]=array[i,j%div]/400
-			if j%div==8 or j%div==9:
-				array[i,j%div]=array[i,j%div]/360
-			if j%div==10:
-				if array[i,j%div]==0:
-					array[i,j%div]=0.01
+		array=np.empty((int(len(data['valores'])/11), 11))
+		#array=np.empty((1,11))
+		j=0
+		i=0
+		for valor in data['valores']:	
+			temp=float(valor['id'])
+			if j%11<8:
+				temp=round(temp/400, 3)
+			elif j%11<10:
+				temp=round(temp/360, 3)
+			elif j%11==10:
+				if temp==0:
+					temp=0.001
 				else:
-					array[i,j%div]=array[i,j%div]/30
+					temp=round(temp/30,3)
+
+			array[i,j%11]= temp	
 
 			j+=1
-
-			if j%div==0 and j!=0:
+			if j%11==0:
 				i+=1
-		x+=1
-	return array
+		datos=np.insert(datos, contador, array, axis=0)
+		contador+=int(len(data['valores'])/11)
+		
+	return datos
 
 capas= np.array([10,8,8,1])
 RN= RedNeuronal(capas)
 
-trainData=lecturaJSON()
-#print(trainData)
+trainData=lecturaJSON(5,6)
+print(trainData)
 
-for i in range(1000):
-	r=randint(5,len(trainData)-5)
-	inputs=np.empty((1,10))
-	for j in range(10):
-		inputs[0,j]=trainData[r,j]
-	salida=trainData[r,10]/30
-	RN.entrenarES(inputs, salida)
-
-r=randint(5,len(trainData)-5)
-inputs=np.empty((1,10))
-for j in range(8):
-	inputs[0,j]=trainData[r,j]/400
-inputs[0,8]=trainData[r,8]/360
-inputs[0,9]=trainData[r,9]/360
-salida=trainData[r,10]/30
-print(RN.resultado(inputs))
-print(salida)
