@@ -13,10 +13,7 @@ def sigmoid(matrix):
 	if len(s)==2:
 		for i in range(s[0]):
 			for j in range(s[1]):
-				try:
-					matrix[i,j]= 1/(1+math.exp(-matrix[i,j]))
-				except OverflowError:
-					print(matrix[i,j])
+				matrix[i,j]= 1/(1+math.exp(-matrix[i,j]))
 		return matrix
 	else:
 		for i in range(s[0]):
@@ -112,7 +109,7 @@ class RedNeuronal():
 		outputs= self.resultado(inputs)
 		respuestas=respuestas.astype(np.float)
 
-		lr=0.2
+		lr=0.1
 
 		#caculo los errores de todos las capas
 		errS= respuestas.transpose()-outputs.transpose()
@@ -184,12 +181,17 @@ def lecturaJSON(a1, a2):
 		for valor in data['valores']:	
 			temp=float(valor['id'])
 			if j%11<8:
-				temp=round(temp/400, 3)
+				if temp>350:
+					temp=0.9
+				else:
+					temp=round(temp/400, 3)
 			elif j%11<10:
 				temp=round(temp/360, 3)
 			elif j%11==10:
 				if temp==0:
 					temp=0.001
+				elif abs(temp)>=29:
+					temp=round((29/30)*(temp/abs(temp)), 3)
 				else:
 					temp=round(temp/30,3)
 
@@ -203,9 +205,41 @@ def lecturaJSON(a1, a2):
 		
 	return datos
 
-capas= np.array([10,8,8,1])
+def entrenarRed(datos, RN, contador):
+
+	for i in range(contador):
+		r=randint(0, len(datos)-1)
+		entradas=np.empty((1,10))
+		for j in range(10):
+			entradas[0,j]=datos[r,j]
+		target=datos[r,10]
+		RN.entrenarES(entradas, target)
+
+def test(datos, RN, contador):
+	error=0
+	for i in range(contador):
+		r=randint(0, len(datos))
+
+		entradas=np.empty((1,10))
+		for j in range(10):
+			entradas[0,j]=datos[r,j]
+
+		print("resultado esperado: ", datos[r, 10])
+		print("resultado obtenido: ", RN.resultado(entradas))
+		print(" ")
+		error+=RN.resultado(entradas)-datos[r,10]
+	error=error/contador
+	print("Error promedio: ", error)
+
+capas= np.array([10,7,10,1])
 RN= RedNeuronal(capas)
 
-trainData=lecturaJSON(5,6)
-print(trainData)
+trainData=lecturaJSON(0,10)
+test(trainData, RN, 1)
+print("entrenando...")
+entrenarRed(trainData, RN, 50000)
 
+print("entrenamiento finalizado")
+print(" ")
+
+test(trainData, RN, 10)
