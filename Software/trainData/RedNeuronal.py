@@ -101,7 +101,7 @@ class RedNeuronal():
 			
 		#ultima capa
 		valoresIO= self.valoresI[:,self.capas[1]-1]
-		outputs=TanH(np.dot(self.pesosS, valoresIO.reshape(len(valoresIO),1))+self.biasS)
+		outputs=sigmoid(np.dot(self.pesosS, valoresIO.reshape(len(valoresIO),1))+self.biasS)
 		return outputs
 
 	def entrenarES(self, inputs, respuestas):
@@ -112,7 +112,7 @@ class RedNeuronal():
 		lr=0.1
 
 		#caculo los errores de todos las capas
-		errS= respuestas.transpose()-outputs.transpose()
+		errS= respuestas-outputs.transpose()
 
 		if self.capas[1]==1:
 			errI=np.dot(self.pesosS.transpose(), errS.transpose())
@@ -128,9 +128,10 @@ class RedNeuronal():
 				errI[:, k-1]=a
 
 		#calculo los deltas
-
-		deltaS = lr*errS.transpose()*(1-(outputs*outputs))*(self.valoresI[:,self.capas[1]-1].reshape(1,self.capas[2]))
-		deltaSb = lr*errS.transpose()*(1-(outputs*outputs))
+		a=lr*errS.transpose()*outputs*(1-outputs)
+		b=(self.valoresI[:,self.capas[1]-1])#.reshape(1,self.capas[2]))
+		deltaS = a*b
+		deltaSb = a
 
 		deltaI = np.empty((self.capas[2], self.capas[2], self.capas[1]-1))
 		deltaIb = np.empty((self.capas[2], self.capas[1]))
@@ -164,7 +165,7 @@ class RedNeuronal():
 def lecturaJSON(a1, a2):
 	x=a1
 	contador=0
-	datos=np.empty((1,11))
+	datos=np.empty((1,12))
 
 	for x in range(a1,a2):
 
@@ -174,7 +175,7 @@ def lecturaJSON(a1, a2):
 		except FileNotFoundError:
 			return 0
 
-		array=np.empty((int(len(data['valores'])/11), 11))
+		array=np.empty((int(len(data['valores'])/11), 12))
 		#array=np.empty((1,11))
 		j=0
 		i=0
@@ -188,13 +189,17 @@ def lecturaJSON(a1, a2):
 			elif j%11<10:
 				temp=round(temp/360, 3)
 			elif j%11==10:
+				if temp<0:
+					array[i,11]=0.001
+				else:
+					array[i,11]=0.900
 				if temp==0:
 					temp=0.001
 				elif abs(temp)>=29:
-					temp=round((29/30)*(temp/abs(temp)), 3)
+					temp=round((29/30)*abs(temp), 3)
 				else:
-					temp=round(temp/30,3)
-
+					temp=round(abs(temp)/30,3)
+				
 			array[i,j%11]= temp	
 
 			j+=1
@@ -209,37 +214,26 @@ def entrenarRed(datos, RN, contador):
 
 	for i in range(contador):
 		r=randint(0, len(datos)-1)
-		entradas=np.empty((1,10))
-		for j in range(10):
+		entradas=np.empty((1,8))
+		for j in range(8):
 			entradas[0,j]=datos[r,j]
-		target=datos[r,10]
+		target=np.array([(datos[r,10],datos[r,11])])
 		RN.entrenarES(entradas, target)
 
 def test(datos, RN, contador):
 	error=0
 	for i in range(contador):
-		r=randint(0, len(datos))
+		r=randint(0, len(datos)-1)
 
-		entradas=np.empty((1,10))
-		for j in range(10):
+		entradas=np.empty((1,8))
+		for j in range(8):
 			entradas[0,j]=datos[r,j]
 
-		print("resultado esperado: ", datos[r, 10])
+		print("resultado esperado: ", datos[r, 10], datos[r,11])
 		print("resultado obtenido: ", RN.resultado(entradas))
 		print(" ")
-		error+=RN.resultado(entradas)-datos[r,10]
-	error=error/contador
-	print("Error promedio: ", error)
+		#error+=RN.resultado(entradas)-datos[r,10]
+	#error=error/contador
+	#print("Error promedio: ", error)
 
-capas= np.array([10,7,10,1])
-RN= RedNeuronal(capas)
 
-trainData=lecturaJSON(0,10)
-test(trainData, RN, 1)
-print("entrenando...")
-entrenarRed(trainData, RN, 50000)
-
-print("entrenamiento finalizado")
-print(" ")
-
-test(trainData, RN, 10)
