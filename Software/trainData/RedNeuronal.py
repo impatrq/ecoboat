@@ -113,7 +113,6 @@ class RedNeuronal():
 
 		#caculo los errores de todos las capas
 		errS= respuestas-outputs.transpose()
-
 		if self.capas[1]==1:
 			errI=np.dot(self.pesosS.transpose(), errS.transpose())
 
@@ -129,7 +128,7 @@ class RedNeuronal():
 
 		#calculo los deltas
 		a=lr*errS.transpose()*outputs*(1-outputs)
-		b=(self.valoresI[:,self.capas[1]-1])#.reshape(1,self.capas[2]))
+		b=(self.valoresI[:,self.capas[1]-1])
 		deltaS = a*b
 		deltaSb = a
 
@@ -152,13 +151,14 @@ class RedNeuronal():
 		deltaE= a.reshape(self.capas[2],1)*b
 		deltaEb= a
 
+		#print(deltaS)
+		#print(deltaSb)
 		self.pesosE += deltaE
 		self.pesosI += deltaI
 		self.pesosS += deltaS
 		self.biasE += deltaEb.reshape(self.capas[2],1)
 		self.biasI += deltaIb
 		self.biasS += deltaSb
-
 		return 0
 
 
