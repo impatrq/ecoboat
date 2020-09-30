@@ -19,7 +19,7 @@ for i in range(10000):
 
 for i in range(4):
 	entradas=np.array([trainData[i,0], trainData[i,1]])
-	print(trainData[i,0], trainData[i,1])
+	print(trainData[i,2], trainData[i,3])
 	print(RN.resultado(entradas))
 
 

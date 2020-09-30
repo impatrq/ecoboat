@@ -57,23 +57,24 @@ def mutarMatiz(matrix, rate):
 
 class RedNeuronal():
 
-	def __init__(self, capas):
+	def __init__(self, capas, lr):
 
 		self.capas=capas
+		self.lerningR=lr
 
 		#iniciar los pesos de forma aleatoria
 		#primera capa de la red
 		self.biasE=np.random.random((capas[2],1))
-		self.pesosE=np.random.random((capas[2], capas[0]))		
+		self.pesosE=np.random.uniform(0.0001, (1/math.sqrt(capas[0])),(capas[2], capas[0]))		
 
 		#capas intermedias
 		self.biasI=np.random.random((capas[2],capas[1]))
-		self.pesosI=np.random.random((capas[2], capas[2], capas[1]-1))
+		self.pesosI=np.random.uniform(0.0001, (1/math.sqrt(capas[2])),(capas[2], capas[2], capas[1]-1))
 		self.valoresI=np.empty((capas[2], capas[1]), dtype=float)
 
 		#ultima capa de la red
 		self.biasS=np.random.random((capas[3],1))
-		self.pesosS=np.random.random((capas[3], capas[2])) 
+		self.pesosS=np.random.uniform(0.0001, (1/math.sqrt(capas[2])),(capas[3], capas[2])) 
 
 	def mutar(self, rate):
 		mutarMatiz(self.biasE ,rate)
@@ -109,7 +110,7 @@ class RedNeuronal():
 		outputs= self.resultado(inputs)
 		respuestas=respuestas.astype(np.float)
 
-		lr=0.1
+		lr=self.lerningR
 
 		#caculo los errores de todos las capas
 		errS= respuestas-outputs.transpose()
@@ -182,58 +183,68 @@ def lecturaJSON(a1, a2):
 		for valor in data['valores']:	
 			temp=float(valor['id'])
 			if j%11<8:
-				if temp>350:
-					temp=0.9
+				if temp>320:
+					temp=350/400
 				else:
-					temp=round(temp/400, 3)
+					temp=round(temp/400, 5)
 			elif j%11<10:
-				temp=round(temp/360, 3)
+				temp=round(temp/360, 5)
+
 			elif j%11==10:
+
 				if temp<0:
-					array[i,11]=0.001
+					array[i,11]=0.2
 				else:
-					array[i,11]=0.900
-				if temp==0:
-					temp=0.001
-				elif abs(temp)>=29:
-					temp=round((29/30)*abs(temp), 3)
-				else:
-					temp=round(abs(temp)/30,3)
+					array[i,11]=0.8
+
+				temp+=30
+				temp=round(temp/60, 5)
+				if temp>=0.95:
+					temp=0.95
+				elif temp<=0.5:
+					temp=0.05
 				
 			array[i,j%11]= temp	
 
 			j+=1
-			if j%11==0:
+			if j%11==0 and j!=0:
 				i+=1
 		datos=np.insert(datos, contador, array, axis=0)
-		contador+=int(len(data['valores'])/11)
+		contador+=int(len(data['valores'])/11)+1
 		
 	return datos
 
 def entrenarRed(datos, RN, contador):
 
 	for i in range(contador):
-		r=randint(0, len(datos)-1)
-		entradas=np.empty((1,8))
-		for j in range(8):
+		r=randint(0, len(datos)-2)
+		entradas=np.empty((1,RN.capas[0]))
+		for j in range(RN.capas[0]):
 			entradas[0,j]=datos[r,j]
-		target=np.array([(datos[r,10],datos[r,11])])
+		target=np.array([(datos[r,10])])#,datos[r,11])])
 		RN.entrenarES(entradas, target)
 
 def test(datos, RN, contador):
 	error=0
 	for i in range(contador):
-		r=randint(0, len(datos)-1)
+		r=randint(0, len(datos)-2)
 
-		entradas=np.empty((1,8))
-		for j in range(8):
+		entradas=np.empty((1,RN.capas[0]))
+		for j in range(RN.capas[0]):
 			entradas[0,j]=datos[r,j]
 
-		print("resultado esperado: ", datos[r, 10], datos[r,11])
+		print("resultado esperado: ", datos[r, 10])#, datos[r,11])
 		print("resultado obtenido: ", RN.resultado(entradas))
 		print(" ")
 		#error+=RN.resultado(entradas)-datos[r,10]
 	#error=error/contador
 	#print("Error promedio: ", error)
 
+capas= np.array([8,2,4,1])
+RN= RedNeuronal(capas, 0.2)
+trainData=lecturaJSON(0,1)
+#print(trainData)
 
+for i in range(2):
+	entrenarRed(trainData, RN, 10000)
+	test(trainData, RN, 5)
