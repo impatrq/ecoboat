@@ -37,7 +37,6 @@ def medicion():
 	time.sleep(0.00001)
 	GPIO.output(TRIG1, 0)
 	GPIO.output(TRIG2, 1)
-
 	# En este momento el sensor envía 8 pulsos
 	# y pone a ECHO en HIGH
 	# cuando llegan los pulsos lo pone en LOW

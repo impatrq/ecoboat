@@ -46,7 +46,7 @@ class Barco {
       line(0,0,0,-this.alto);
 
       noStroke();
-      fill(180, 135, 11);
+      fill(255);
       rect(0-(this.ancho/2), 0-(this.alto/2), this.ancho, this.alto);
 
       fill(101, 166, 185);

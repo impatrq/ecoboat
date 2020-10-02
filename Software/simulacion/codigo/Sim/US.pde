@@ -210,9 +210,9 @@ class US {
 
           if (cheak != null) { 
             fill(255,0,0);
-            circle(cheak.x,cheak.y, 5);
             if (d>dist(this.pos.x, this.pos.y, cheak.x, cheak. y)) {
               d=dist(this.pos.x, this.pos.y, cheak.x, cheak. y);
+              circle(cheak.x,cheak.y, 5);
             }
           }
         }
