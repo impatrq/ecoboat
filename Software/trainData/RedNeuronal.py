@@ -240,11 +240,3 @@ def test(datos, RN, contador):
 	#error=error/contador
 	#print("Error promedio: ", error)
 
-capas= np.array([8,2,4,1])
-RN= RedNeuronal(capas, 0.2)
-trainData=lecturaJSON(0,1)
-#print(trainData)
-
-for i in range(2):
-	entrenarRed(trainData, RN, 10000)
-	test(trainData, RN, 5)

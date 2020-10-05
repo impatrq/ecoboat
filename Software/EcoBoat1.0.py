@@ -208,20 +208,26 @@ def pilotoAutomático():
 		#curso= 1 yendo a derecha 
 		med=US.lectura()
 		entradas= np.empty((1, 10))
+
 		for i in range(10):
 			entradas[i]=med[i]
 
-		entradas[8]=DATOS.curso
-		entradas[9]=DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
-
-		while entradas[3]<400 or entradas[4]<400 or (curso!=0 and entradas[4+curso]<400): 			
+		while med[3]<400 or med[4]<400 or (curso!=0 and med[4+curso]<400): 
+			entradas[8]=DATOS.curso
+			entradas[9]=DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
+					
 			angulo=RN.resultado(entradas)
 			if angulo > 0:	#Si el giro es positivo
 	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
 	        		timon.girarAH()
 	        if angulo < 0:	#Si el giro es negativo
 	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
-	        		timon.girarH()	
+	        		timon.girarH()
+
+	        med=US.lectura()
+			entradas= np.empty((1, 10))
+			for i in range(10):
+				entradas[i]=med[i]	
 
 	#------------------------------------------------------------------------------------------------------------------
 
