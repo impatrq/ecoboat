@@ -204,6 +204,7 @@ def pilotoAutomático():
 
 	#--------------------------------------------------Red Neuronal----------------------------------------------------
 	def redNeuronal(curso, waypoint): 
+	#Esta función se utiliza para detectar si hay algún obstáculo. En caso de haberlo, iniciamos la RedNeuronal para esquivar.
 		#curso= 0 yendo hacia adelante
 		#curso=-2 yendo a izquierda
 		#curso= 1 yendo a derecha 
@@ -280,13 +281,13 @@ def pilotoAutomático():
 
 	        if angulo < 0:	#Si el giro es negativo
 	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se llego al valor deseado
-	        		redNeuronal(-2, waypoint)
-	        		timon.girarH()
+	        		redNeuronal(-2, waypoint)	#Corro el esta funcion por si hay obstáculos mientras giro
+	        		timon.girarH()	#Giro Horario
 
 	        if angulo > 0:	#Si el giro es positivo
 	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se llego al valor deseado
-	        		redNeuronal(1, waypoint)
-	        		timon.girarAH()
+	        		redNeuronal(1, waypoint)	#Corro el esta funcion por si hay obstáculos mientras giro
+	        		timon.girarAH()	#Giro AniHorario
 
 	        return angulo
 	#------------------------------------------------------------------------------------------------------------------
@@ -313,10 +314,10 @@ def pilotoAutomático():
 	for i in range (0, len(waypoints)):
 		#La idea es que corrija el rumbo a lo largo del trayecto
 		while(LlegadaAlWP(waypoints[i]) != 1):
-			redNeuronal(0, waypoints[i])
+			redNeuronal(0, waypoints[i])	#Detecto si hay obstáculos
 
 			if DATOS.curso != None:		#Solo corrijo el rumbo si hay un curso detectado
-				controlPID(waypoints[i])
+				controlPID(waypoints[i])	#Si el curso no es el deseado se activará el PID
 
 	#Detengo los motores de propulsión y la cinta transportadora
 	Cangilon.detener()
