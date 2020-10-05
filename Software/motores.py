@@ -102,7 +102,8 @@ class PaP():
 
 #---------------------------------------------------------Motor de la Cinta Transportadora-----------------------------------------------------
 class Cangilon():
-
+#El puente H que controla este motor funciona con un Multiplexor en la entrada para direccionar la señal PWM en ambos sentidos de giro.
+#Esto es debido a que la Raspberry no cuenta con suficientes pines PWM. Entonces de esta forma utilizamos solo un pin PWM y una output normal.
     def __init__(self, pin1, pin2, pwm):
 
         self.pin1= pin1 #Pin de selección de sentido de giro

@@ -138,7 +138,8 @@ def conversor():	#El conversor A/D funciona con comunicación SPI
 def pilotoAutomático():
 	#------------------------Medición de los sensores ultrasónicos---------------
 	class mediciones():
-
+	#En esta clase se les asigna un nombre a los datos de distancia obtenidos con la librería de sensoresUS para
+	#para facilitar la escritura del código. Utilizamos la array que tiene los 8 datos y leasignamos un nombre a cada posición.
 			def __init__(self):
 				self.Lfi=0
 				self.Lfd=0
@@ -245,7 +246,11 @@ def pilotoAutomático():
 	    errorT = 0	#Variable para cuando se activa la zona integral
 	    
 	    while DeltaD >= 0.05 or DeltaD <= -0.05: #Le pusimos que funcione hasta un error un poco mayor a 0 debido a el margen de error del GPS
-	        #Primero calculo el error
+	        #Si el GPS no encuentra un Curso salgo del PID
+	        if DATOS.curso == None:
+	        	break
+
+	        #Primero calculo el error	
 	        DD= DireccionDeseada(DATOS.lat, DATOS.long, waypoint)
 	        DA= DATOS.curso #Direccion actual dado por el modulo gps
 	        DeltaD= DD - DA
@@ -274,12 +279,12 @@ def pilotoAutomático():
 	            angulo = (DeltaD/ abs(DeltaD))*30 #el angulo toma el signo del DeltaD
 
 	        if angulo < 0:	#Si el giro es negativo
-	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se llego al valor deseado
 	        		redNeuronal(-2, waypoint)
 	        		timon.girarH()
 
 	        if angulo > 0:	#Si el giro es positivo
-	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se lelgo al valor deseado
+	        	while DATOS.timon != angulo:	#Giro hasta que el sensor del timón detecte que se llego al valor deseado
 	        		redNeuronal(1, waypoint)
 	        		timon.girarAH()
 
