@@ -6,7 +6,7 @@ import json
 
 #funciones de activacion
 
-def sigmoid(matrix):
+def sigmoid(matrix): #aplica la funcion sigmoid a todos los componentes de una matriz
 
 	s=np.shape(matrix)
 
@@ -20,7 +20,7 @@ def sigmoid(matrix):
 			matrix[i]= 1/(1+math.exp(-matrix[i]))
 		return matrix
 
-def TanH(matrix):
+def TanH(matrix): #aplica pla funcion Hiper Tangente a todos los componentes de una matriz
 	for i in range(len(matrix)):
 		a=math.exp(matrix[i])
 		b=np.exp(-matrix[i])
@@ -29,24 +29,31 @@ def TanH(matrix):
 
 #funciones de matriz
 
-def mutarMatiz(matrix, rate):
+def mutarMatiz(matrix, rate): #"muta" una matriz
+	#llamamos mutar a cambiar un porcentaje de la matriz por componentes aleatorios
+	#este porcentaje esta dado por el ratio
 
 	s=np.shape(matrix)
 
+	#primero recorremos uno a uno los componentes de la matriz
 	for i in range(s[0]):
 		for j in range(s[1]):
 
 			if len(s)==2:
-				prob= random()
-				if prob > rate:
+				prob= random() #se toma un numero random del 0 al 1
+				if prob < rate:
+				#si es más chico que el ratio se muta el componente de la matriz
+				#mientras más chico el ratio menos probable que se cumpla esta condicion	
 					matrix[i,j]=random()
 				else:
 					pass
 
 			else:
+				#el esta parte tenemos el mismo codigo
+				#pero agregamos un for mas si la matriz es de 3 dim
 				for h in range(s[2]):
 					prob= random()
-					if prob > rate:
+					if prob < rate:
 						matrix[i,j,h]=random()
 					else:
 						pass
@@ -76,7 +83,8 @@ class RedNeuronal():
 		self.biasS=np.random.random((capas[3],1))
 		self.pesosS=np.random.uniform(0.0001, (1/math.sqrt(capas[2])),(capas[3], capas[2])) 
 
-	def mutar(self, rate):
+	def mutar(self, rate): #mutamos la red total 
+		#mutamos cada matriz de la red por separado
 		mutarMatiz(self.biasE ,rate)
 		mutarMatiz(self.biasI ,rate)
 		mutarMatiz(self.biasS ,rate)
@@ -163,7 +171,11 @@ class RedNeuronal():
 		return 0
 
 
-def lecturaJSON(a1, a2):
+# funciones para entrenar la red
+
+def lecturaJSON(a1, a2): #con esta funcion tomamos los datos de los archivos json
+	#tiene dos parametros donde determinamos que rango de archivos queremos tomar
+	#ejemplo: (0, 10) toma del archivo 0 al 10
 	x=a1
 	contador=0
 	datos=np.empty((1,12))
@@ -182,9 +194,10 @@ def lecturaJSON(a1, a2):
 		i=0
 		for valor in data['valores']:	
 			temp=float(valor['id'])
+			#estos if son para normalizar los valores entre 0 y 1
 			if j%11<8:
 				if temp>320:
-					temp=350/400
+					temp=320/400
 				else:
 					temp=round(temp/400, 5)
 			elif j%11<10:
@@ -201,7 +214,7 @@ def lecturaJSON(a1, a2):
 				temp=round(temp/60, 5)
 				if temp>=0.95:
 					temp=0.95
-				elif temp<=0.5:
+				elif temp<=0.05:
 					temp=0.05
 				
 			array[i,j%11]= temp	
@@ -209,14 +222,19 @@ def lecturaJSON(a1, a2):
 			j+=1
 			if j%11==0 and j!=0:
 				i+=1
-		datos=np.insert(datos, contador, array, axis=0)
+		#guardamos los datos en una unica matriz
+		datos=np.insert(datos, contador, array, axis=0) 
 		contador+=int(len(data['valores'])/11)+1
 		
 	return datos
 
-def entrenarRed(datos, RN, contador):
+def entrenarRed(datos, RN, contador): #con esta funcion entreno la red
+	#el primer parametro es la matriz que contiene la informacion para entrenar la red
+	#el segundo es la red a entrenar
+	#el contador es la cantidad de veces que se entrena 
 
 	for i in range(contador):
+		#los ejemplos los tomamos de forma aleatoria
 		r=randint(0, len(datos)-2)
 		entradas=np.empty((1,RN.capas[0]))
 		for j in range(RN.capas[0]):
@@ -224,8 +242,11 @@ def entrenarRed(datos, RN, contador):
 		target=np.array([(datos[r,10])])#,datos[r,11])])
 		RN.entrenarES(entradas, target)
 
-def test(datos, RN, contador):
-	error=0
+def test(datos, RN, contador): #con esta funcion testeo la red
+	#el primer parametro es la matriz que contiene la informacion para testear la red
+	#el segundo es la red a testear
+	#el contador es la cantidad de veces que se testea
+
 	for i in range(contador):
 		r=randint(0, len(datos)-2)
 
@@ -236,7 +257,3 @@ def test(datos, RN, contador):
 		print("resultado esperado: ", datos[r, 10])#, datos[r,11])
 		print("resultado obtenido: ", RN.resultado(entradas))
 		print(" ")
-		#error+=RN.resultado(entradas)-datos[r,10]
-	#error=error/contador
-	#print("Error promedio: ", error)
-

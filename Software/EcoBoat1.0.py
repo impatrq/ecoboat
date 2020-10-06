@@ -136,34 +136,6 @@ def conversor():	#El conversor A/D funciona con comunicación SPI
 
 #-------------------------------------------------------------Piloto automático-------------------------------------------------------------
 def pilotoAutomático():
-	#------------------------Medición de los sensores ultrasónicos---------------
-	class mediciones():
-	#En esta clase se les asigna un nombre a los datos de distancia obtenidos con la librería de sensoresUS para
-	#para facilitar la escritura del código. Utilizamos la array que tiene los 8 datos y leasignamos un nombre a cada posición.
-			def __init__(self):
-				self.Lfi=0
-				self.Lfd=0
-				self.Lsi=0
-				self.Lsd=0
-				self.Lli=0
-				self.Lld=0
-				self.Lti=0
-				self.Ltd=0
-
-			def medicion(self):
-				medida=US.lectura()
-				self.Lfd=medida[0] #Frontal derecho
-				self.Lsd=medida[1] #Diagonal derecho
-				self.Lld=medida[2] #Lateral derecho
-				self.Ltd=medida[3] #Atras derecho
-				self.Lti=medida[4] #Atras izquierdo
-				self.Lli=medida[5] #Lateral izquierdo
-				self.Lsi=medida[6] #Diagonal izquierdo
-				self.Lfi=medida[7] #Frontal izquierdo
-				
-	med = mediciones()
-	#---------------------------------------------------------------------------
-
 	#---------------------------------------------Funciones de navegación---------------------------------------------
 	#Esta función se utilzia para medir la distancia entre la ubicación actual y el próximo waypoint
 	def distancia(lat1, lng1 , waypoint):	#lat1 y lng1 son los datos de posición actual
