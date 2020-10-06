@@ -1,0 +1,66 @@
+﻿Batería:
+https://www.xupai.com/product/showproduct.php?id=932&lang=en
+Panel solar:
+https://articulo.mercadolibre.com.ar/MLA-617044005-cargador-de-baterias-12v-panel-solar-10wp-fotovoltaicos-10w-_JM
+Motores de propulsión y cinta transportadora:
+https://articulo.mercadolibre.com.ar/MLA-828883951-motorreductor-motor-reductor-12v-24v-cupla-20kgfcm-arduino-_JM?quantity=1#reco_item_pos=2&reco_backend=machinalis-seller-items-pdp&reco_backend_type=low_level&reco_client=vip-seller_items-above&reco_id=d231fc59-a1a7-4a6f-b3bf-ab472e27573d
+Motor de dirección:
+http://robocraft.ru/files/datasheet/28BYJ-48.pdf
+Raspberry:
+https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2711/rpi_DATA_2711_1p0_preliminary.pdf
+Arduino:
+https://store.arduino.cc/usa/arduino-uno-rev3
+GPS:
+https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_(GPS.G6-HW-09005).pdf
+NRF24l01:
+https://nomada-e.com/descargas/datasheet/60-Mo%cc%81dulo%20de%20RF%202.4GHz%20%5bnRF24L01%5d.pdf
+https://www.sparkfun.com/datasheets/Components/SMD/nRF24L01Pluss_Preliminary_Product_Specification_v1_0.pdf
+HC-SR05:
+http://www.energiazero.org/arduino_sensori/Arduino%20ultrasonic%20sensor%20(HC-SR04%20or%20HY-SRF05).pdf
+http://tet.pub.ro/pages/altele/Documentatie/Senzor%20ultrasunete%20HY-SRF05/HY-SRF05%20Precision%20Ultrasonic%20Sensor%20from%20upgradeindustries%20on%20Tindie.pdf
+CCM:
+  4N25:
+  https://www.vishay.com/docs/83725/4n25.pdf
+  IRF640N:
+  http://www.alphacron.de/download/hardware/IRF640.pdf
+  IRF9530:
+  https://www.vishay.com/docs/91076/sihf9530.pdf
+  74LS157 :
+  https://www.uni-kl.de/elektronik-lager/417724
+  ULN2003:
+  https://www.st.com/resource/en/datasheet/uln2001.pdf
+Regulador de Carga:
+  UA741CP:
+  https://www.ti.com/lit/ds/slos094g/slos094g.pdf?ts=1600038173408&ref_url=https%253A%252F%252Fwww.google.com%252F
+  LM7805:
+  http://www.datasheet.es/PDF/919052/LM7805-pdf.html
+Sensores Ultrasónicos:
+
+Sensores Analógicos:
+  ADC0834:
+  https://www.ti.com/lit/ds/symlink/adc0834-n.pdf?ts=1600954794602&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FADC0834-N
+Fuentes de 5V:
+  LM2596:
+  https://www.onsemi.com/pub/Collateral/LM2596-D.PDF
+Tecnologia UART:
+http://www.el.uma.es/marin/Practica4_UART.pdf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

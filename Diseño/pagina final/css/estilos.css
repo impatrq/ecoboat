@@ -1,0 +1,171 @@
+img {
+    display: block;
+    max-width: 100%;
+    margin: auto;
+}
+
+body{
+    list-style: none;
+    margin: 10px;
+    margin-top: 90px;
+    padding: 0;
+    font-family: 'Abel', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6{
+    text-decoration-line: underline;
+    text-align: center;
+    color: rgb(17, 56, 89);
+    padding: 10px;
+}
+p{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+/*--------------------menu---------------------*/
+
+.menu{
+    position: fixed;
+    z-index: 1000;
+    padding: 20px 10px;
+    margin-left: -10px;
+    margin-top: -80px;
+    width: 100%;
+    background:rgb(127, 155, 200); opacity: .8;
+}
+
+.menu ul{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.menu ul li{
+    list-style: none;
+    margin: 0 20px;
+    display: inline;
+}
+
+.menu ul li:hover a{
+    background: #ffffff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.menu ul li a{
+    color: #000000;
+    text-decoration: none;
+}
+
+/*-------------------barra--------------------*/
+
+.barra{
+    position: relative;
+    background: #2abbb5;
+    z-index: 100;
+}
+
+.telefono, .mail, .insta{
+    position: absolute;
+    top: 0;
+}
+
+.barra .telefono{
+    z-index: 1110;
+    margin-top: 1.8%;
+    margin-left: 58.6%;
+    width: 14.3%;
+}
+
+.barra .mail{
+    z-index: 1110;
+    margin-top: 0.5%;
+    margin-left: 75.3%;
+    width: 16%;
+}
+
+.barra .insta{
+    z-index: 1110;
+    margin-top: 2.7%;
+    margin-left: 75.3%;
+    width: 11%;
+}
+
+/*-------------------banner-------------------*/
+
+.banner{
+    position: relative;
+    margin-top: -6px;
+    z-index: 110;
+}
+
+.banner .fondito{
+    position: absolute;
+    margin-top: -60px;
+    z-index: -10;
+}
+
+.boto1, .boto2, .boto4{
+    position: absolute;
+    top: 0;
+}
+
+.boto1{
+    z-index: 10000;
+    margin-top: 1.5%;
+    margin-left: 11%;
+    width: 13.2%;
+    
+}
+
+.boto2{
+    margin-top: 34.8%;
+    margin-left: 8.65%;
+    width: 12.8%;
+}
+
+.boto4{
+    width: 13%;
+    margin-top: 21.3%;
+    margin-left:84.9%
+}
+
+
+/*-----------------barramedia----------------*/
+
+.barramedia{
+    z-index: 140;
+    position: relative;
+    margin-top: -30px;
+}
+
+.separador{
+    opacity: 0;
+    height: 20%;
+}
+/*-----------------contenido-----------------*/
+
+.objetivos, .nosotros, .general, .tecnico, .partes{
+    background-color: rgb(230, 222, 222);
+    margin-bottom: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.info, .base, .cinta, .electronica{
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
+    border-radius: 10px;
+    padding: 1px;
+}
+
+img .electronica{
+    margin-left: 20%;
+}
