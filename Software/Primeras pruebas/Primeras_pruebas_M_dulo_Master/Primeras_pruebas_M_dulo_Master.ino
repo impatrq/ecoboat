@@ -6,18 +6,15 @@ RF24 radio(9, 10);
 
 void setup(void) {
 //-------------------------------------------------------------------------Configuración del Módulo Master------------------------------------------------------------------------
-  while (!Serial);
-  Serial.begin(9600);
-
-  radio.begin();
-  radio.setPALevel(RF24_PA_MAX);
-  radio.setChannel(0x76);
-  radio.openWritingPipe(0xF0F0F0E1LL);
+  radio.begin();  
+  radio.setPALevel(RF24_PA_MAX);  //Definimos la potencia del módulo
+  radio.setChannel(0x76); //Canal
+  radio.openWritingPipe(0xF0F0F0E1LL);  //Direcciones de escritura y lectura
   const uint64_t pipe = 0xE8E8F0F0E1LL;
   radio.openReadingPipe(1, pipe);
 
   radio.enableDynamicPayloads();
-  radio.powerUp();
+  radio.powerUp();  //Iniciamos la radio
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -43,41 +40,28 @@ String recibirRF(){
 
 void loop(void) {
   char MSJZARPAR = "!ZARPAR";
-  char MSJANALISIS = "!ANALISIS";
   char comando;
   comando = enviarRF(MSJZARPAR);
-  radio.write(comando, sizeof(comando));
-  Serial.println("Se está enviando el mensaje");
+  radio.write(comando, sizeof(comando));  //Envio el comando
 
-  radio.startListening();
+  radio.startListening();   //Empiezo a escuchar
 
   //---------------------Comando Zarpar------------------------------
   if (comando == MSJZARPAR){
-    Serial.println("El usuario eligió la opción zarpar");
     if (radio.available()){
       while (true){
         String mensaje;
-        mensaje = recibirRF();
-        Serial.println(mensaje);
-        if (mensaje == "20"){
-          return 0;
+        latitud = recibirRF();
+        longitud = recibirRF();
+        curso = recibirRF();
+        consProp = recibirRF();
+        consCang = recibirRF();
+        bateria = recibirRF();
+        timon = recibirRF();
         }
         delay(500);
       }
    }
-  return 0;
-  }
-  //-----------------------------------------------------------------
-
-  //--------------------Comando análisis-----------------------------
-  else if (comando == MSJANALISIS){
-    Serial.println("El usuario eligió la opción análisis rápido");
-    if (radio.available()){
-      String mensaje;
-      mensaje = recibirRF();
-      Serial.println(mensaje);
-      return 0;
-    }
   }
   //-----------------------------------------------------------------
 }

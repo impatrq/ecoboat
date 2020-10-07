@@ -96,25 +96,30 @@ def conversor():	#El conversor A/D funciona con comunicación SPI
 		for canal in range (0, 3):	#Voy tomando los datos de todos los canales
 			#Primero tomamos los datos crudos del conversor A/D (le digo que canal y que modo quiero usar)
 	        datosCrudos = spi.xfer([(12 + canal), 0, 0])
-	        #Proceso esta información para tenerla en un numero de 0 a 1023
+	        #Proceso esta información para tenerla en un numero de 0 a 255
 	        datosProcesados = ((datosCrudos[1]) << 1) + (datosCrudos[2] >> 7)
+
 	        #--------------------------------------------Conversión a porcentaje de batería--------------------------------------------
 	        if canal == 0:	#Canal del sensor de porcentaje de la batería
-			    if datosProcesados < 808: #Si es menor a 808bits significa que estoy al 0% (11,8V)
+			    if datosProcesados < 201: #Si es menor a 201 bits significa que estoy al 0% (11,8V)
 			    	porcentaje = 0
 			    else:
-			    	porcentaje = ((datosProcesados - 808) * 100) / float(1023 - 808) #Si el valor es igual o mayor a 808 calculo el procentaje
+			    	#Si el valor es igual o mayor a 201 calculo el procentaje
+			    	porcentaje = ((datosProcesados - 201) * 100) / float(255 - 201) 
 			    	porcentaje = round(porcentaje)
 			    
-			    DATOS.bateria = porcentaje
+			    DATOS.bateria = porcentaje 	#Guardo el valor en la variable global
+
 			#-----------------------------------------------Conversión a grados del timón----------------------------------------------
 			elif canal == 1:	#Canal del sensor de posición del timón
-	        	grados = -128 + datosProcesados		#La marca de 0 grados está justo en el medio del pote, por ende, es una conversión de sumar.
+				#La marca de 0 grados está justo en el medio del pote, por ende, es una conversión de sumar.
+	        	grados = -128 + datosProcesados		
 	        	
-	        	DATOS.timon = grados
-	        #--------------------------------------Conversión a consumo de los motores (A)------------------------------------
+	        	DATOS.timon = grados 	#Guardo el valor en la variable global
+
+	        #------------------------------------------Conversión a consumo de los motores (A)-----------------------------------------
 	        elif canal == 2 or canal == 3:	
-	        	voltaje = (datosProcesados * 5) / float(1023) #Convierto el valor en bits a volts (0 a 5V)
+	        	voltaje = (datosProcesados * 5) / float(255) #Convierto el valor en bits a volts (0 a 5V)
 			    voltaje = round(voltaje, 3) #Redondeo a tres decimales
 			    if voltaje <= 2,5: #Si es negativo
 			    	consumo = - (voltaje * 0.1) #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
@@ -123,10 +128,10 @@ def conversor():	#El conversor A/D funciona con comunicación SPI
 			    	consumo = (voltaje - 2.5) * 0.1 #Convierto el valor de voltaje en corriente (Relación: 100mV = 1A)
 
 			   	if canal == 2: #Canal del sensor de corriente del motor de propulsión
-				    DATOS.motProp = consumo
+				    DATOS.motProp = consumo 	#Guardo el valor en la variable global
 				   	
 				elif canal == 3: #Canal del sensor de corriente del motor de la cinta Transportadora
-					DATOS.motCang = consumo
+					DATOS.motCang = consumo  	#Guardo el valor en la variable global
 
 			#Cuando se finaliza el recorrido, dejamos de sensar datos.
 			if DATOS.fin == 1:
@@ -369,12 +374,13 @@ def módulosRF():
 
 		#Envió información a la interfaz de usuario
 		while True:
-			enviarRF(DATOS.lat)
-			enviarRF(DATOS.lon)
-			enviarRF(DATOS.curso)
-			enviarRF(DATOS.motProp)
-			enviarRF(DATOS.motCang)
-			enviarRF(DATOS.bateria)
+			enviarRF(DATOS.lat)		#Latitud
+			enviarRF(DATOS.lon)		#Longitud
+			enviarRF(DATOS.curso)	#Curso
+			enviarRF(DATOS.motProp)	#Consumo del motor de Propulsión
+			enviarRF(DATOS.motCang)	#Consumo del motor de la Cinta Transportadora
+			enviarRF(DATOS.bateria)	#Porcentaje de Batería
+			enviarRF(DATOS.timon)	#Grados del Timón
 			#Si el barco finalizó el recorrido, dejo de enviar datos
 			if DATOS.fin == 1:
 				break
