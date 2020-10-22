@@ -7,7 +7,7 @@ Bienvenidos al repositorio de EcoBoat.
 
 En la carpeta de "Software" se encontrarán con varios archivos:
 
-- EcoBoat1.0: Es el código principal, donde se ejecuta el funcionamiento del barco y todas las librerías utilizadas para dicho fin.
+- EcoBoat1.0: Es el código principal, donde se ejecuta el funcionamiento del barco y todas las librerías utilizadas para dicho fin. En este programa se deben ingresar los waypoints a seguir en la línea 288 tal como se muestra en el código.
 - Motores: Es la librería (desarrollada por el equipo de EcoBoat) que se utiliza para controlar los motores.
 - SensoresUS: Es la librería (desarrollada por el equipo de EcoBoat) que utilizamos para realizar las mediciones con los sensores Ultrasónicos.
 - RedNeuronal: Es la librería (desarrollada por el equipo de EcoBoat) que contiene el código de la Red Neuronal (No incluye la parte del entrenamiento).
