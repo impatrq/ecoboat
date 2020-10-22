@@ -7,15 +7,15 @@ Bienvenidos al repositorio de EcoBoat.
 
 En la carpeta de "Software" se encontrarán con varios archivos:
 
-- EcoBoat1.0: Es el código principal, donde se ejecuta el funcionamiento del barco y todas las librerías utilizadas para dicho fin. En este programa se deben ingresar los waypoints a seguir en la línea 288 tal como se muestra en el código.
+- EcoBoat1.0: Es el código principal, donde se ejecuta el funcionamiento del barco y todas las librerías utilizadas para dicho fin.
 - Motores: Es la librería (desarrollada por el equipo de EcoBoat) que se utiliza para controlar los motores.
 - SensoresUS: Es la librería (desarrollada por el equipo de EcoBoat) que utilizamos para realizar las mediciones con los sensores Ultrasónicos.
-- RedNeuronal: Es la librería (desarrollada por el equipo de EcoBoat) que contiene el código de la Red Neuronal (No incluye la parte del entrenamiento).
+- RedNeuronal: Es la librería (desarrollada por el equipo de EcoBoat) que contiene el código de la Red Neuronal y su entrenamiento.
 - Módulo_Master: Es el programa utilizado para recibir la información y transferirla mediante sockets a la Interfaz de Usuario.
 - Interfaz de Usuario: En esta carpeta se encuentran los códigos de la interfaz de usuario.
 - Simulación: En esta carpeta encontrarán todo lo relacionado al entrenamiento de la Red Neuronal.
   - Aplicación Ejecutable: Aquí se encuentra la aplicación de la cual se obtienen los datos de entrenamiento para la red, es decir, la red aprende de las acciones realizadas en dicha aplicación.
-  - Código fuente: Contiene el programa de la simulación y entrenamiento de la Red Neuronal.
+  - Código fuente: Contiene el programa de la simulación.
   - trainData: En esta carpeta se guardan los archivos con la información de entrenamiento.
 
 ## Hardware
